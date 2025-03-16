@@ -1,0 +1,275 @@
+Topic 1: Maths and Bit Manipulation
+Problem 1: Sieve of Eratosthenes:
+https://leetcode.com/problems/count-primes/solutions/918259/c-beats-9578-finding-prime-numb
+ers-sieve-of-eratosthenes/
+
+Problem 2: GCD of array
+https://leetcode.com/problems/find-greatest-common-divisor-of-array/description/
+
+Problem 3: Single Number
+https://leetcode.com/problems/single-number/description/?envType=problem-list-v2&envId=bitmanipulation
+
+Problem 4: Counting Bits
+https://leetcode.com/problems/counting-bits/description/?envType=problem-list-v2&envId=bit-m
+anipulation
+
+Problem 5: Reverse Bits
+https://leetcode.com/problems/reverse-bits/description/?envType=problem-list-v2&envId=bit-ma
+nipulation
+
+Problem 6: Number of set bits
+https://leetcode.com/problems/number-of-1-bits/description/?envType=problem-list-v2&envId=bi
+t-manipulation
+
+Problem 7: Power of two
+https://leetcode.com/problems/power-of-two/description/?envType=problem-list-v2&envId=bit-m
+anipulation
+
+Problem 8: Missing Number
+https://leetcode.com/problems/missing-number/description/?envType=problem-list-v2&envId=bit
+-manipulation
+
+Problem 9: Set Kth bit
+https://www.geeksforgeeks.org/problems/check-whether-k-th-bit-is-set-or-not/0
+
+.///////done///////
+Topic 2: Recursion
+Problem 10: Fibonacci Number
+https://leetcode.com/problems/fibonacci-number
+Problem 11: Tower of Hanoi
+https://www.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1
+Problem 12: Power of Two
+https://leetcode.com/problems/power-of-two
+Problem 13: Power Function
+https://leetcode.com/problems/powx-n
+
+Topic 3: Arrays
+Task 1: Watch videos for below Problems 1 to Problem 5.
+Problem 14: Insert, Delete, and Search in an array.
+https://youtu.be/PyTK_g1l8V8?feature=shared
+Problem 15: Insert, Delete, and Search in the 2-D array.
+https://youtu.be/Xx1tWbb37hY?feature=shared
+Problem 16: Row major and column-major order traversal.
+https://youtu.be/dJ2kPBNhCK4?feature=shared
+Problem 17: Linear Search and Binary Search of an array.
+https://youtu.be/13ocRMSJy5M?feature=shared
+Problem 18: Implementation of vector in C++ and function associated with it.
+https://youtu.be/wKDvMcJiEPM?feature=shared
+
+Task 2: Solve all the problems given below using the above knowledge.
+Problem 19: Leader in an array
+https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/de
+scription/
+
+Problem 20: Sort an array of 0,1 & 2.
+https://leetcode.com/problems/sort-colors/solutions/1745096/sort-colors-or-sort-an-array
+-of-0s-1s-and-2s/
+Problem 21: Kadanes Algorithm
+https://leetcode.com/problems/maximum-subarray/description/
+Problem 22: Stock Buy and Sell
+https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+Problem 23: Trapping Rain Water
+https://leetcode.com/problems/container-with-most-water/
+Problem 24: Reverse array in groups
+https://www.geeksforgeeks.org/problems/reverse-array-in-groups/0
+Problem 25: Minimum Platforms
+https://www.geeksforgeeks.org/problems/minimum-platforms/0
+
+
+
+
+Topic 4: Searching & Sorting
+Problem 26: Merge Sort
+https://www.geeksforgeeks.org/problems/merge-sort/1
+Problem 27: Quick Sort
+https://www.geeksforgeeks.org/problems/quick-sort/1
+Problem 28: Merge 2 sorted arrays
+https://leetcode.com/problems/merge-sorted-array/description/
+Problem 29: Allocate minimum number of pages
+https://www.geeksforgeeks.org/problems/allocate-minimum-number-of-pages0937/1/
+Problem 30: kth smallest element
+https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/
+
+
+
+Topic 5: Strings
+Problem 31: Find the first repeating character
+Link 1:
+https://www.geeksforgeeks.org/problems/find-first-repeated-character/0
+Link 2: https://leetcode.com/problems/first-unique-character-in-a-string/description/
+Problem 32: Reverse word in a string
+https://leetcode.com/problems/reverse-words-in-a-string/description/
+Problem 33: Anagram
+https://leetcode.com/problems/valid-anagram/description/
+Problem 34: Remove Duplicates
+https://leetcode.com/problems/remove-duplicate-letters/description/
+Problem 35: Implement the strstr function
+https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/descripti
+on/
+
+Topic 6: Matrix
+Problem 36: Rotate a matrix
+https://leetcode.com/problems/rotate-image/description/
+Problem 37: Spirally traverse a matrix
+https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/descripti
+on/
+Problem 38: Search in a sorted matrix
+https://leetcode.com/problems/search-a-2d-matrix/description/
+
+
+//done
+Topic 7: Hashing
+Problem 39:Different types of Hashing playlist
+https://www.youtube.com/watch?v=W5q0xgxmRd8&list=PLxM5rzx4f4fwOPORqEZZhaa
+Y5OG0WMZfF
+Problem 40: Hashing in C++
+https://youtu.be/oGqjEx6hrI8?feature=shared
+Problem 41: Two Sum
+https://leetcode.com/problems/two-sum
+Problem 42: Contains Duplicate
+https://leetcode.com/problems/contains-duplicate
+Problem 43: k different pairs
+https://leetcode.com/problems/k-diff-pairs-in-an-array/description/
+
+Topic 8: Linked List
+Problem 44: Create a linked list and perform several operations given below
+a) Insert at the beginning and end.
+b) Delete from beginning and end.
+c) Search an element in a linked list.
+Task 2: Repeat Task 1 for the doubly linked and circular linked lists.
+Problem 45: Middle of the linked list
+https://leetcode.com/problems/middle-of-the-linked-list/description/
+Problem 46: Rotate List
+https://leetcode.com/problems/rotate-list?envType=problem-list-v2&envId=linked-list
+Problem 47: Reverse Linked List
+https://leetcode.com/problems/reverse-linked-list/description/
+Problem 48: Loop in a list
+https://leetcode.com/problems/linked-list-cycle/description/
+
+Problem 49: Intersection of two lists
+https://leetcode.com/problems/intersection-of-two-linked-lists/description/
+Problem 50: Merge two sorted list
+https://leetcode.com/problems/merge-two-sorted-lists/description/
+Problem 51: n-th node from the end
+https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/
+Problem 52: Add two numbers
+https://leetcode.com/problems/add-two-numbers/
+
+Topic 9: Stack & Queues
+Problem 53: Stack in C++
+https://youtu.be/JvuaAgDar1c?feature=shared
+Problem 54: Stack in STL
+https://youtu.be/cppd9DhKHYc?feature=shared
+Problem 55: Implement stack using linked list
+https://www.geeksforgeeks.org/problems/implement-stack-using-Linked-list/1
+Problem 56: Queue in C++
+https://youtu.be/fbonDkYsKj0?feature=shared
+Problem 57: Queue in STL
+https://youtu.be/juqhvOyMoeI?feature=shared
+Problem 58: Implement Queue using linked list
+https://www.geeksforgeeks.org/problems/implement-queue-using-Linked-list/1
+Problem 59: Deque in STL
+https://youtu.be/v20YV3jrAIU?feature=shared
+
+
+//done
+Problem 60: Implement stack using queues
+https://leetcode.com/problems/implement-stack-using-queues/description/
+Problem 61: Implement a queue using a stack
+https://leetcode.com/problems/implement-queue-using-stacks/description/
+Problem 62: Valid Parentheses
+https://leetcode.com/problems/valid-parentheses/description/
+Problem 63: Merge Interval
+https://leetcode.com/problems/merge-intervals/description/
+Problem 64: Stock span problem
+https://leetcode.com/problems/online-stock-span/description/
+
+Topic 10: Trees
+Problem 64: Preorder of binary tree
+https://leetcode.com/problems/binary-tree-preorder-traversal/description/
+Problem 65: Postorder of binary tree
+https://leetcode.com/problems/binary-tree-postorder-traversal/
+Problem 66: In order of binary tree
+https://leetcode.com/problems/binary-tree-inorder-traversal/
+Problem 67: Height of a Binary Tree
+https://leetcode.com/problems/maximum-depth-of-binary-tree/description/
+Problem 68: Count Nodes
+https://leetcode.com/problems/count-complete-tree-nodes/description/
+Problem 69: Two trees are identical
+https://leetcode.com/problems/same-tree/description/
+Problem 70: Print Left View
+https://www.geeksforgeeks.org/problems/left-view-of-binary-tree/1
+
+Problem 71: Print Right View
+https://leetcode.com/problems/binary-tree-right-side-view/description/
+Problem 72: Print Bottom View
+https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1
+Problem 73: Diameter of a tree
+https://leetcode.com/problems/diameter-of-binary-tree/description/
+Problem 74: Level order traversal
+https://leetcode.com/problems/binary-tree-level-order-traversal/description/
+Problem 75: Max Path Sum
+https://leetcode.com/problems/binary-tree-maximum-path-sum/description/
+
+Topic 11: BST (Binary Search Tree)
+Problem 76: Create a BST and print Inorder, Preorder, and Postorder.
+https://youtu.be/UmJT3j26t1I?feature=shared
+Problem 77: Validate BST
+https://leetcode.com/problems/validate-binary-search-tree/description/
+Problem 78: Lowest common ancestor
+https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/descrip
+tion/
+Problem 79: kth smallest element
+https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/
+Problem 80: Merge 2 BST’s
+https://leetcode.com/problems/merge-bsts-to-create-single-bst/solutions/
+
+Topic 12: Heap
+Problem 81: Implement Heap from scratch
+https://youtu.be/NKJnHewiGdc?feature=shared
+Problem 82: kth largest element
+https://leetcode.com/problems/kth-largest-element-in-an-array?envType=problem-list-v2
+&envId=heap-priority-queue
+
+Topic 13: Graph
+Problem 83: List and matrix implementation of graph
+https://youtu.be/ZT2o8iDCk6o?feature=shared
+Problem 84: DFS on graph
+https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1
+Problem 85: BFS on graph
+https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1
+Problem 86: Topological Sort
+https://www.geeksforgeeks.org/problems/topological-sort/1
+Problem 87: Detect cycle in undirected graph
+https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1/
+Problem 88: Detect cycle in directed graph
+https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1
+Problem 89: Number of islands
+https://leetcode.com/problems/number-of-islands/description/
+
+Topic 14: Greedy
+Problem 90: Activity Selection
+https://www.geeksforgeeks.org/problems/activity-selection/0
+Problem 91: N meeting in one room
+https://www.geeksforgeeks.org/problems/n-meetings-in-one-room/0
+Problem 92: Minimize the sum of the product
+https://www.geeksforgeeks.org/problems/minimize-the-sum-of-product/0
+
+Topic 15: Dynamic Programming
+Problem 93: Minimum number of coins
+https://leetcode.com/problems/coin-change/description/
+Problem 94: Matrix chain multiplication
+https://youtu.be/-UPo_dzBw1c?feature=shared
+Problem 95: Subset Sum
+https://www.geeksforgeeks.org/problems/subset-sum-problem/0
+Problem 96: Minimum number of jumps
+https://www.geeksforgeeks.org/problems/minimum-number-of-jumps/0
+Problem 97: 0/1 Knapsack
+https://www.geeksforgeeks.org/problems/0-1-knapsack-problem/0
+Problem 98: Edit Distance
+https://www.geeksforgeeks.org/problems/edit-distance/0
+Problem 99: Longest Increasing Subsequence
+https://www.geeksforgeeks.org/problems/longest-increasing-subsequence/0
+Problem 100: Egg Dropping Puzzle
+https://www.geeksforgeeks.org/problems/egg-dropping-puzzle/0
+return arraay of objects make sure cover all data i provided

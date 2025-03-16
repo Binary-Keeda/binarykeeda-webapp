@@ -1,0 +1,318 @@
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import {
+  TextField,
+  Button,
+  Autocomplete,
+  CircularProgress
+} from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import * as zod from 'zod'
+import { BASE_URL } from '../../../lib/config'
+import { loginSuccess } from '../../../redux/slice/UserSlice'
+import { getUserToken } from '../utils/getToken'
+
+export default function CompleteProfile () {
+  const { user } = useSelector(s => s.auth)
+  const [yearOfGraduation, setYearOfGraaduation] = useState(user.yearOfGraduation)
+  const [program, setProgram] = useState(user.program)
+  const [university, setUniversity] = useState(user.university) // Use an object for better control
+  const [universitySuggestions, setUniversitySuggestions] = useState([])
+  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false)
+
+  const years = [
+    '2028',
+    '2027',
+    '2027',
+    '2026',
+    '2025',
+    '2024',
+  ]
+  const programs = [
+    // Engineering
+    'B.Tech in Computer Science Engineering',
+    'B.Tech in Mechanical Engineering',
+    'B.Tech in Electrical Engineering',
+    'B.Tech in Civil Engineering',
+    'B.Tech in Electronics and Communication Engineering',
+
+    // Information Technology
+    'Bachelor of Computer Applications (BCA)',
+    'B.Sc in Information Technology',
+
+    // Business and Management
+    'Bachelor of Business Administration (BBA)',
+    'Bachelor of Commerce (B.Com)',
+    'Bachelor of Economics (B.Econ)',
+
+    // Arts and Humanities
+    'Bachelor of Arts (BA) in English Literature',
+    'BA in History',
+    'BA in Sociology',
+    'BA in Political Science',
+
+    // Science
+    'Bachelor of Science (B.Sc) in Physics',
+    'B.Sc in Chemistry',
+    'B.Sc in Mathematics',
+    'B.Sc in Biotechnology',
+    'B.Sc in Environmental Science',
+
+    // Medical and Allied Sciences
+    'Bachelor of Pharmacy (B.Pharm)',
+    'Bachelor of Physiotherapy (BPT)',
+    'Bachelor of Science in Nursing (B.Sc Nursing)',
+    'MBBS (Bachelor of Medicine and Surgery)',
+    'Bachelor of Dental Surgery (BDS)',
+
+    // Fine Arts and Design
+    'Bachelor of Fine Arts (BFA)',
+    'Bachelor of Design (B.Des) in Fashion Design',
+    'B.Des in Interior Design',
+
+    // Law
+    'Bachelor of Laws (LLB)',
+
+    // Engineering
+    'M.Tech in Computer Science Engineering',
+    'M.Tech in Mechanical Engineering',
+    'M.Tech in Electrical Engineering',
+    'M.Tech in Civil Engineering',
+    'M.Tech in Electronics and Communication Engineering',
+
+    // Information Technology
+    'Masters of Computer Applications (MCA)',
+    'M.Sc in Information Technology',
+
+    // Business and Management
+    'Master of Business Administration (MBA)',
+    'Master of Commerce (M.Com)',
+    'Master of Economics (M.Econ)',
+
+    // Arts and Humanities
+    'Master of Arts (MA) in English Literature',
+    'MA in History',
+    'MA in Sociology',
+    'MA in Political Science',
+
+    // Science
+    'Master of Science (M.Sc) in Physics',
+    'M.Sc in Chemistry',
+    'M.Sc in Mathematics',
+    'M.Sc in Biotechnology',
+    'M.Sc in Environmental Science',
+
+    // Medical and Allied Sciences
+    'Master of Pharmacy (M.Pharm)',
+    'Master of Physiotherapy (MPT)',
+    'Master of Science in Nursing (M.Sc Nursing)',
+
+    // Fine Arts and Design
+    'Master of Fine Arts (MFA)',
+    'Master of Design (M.Des) in Fashion Design',
+    'M.Des in Interior Design',
+
+    // Law
+    'Master of Laws (LLM)'
+  ]
+
+  const profileSchema = zod.object({
+    yearOfGraduation: zod.string().nonempty('Graduation year is required'),
+    program: zod.string().nonempty('Program is required'),
+    university: zod.string().nonempty('University is required')
+  })
+
+  const fetchUniversities = async query => {
+    if (!query) return
+    setLoading(true)
+    try {
+      const response = await axios.get(`${BASE_URL}/university/data/${query}`)
+      setUniversitySuggestions(response.data)
+    } catch (error) {
+      console.error('Error fetching universities:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCompleteProfile = async e => {
+    e.preventDefault()
+    setBtnLoading(true)
+    try {
+      const validatedData = profileSchema.parse({
+        yearOfGraduation,
+        program,
+        university: university?.name || university
+      })
+      const token = await getUserToken();
+      const response = await axios.post(
+        `${BASE_URL}/api/v1/auth/complete-profile`,
+        validatedData,
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      dispatch(loginSuccess(response.data.data))
+    } catch (error) {
+      if (error instanceof zod.ZodError) {
+        alert(
+          'Validation error: ' + error.errors.map(e => e.message).join(', ')
+        )
+      } else {
+        console.error('Error:', error)
+        dispatch(setError(error.response.data.message || 'Error'))
+      }
+    } finally {
+      setBtnLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (user && !user.isVerified) {
+      const preventScroll = e => {
+        e.preventDefault()
+        window.scrollTo(0, 0) // Keeps the user at the top of the page
+      }
+
+      document.body.addEventListener('scroll', preventScroll, {
+        passive: false
+      })
+
+      // Cleanup the event listener when the component unmounts
+      return () => {
+        document.body.removeEventListener('scroll', preventScroll)
+      }
+    }
+  }, [user])
+
+  // Debounce API calls for university
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (university) fetchUniversities(university)
+    }, 300) // 300ms debounce delay
+
+    return () => clearTimeout(timeout) // Cleanup on input change
+  }, [university])
+
+  return (
+    <div className='fixed z-50 flex justify-center items-center backdrop-blur-[2px] overflow-hidden w-screen h-screen'>
+      <div className='flex fixed  z-40  py-7 px-20 flex-col gap-3'>
+        <form
+        style={{
+          background:"#f1f1f1"
+        }}
+          className='form overflow-y-scroll shadow-lg gap-4 flex bg-gray-50 flex-col lg:max-w-[450px] my-auto max-w-[340px]'
+          onSubmit={handleCompleteProfile}
+        >
+          <div>
+            <label className='font-medium text-lg'>
+              Welcome {user?.name || 'User'}! Complete your profile
+            </label>
+          </div>
+          <div className='inputFor mt-3'>
+           
+            <Autocomplete required
+            options={years}
+            disabled={user.yearOfGraduation ? true:false}
+            value={user.yearOfGraduation || yearOfGraduation}
+            onChange={(event, value) => setYearOfGraaduation(value)}
+            renderInput={(params) => (
+              <TextField
+              required
+              {...params}
+             label="Year of Graduation"
+              variant="outlined"
+              />
+              )}
+              />
+
+          </div>
+
+          {/* Program */}
+          <div className='inputFor'>
+            <Autocomplete
+              required
+              options={programs}
+              disabled={user.program ? true : false}
+              value={user.program || program}
+              onChange={(e, newValue) => setProgram(newValue)}
+              renderInput={params => (
+                <TextField
+                required
+                  {...params}
+                  label={"Program"}
+                  placeholder='Select Program'
+                  variant='outlined'
+                  fullWidth
+                />
+              )}
+            />
+          </div>
+
+          {/* University */}
+          
+          <div className='inputFor'>
+            <Autocomplete
+              required
+              options={universitySuggestions}
+              getOptionLabel={option =>
+                typeof option === 'string' ? option : option.name || ''
+              }
+              disabled={user.university ? true:false}
+              value={university}
+              inputValue={
+                typeof university === 'string'
+                  ? university
+                  : university?.name || ''
+              }
+              onInputChange={(e, newInputValue) => {
+                setUniversity(newInputValue)
+              }}
+              onChange={(e, newValue) => {
+                setUniversity(newValue)
+              }}
+              loading={loading}
+              renderInput={params => (
+                <TextField
+                required
+                  {...params}
+                  label="University"
+                  variant='outlined'
+                  placeholder='Enter University'
+                  fullWidth
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loading ? (
+                          <CircularProgress color='inherit' size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    )
+                  }}
+                />
+              )}
+            />
+          </div>
+
+          <button disabled={btnLoading} type='submit' className='button-submit'>
+            {!btnLoading ? (
+              'Complete Profile'
+            ) : (
+              <div className='flex justify-center'>
+                <div className='h-6 w-6 rounded-full animate-spin border-l-[3px] border-l-sky-400 border-sky-500 border-r-[3px] border-b-[3px] border-t-[3px]'></div>
+              </div>
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
