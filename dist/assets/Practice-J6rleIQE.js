@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Table-nLCvoGHd.js","assets/index-DZwR2MsO.js","assets/index-CgyanQc4.css","assets/IconButton-CBnu3xQV.js"])))=>i.map(i=>d[i]);
-import{j as r,r as a,R as t,_ as e}from"./index-DZwR2MsO.js";import{U as s}from"./Userdashboard-CLFRUKdz.js";import"./IconButton-CBnu3xQV.js";const o=t.lazy(()=>e(()=>import("./Table-nLCvoGHd.js"),__vite__mapDeps([0,1,2,3])));function c(){return r.jsx(a.Suspense,{fallback:r.jsx(r.Fragment,{children:"LOADING ... "}),children:r.jsx(o,{})})}const m=s(c);export{m as default};
