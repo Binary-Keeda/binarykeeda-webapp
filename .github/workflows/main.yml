@@ -28,6 +28,5 @@ jobs:
           git pull origin main || { echo 'Git pull failed' ; exit 1; }
           
           # Check if pm2 process is running and restart or start it
-          pm2 restart 1 || { echo 'PM2 restart failed' ; exit 1; }
-          fi
+          pm2 restart 0 || { echo 'PM2 restart failed' ; exit 1; }
           EOF
