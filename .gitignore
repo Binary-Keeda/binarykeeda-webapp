@@ -1,4 +1,4 @@
 # Logs
 node_modules
-/src
-/public
+# /src
+# /public
