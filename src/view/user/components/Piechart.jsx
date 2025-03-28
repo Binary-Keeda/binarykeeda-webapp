@@ -1,6 +1,3 @@
-import { Person } from '@mui/icons-material';
-import { Divider, Typography } from '@mui/material';
-import { ResponsiveChartContainer } from '@mui/x-charts';
 import { PieChart } from '@mui/x-charts/PieChart';
 
 const pieParams = {
@@ -9,14 +6,11 @@ const pieParams = {
 };
 export default function UserPieChart() {
     return (
-        <>
-            <div className='w-full '>
-                <p className='flex items-end gap-1' ><Person /> User's Progres</p>
-                <hr className='mt-1' />
-            </div>
+        <div className='shadow-lg w-full p-6 rounded-xl  bg-white'>
+
             <PieChart
                 width={300}
-                height={300}
+                height={240}
                 {...pieParams}
                 series={[
                     {
@@ -30,11 +24,19 @@ export default function UserPieChart() {
                             value: 20,
                             color: 'blue',
                             label: "Core"
-                        }, {
+                        },
+                        {
                             value: 30,
                             color: 'green',
                             label: "Misc."
-                        },],
+                        },
+                        {
+                            value: 130,
+                            color: 'gray',
+                            label: "Un attempted"
+                        },
+
+                        ],
                         innerRadius: 30,
                         outerRadius: 100,
                         paddingAngle: 5,
@@ -43,17 +45,15 @@ export default function UserPieChart() {
                         endAngle: 360,
                         cx: 150,
                         slotProps: { legend: { hidden: true } },
-                        cy: 150,
+                        cy: 110,
                     }
                 ]}
             />
-            <div>
-                <button>
-                    <a className='text-xs capitalize hover:underline' href="">
+                <button className='bg-sky-700 py-2 mx-auto text-white px-10 flex justify-center items-center' >
+                    <a className='text-xs  capitalize hover:underline' href="">
                         view leaderboards
                     </a>
                 </button>
-            </div>
-        </>
+        </div>
     )
 }

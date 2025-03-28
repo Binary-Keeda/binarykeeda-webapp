@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 import { RoleBasedRoutes } from './auth/ProtectedRoutes';
 import { getQuiz } from './redux/api/getQuiz';
 import NotFound from './utilities/NotFound';
+import QuizList from './view/user/QuizList';
 // Lazy-loaded pages
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -28,8 +29,9 @@ const App = () => {
   const UserSolution = React.lazy(()=> import('./view/user/Solutions'));
   const UserPreview = React.lazy(() => import('./view/user/Preview'));
   const UserPlayground = React.lazy(() => import('./view/user/Playground'));
-  const UserTestList = React.lazy(() => import('./view/user/TestList'))
-  const UserTest = React.lazy(() => import('./view/user/Test'))
+  const UserTestList = React.lazy(() => import('./view/user/TestList'));
+  const UserTest = React.lazy(() => import('./view/user/Test'));
+  const UserQuizList = React.lazy(()=> import('./view/user/QuizList'));
   useEffect(() => {
     dispatch(getUser(token));
   }, [])
@@ -55,6 +57,7 @@ const App = () => {
               <Route path='coding' element={<UserCoding/>} />
               <Route path='playground' element={<UserPlayground/>}/>
               <Route path='roadmaps' element={<UserRoadmaps/>}/>
+              <Route path='practice/:name' element={<QuizList/>}/>
               <Route element={<UserPreview />} path='preview/:id' />
               <Route element={<UserTest />} path='test/:id' />
               <Route element={<UserTestList />} path='test/' />

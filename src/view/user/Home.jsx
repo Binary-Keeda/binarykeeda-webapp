@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom';
 import Submissions from './components/Solutions';
 import UserDashboard from './Userdashboard'
 import Piechart from './components/Piechart'
+import { EmojiEvents, Person } from '@mui/icons-material';
 
 function Home() {
   const { user } = useSelector(s => s.auth);
   const [userInfoModal, setUserInfoModal] = useState(true);
-
+  const [progress, setProgress] = useState(70);
   useEffect(() => {
     const userinfo = localStorage.getItem('info');
     setUserInfoModal(userinfo);
@@ -37,23 +38,44 @@ function Home() {
               <p className='text-sm text-gray-600 dark:text-gray-300'>{user.email}</p>
             </div>
             {/* Name and Email */}
-            <div className='mt-3 flex flex-col items-start w-full text-sm'>
-              <small className='text-wrap'><strong>University:</strong> {user.university || 'Not Provided'}</small>
+            <div className='mt-7 flex flex-col items-start w-full text-sm'>
               <small className='text-wrap'><strong>Semester:</strong> {user.semester || 'Not Provided'}</small>
               <small><strong>Program:</strong> {user.program || 'Not Provided'}</small>
+              <small className='text-wrap'><strong>University:</strong> {user.university || 'Not Provided'}</small>
               <small><strong>Joined:</strong> {new Date(user.createdAt).toDateString()}</small>
               <small><strong>Status: {"  "} </strong><Chip sx={{ font: "10px" }} label="Active" size="small" color='success' /></small>
+
             </div>
+
           </div>
-          <button>
-            <a className='text-xs hover:underline bottom-5 w-full text-center' href="">
+          <button className='text-gray-800 px-10 rounded-lg flex justify-center items-center gap-2 flex-col' >
+
+            <a className='bg-sky-700 px-5 py-2 my-2  text-white text-xs hover:underline bottom-5 w-full text-center' href="">
               Edit Profile
             </a>
           </button>
         </div>
 
         {/* Chart & Advertisement Section */}
-        <div className='flex border hover:shadow:lg flex-[.5] justify-centerx bg-white shadow-lg  p-6 rounded-xl dark:bg-gray-800 flex-col items-center '>
+        <div className='flex gap-4 hover:shadow-lg flex-[.5] justify-center rounded-xl dark:bg-gray-800 flex-col items-center '>
+
+
+          <div className='w-full border hover:shadow-lg p-6 rounded-lg shadow-md bg-white'>
+            <p className='flex items-center gap-2 text-gray-700 font-semibold'>
+              <Person /> User's Progress
+            </p>
+            <hr className='mt-2' />
+
+            {/* Progress Bar */}
+            <div className='w-full bg-gray-200 rounded-full h-3 mt-4 relative'>
+              <div
+                className='bg-[#da5410] h-3 rounded-full transition-all duration-300'
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+
+            <p className='text-sm text-gray-600 mt-2 text-right'>{progress}% completed</p>
+          </div>
           <Piechart />
         </div>
 

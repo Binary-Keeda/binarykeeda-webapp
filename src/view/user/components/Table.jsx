@@ -6,10 +6,14 @@ import { resetState, setCategory, setCurrentPage } from '../../../redux/reducers
 import { useEffect } from 'react'
 
 
-const Table = ({}) => {
+const Table = ({category}) => {
+  
     const { hasMore, page, loading, data, currentPage, totalPages } = useSelector(
       s => s.quiz
     )
+    useEffect(()=>{
+      dispatch(setCategory(category))
+    }, []);
     const dispatch = useDispatch()
     // useEffect(() => {
     //   console.log(data)

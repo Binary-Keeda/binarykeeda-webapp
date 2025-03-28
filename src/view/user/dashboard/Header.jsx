@@ -30,7 +30,7 @@ function Header({
       <header className='relative h-[70px]'>
         <nav className={`fixed shadow-sm dark:text-gray-50 bg-blend-difference text-gray-600  h-[70px] items-center pr-5 pl-2  flex justify-between z-40 w-full top-0 dark:bg-[${DARK_STRONG}] bg-white`}>
           <div className="md:hidden">
-            <ShortText onClick={() => setMenuOpen(true)} />
+            <ShortText onClick={() => setMenuOpen(!menuOpen)} />
           </div>
           <div className='flex gap-1 items-center'>
             {/* <video
@@ -41,7 +41,7 @@ function Header({
               muted
               className='h-[60px] rounded-[20px]'
             ></video> */}
-            <img src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg' className='h-10' alt='' />
+            <img src='/assets/logo/F1948A99-E208-45B2-A79C-D1E5FCE620AA_4_5005_c.jpeg' className='h-14' alt='' />
           </div>
           <div className='flex items-center gap-3'>
             <AccountMenu handleLogout={handleLogout}/>
