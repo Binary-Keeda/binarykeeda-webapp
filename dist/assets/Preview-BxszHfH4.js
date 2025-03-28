@@ -1,0 +1,1 @@
+import{U as a,J as l,b as r,r as s,j as d}from"./index-CuTTi1tZ.js";function f(){const{id:t}=l(),{solutions:n}=r(o=>o.solution),{data:u}=r(o=>o.quiz),[e,i]=s.useState();return s.useEffect(()=>{const o=n.find(c=>c._id===t);i(o)},[t]),s.useEffect(()=>{console.log(u),console.log(e)},[e]),d.jsx("div",{children:"Preview"})}const S=a(f);export{S as default};
