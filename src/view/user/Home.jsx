@@ -12,6 +12,7 @@ function Home() {
   const [userInfoModal, setUserInfoModal] = useState(true);
   const [progress, setProgress] = useState(70);
   useEffect(() => {
+    console.log("Home Dashboard mounted")
     const userinfo = localStorage.getItem('info');
     setUserInfoModal(userinfo);
   }, []);
@@ -197,4 +198,4 @@ const InfoModal = ({ setUserInfoModal }) => {
   );
 };
 
-export default UserDashboard(Home);
+export default Home;

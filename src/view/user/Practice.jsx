@@ -41,4 +41,4 @@ function PracticePage() {
     </Suspense>
   )
 }
-export default UserDashboard(PracticePage);
+export default PracticePage;

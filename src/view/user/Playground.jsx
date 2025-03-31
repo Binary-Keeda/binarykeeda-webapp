@@ -192,4 +192,4 @@ function Playground() {
 }
 
 
-export default UserDashboard(Playground);
+export default Playground;

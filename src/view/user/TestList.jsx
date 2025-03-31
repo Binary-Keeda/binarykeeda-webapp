@@ -24,21 +24,14 @@ function TestList() {
     )
 }
 
-export default UserDashboard(TestList);
+export default TestList;
 const columns = [
     { field: 'id', headerName: 'ID', width: 80 },
     { field: 'testName', headerName: 'Test Name', width: 200 },
-    { field: 'automataMarks', headerName: 'Automata', width: 120 },
-    { field: 'codingMarks', headerName: 'Coding', width: 120 },
-    { field: 'aptitudeMarks', headerName: 'Aptitude', width: 120 },
-    { field: 'totalMarks', headerName: 'Total', width: 100 },
     { field: 'difficulty', headerName: 'Level', width: 120 },
     { field: 'timeBound', headerName: 'Timed', width: 100 },
     { field: 'duration', headerName: 'Duration', width: 120 },
     { field: 'testTaken', headerName: 'Attempted', width: 120 },
-    { field: 'score', headerName: 'Score', width: 100 },
-    { field: 'accuracy', headerName: 'Accuracy', width: 120 },
-    { field: 'passFail', headerName: 'Result', width: 100 },
     { field: 'dateAttempted', headerName: 'Date', width: 140 },
     { field: 'attemptLink', headerName: 'Attempt', width: 200, sortable: false },
 ];

@@ -1,0 +1,212 @@
+{
+  "section": [
+    {
+      "_id": "67a86a85f5c07ac70b974ca5",
+      "name": "Quants",
+      "difficulty": "Easy",
+      "tags": [
+        "math",
+        "logic"
+      ],
+      "creator": "64f8b59b5e5f5b00123abcd",
+      "title": "Basic Math Quiz",
+      "duration": 10,
+      "questions": [
+        {
+          "_id": "67ea2767b8d02f2f64c5d1cc",
+          "question": "What is 2 + 2?",
+          "marks": 2,
+          "negative": 0,
+          "category": "MCQ",
+          "options": [
+            {
+              "_id": "67ea2767b8d02f2f64c5d1cd",
+              "text": "3",
+              "isCorrect": false
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1ce",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1cf",
+              "text": "5",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "_id": "67ea2767b8d02f2f64c5d1d0",
+          "question": "What is the square root of 16?",
+          "marks": 2,
+          "negative": 0,
+          "category": "MCQ",
+          "options": [
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d1",
+              "text": "2",
+              "isCorrect": false
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d2",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d3",
+              "text": "8",
+              "isCorrect": false
+            }
+          ]
+        }
+      ],
+      "marks": 4,
+      "averageScore": 0,
+      "highestScore": 0,
+      "isAvailable": true
+    },
+    {
+      "_id": "67a86a85f5c07ac70b974ca5",
+      "name": "Logical",
+      "difficulty": "Easy",
+      "tags": [
+        "math",
+        "logic"
+      ],
+      "creator": "64f8b59b5e5f5b00123abcd",
+      "title": "Basic Math Quiz",
+      "duration": 10,
+      "questions": [
+        {
+          "_id": "67ea2767b8d02f2f64c5d1cc",
+          "question": "What is 2 + 2?",
+          "marks": 2,
+          "negative": 0,
+          "category": "MCQ",
+          "options": [
+            {
+              "_id": "67ea2767b8d02f2f64c5d1cd",
+              "text": "3",
+              "isCorrect": false
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1ce",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1cf",
+              "text": "5",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "_id": "67ea2767b8d02f2f64c5d1d0",
+          "question": "What is the square root of 16?",
+          "marks": 2,
+          "negative": 0,
+          "category": "MCQ",
+          "options": [
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d1",
+              "text": "2",
+              "isCorrect": false
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d2",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d3",
+              "text": "8",
+              "isCorrect": false
+            }
+          ]
+        }
+      ],
+      "marks": 4,
+      "averageScore": 0,
+      "highestScore": 0,
+      "isAvailable": true
+    },
+    {
+      "_id": "67a86a85f5c07ac70b974ca5",
+      "name": "English",
+      "difficulty": "Easy",
+      "tags": [
+        "math",
+        "logic"
+      ],
+      "creator": "64f8b59b5e5f5b00123abcd",
+      "title": "Basic Math Quiz",
+      "duration": 10,
+      "questions": [
+        {
+          "_id": "67ea2767b8d02f2f64c5d1cc",
+          "question": "What is 2 + 2?",
+          "marks": 2,
+          "negative": 0,
+          "category": "MCQ",
+          "options": [
+            {
+              "_id": "67ea2767b8d02f2f64c5d1cd",
+              "text": "3",
+              "isCorrect": false
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1ce",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1cf",
+              "text": "5",
+              "isCorrect": false
+            }
+          ]
+        },
+        {
+          "_id": "67ea2767b8d02f2f64c5d1d0",
+          "question": "What is the square root of 16?",
+          "marks": 2,
+          "negative": 0,
+          "category": "MCQ",
+          "options": [
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d1",
+              "text": "2",
+              "isCorrect": false
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d2",
+              "text": "4",
+              "isCorrect": true
+            },
+            {
+              "_id": "67ea2767b8d02f2f64c5d1d3",
+              "text": "8",
+              "isCorrect": false
+            }
+          ]
+        }
+      ],
+      "marks": 4,
+      "averageScore": 0,
+      "highestScore": 0,
+      "isAvailable": true
+    }
+  ],
+  "solution": {
+    "_id": "67ea2760b8d02f2f64c5d1c6",
+    "userId": "67e1918c52ce4d448c229ee1",
+    "quizId": "67a86a85f5c07ac70b974ca5",
+    "ufmAttempts": 0,
+    "isSubmitted": false,
+    "createdAt": "2025-03-31T05:25:52.733Z",
+    "updatedAt": "2025-03-31T05:25:52.733Z",
+    "__v": 0
+  }
+}

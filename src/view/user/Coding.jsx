@@ -12,4 +12,4 @@ function Coding() {
 }
 
 
-export default UserDashboard(Coding)
+export default Coding;

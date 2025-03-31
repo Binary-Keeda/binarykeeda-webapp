@@ -5,16 +5,12 @@ import { logOutUser } from "../../../redux/reducers/UserThunks";
 import Cookies from 'js-cookie'
 import { DARK_STRONG } from "../utils/colors";
 import AccountMenu from "../utils/HeaderMenu";
+import React, { useEffect } from "react";
 // import { handleLogout } from "../../../utils/libs/logout";
 
-function Header({
-  user,
-  menuOpen,
-  setMenuOpen,
-  darkMode,
-  toggleMode
-}) {
+const  Header = React.memo(({user,menuOpen,setMenuOpen,darkMode,toggleMode}) => {
 
+  useEffect(()=>{console.log("Header Mounted")} ,[])
   // const handleLogout = () => { }
   const dispacth = useDispatch();
   const handleLogout = () => {
@@ -41,7 +37,7 @@ function Header({
               muted
               className='h-[60px] rounded-[20px]'
             ></video> */}
-            <img src='/assets/logo/F1948A99-E208-45B2-A79C-D1E5FCE620AA_4_5005_c.jpeg' className='h-14' alt='' />
+            <img src='/assets/logo/F1948A99-E208-45B2-A79C-D1E5FCE620AA_4_5005_c.jpeg' className='h-12' alt='' />
           </div>
           <div className='flex items-center gap-3'>
             <AccountMenu handleLogout={handleLogout}/>
@@ -51,5 +47,5 @@ function Header({
     </>
   )
 
-}
+})
 export default Header;  

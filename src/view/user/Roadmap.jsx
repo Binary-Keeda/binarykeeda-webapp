@@ -34,4 +34,4 @@ import UserDashboard from './Userdashboard';
 }
 
 
-export default UserDashboard(RoadmapGrid);
+export default RoadmapGrid;

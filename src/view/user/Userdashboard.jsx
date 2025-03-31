@@ -1,46 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
-// import { customSignOut } from '../../utils/libs/logout'
-import { useSelector } from 'react-redux'
-import Header from './dashboard/Header'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, Outlet } from "react-router-dom";
+import Header from "./dashboard/Header";
+import Drawer from "./dashboard/Sidebar";
 import CompleteProfile from './dashboard/CompleteProfile'
-import Drawer from './dashboard/Sidebar'
-import { DARK_LIGHT } from './utils/colors'
+const UserDashboardLayout = ({children}) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const location = useLocation();
+  const { user } = useSelector((s) => s.auth);
 
-const UserDashboard = (WrrapedComponent) => {
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleMode = () => {
+    localStorage.setItem("mode", darkMode ? "light" : "dark");
+    setDarkMode(!darkMode);
+  };
 
-  return () => {
-    const customSignOut = () => {
-
+  useEffect(() => {
+    const mode = localStorage.getItem("mode");
+    if (mode === "dark") {
+      document.getElementById("root").classList.add("dark");
+      setDarkMode(true);
+    } else {
+      document.getElementById("root").classList.remove("dark");
+      setDarkMode(false);
     }
-    const [menuOpen, setMenuOpen] = useState(false)
-    const toggleMenu = () => setMenuOpen(!menuOpen)
-    const [darkMode, setDarkMode] = useState(false)
-    const toggleMode = () => {
-      localStorage.setItem('mode', `${!darkMode ? 'dark' : 'light'}`)
-      setDarkMode(!darkMode)
-    }
-    useEffect(() => {
-      const mode = localStorage.getItem('mode')
-      if (mode === 'dark') {
-        document.getElementById('root').classList.add('dark')
-        setDarkMode(true)
-      } else {
-        document.getElementById('root').classList.remove('dark')
-        setDarkMode(false)
-      }
-    }, [darkMode])
-    const { user } = useSelector(s => s.auth);
+  }, []);
 
-    const handleLogout = async () => await customSignOut()
-    const location = useLocation()
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location]);
 
-    useEffect(() => {
-      setMenuOpen(false)
-    }, [location])
-    return <>
-      {/* { (!user?.program || !user?.university || !user?.yearOfGraduation) && <CompleteProfile />} */}
-      {!user.isVerified && <CompleteProfile/>}
+  const handleLogout = async () => await customSignOut();
+
+  return (
+    <>
+      {!user?.isVerified && <CompleteProfile />}
       <Header
         toggleMode={toggleMode}
         darkMode={darkMode}
@@ -55,14 +50,11 @@ const UserDashboard = (WrrapedComponent) => {
         showMenu={menuOpen}
         toggleMenu={toggleMenu}
       />
-      <main className={`pr-5 pl-5 md:pl-[80px] py-5 dark:bg-[${DARK_LIGHT}] bg-gray-50 min-h-[calc(100vh-80px)] text-gray-800 transition-all`}>
-        {/* {children || <Outlet />} */}
-        {<WrrapedComponent/>}
+      <main className={`md:pl-[70px]  ${menuOpen ? "md:pl-[230px] " : "pl-5" }  pr-5 py-5 dark:bg-gray-900 bg-gray-50 min-h-[calc(100vh-80px)] text-gray-800 transition-all`}>
+      {  children || <Outlet /> } {/* This renders the nested components */}
       </main>
     </>
-  }
+  );
+};
 
-}
-
-
-export default UserDashboard;
+export default UserDashboardLayout;

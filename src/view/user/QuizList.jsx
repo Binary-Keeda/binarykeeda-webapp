@@ -15,4 +15,4 @@ function QuizList() {
   )
 }
 
-export default UserDashboard(QuizList)
+export default QuizList

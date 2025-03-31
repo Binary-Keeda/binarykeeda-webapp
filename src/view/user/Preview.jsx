@@ -24,4 +24,4 @@ function Preview() {
 }
 
 
-export default UserDashboard(Preview)
+export default Preview

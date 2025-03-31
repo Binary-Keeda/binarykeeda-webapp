@@ -5,8 +5,8 @@ export const UserRoute = () => {
 
 }
 
-export const RoleBasedRoutes = ({requiredRole}) => {
+export const RoleBasedRoutes = ({requiredRole,children}) => {
     const {user} =useSelector(s=>s.auth);
-    if(user?.role == requiredRole) return <Outlet/>
+    if(user?.role == requiredRole) return children || <Outlet/>
     else return <Navigate to="/login" replace={true}/>
 }
