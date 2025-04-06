@@ -89,7 +89,7 @@ export default function Header() {
         >
           <div className='flex items-center gap-6'>
             <ScrollLink to='home' smooth className='cursor-pointer'>
-              <img src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg' className='h-10' alt='' />
+              <img src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg' className='h-14' alt='' />
             </ScrollLink>
           </div>
           <div className='lg:flex hidden'>

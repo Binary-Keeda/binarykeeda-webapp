@@ -8,7 +8,6 @@ const Home = () => {
   return (
     <section className=''>
       <Hero />
-
       <About />
       <Features />
     </section>

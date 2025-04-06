@@ -2,7 +2,7 @@ export default function Hero() {
     return (
         <section className="relative h-[480px] lg:h-[430px] max-h-lvh backdrop-blur-xl">
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 opacity-75 bg-gradient-to-r from-black via-black to-gray-900  z-30"></div>
+            <div className="absolute inset-0 opacity-75 bg-gradient-to-r from-[#000] via-black to-gray-900  z-30"></div>
 
             {/* Background Video */}
             <video
