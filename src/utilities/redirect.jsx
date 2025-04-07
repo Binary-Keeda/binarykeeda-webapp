@@ -15,19 +15,16 @@ const Redirect = () => {
     const token = params.get("token");
 
     if (token) {
-      // Store token in cookies for future authentication
       Cookies.set("token", token, { expires: 7, secure: true, sameSite: "Strict" });
 
-      // Dispatch action to fetch user details
       dispatch(getUser(token));
     } else {
       console.log("Token nahi mila 🤡");
       navigate("/login");
     }
-  }, []); // Empty dependency array to prevent infinite re-renders
+  }, []); 
 
   useEffect(() => {
-    // Redirect to home/dashboard if user is successfully fetched
     if (user) {
       navigate(`/${user.role}`); // Change to the appropriate route
     }

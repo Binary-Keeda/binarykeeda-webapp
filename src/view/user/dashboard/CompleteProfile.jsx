@@ -27,6 +27,13 @@ const avtars = [
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/toon_6.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_17.png",
 ]
+
+const Specialisations = [
+  'Data Scient',
+  'FulL Stack',
+  'AIML',
+  'Others'
+]
 const years = [
   '2029',
   '2028',
@@ -128,7 +135,7 @@ const programs = [
 export default function CompleteProfile() {
   const { user } = useSelector(s => s.auth)
   const [avatar,setAvatar] = useState({
-    src:avtars[0],
+    src:user.avatar || avtars[0],
     idx:0
   });
   const [yearOfGraduation, setYearOfGraaduation] = useState(user.yearOfGraduation)
@@ -139,13 +146,14 @@ export default function CompleteProfile() {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
-
+  const [specialisation,setSpecialisation]  = useState("");
   const profileSchema = zod.object({
     yearOfGraduation: zod.string().nonempty('Graduation year is required'),
     program: zod.string().nonempty('Program is required'),
     university: zod.string().nonempty('University is required'),
     semester: zod.string().nonempty('University is required'),
-    avatar:zod.string().nonempty()
+    avatar:zod.string().nonempty(),
+    specialisation:zod.string().nonempty()
   })
 
   const fetchUniversities = async query => {
@@ -171,7 +179,8 @@ export default function CompleteProfile() {
         program,
         university: university?.name || university,
         semester:semester,
-        avatar:avatar.src
+        avatar:avatar.src,
+        specialisation:specialisation
       })
       // alert(JSON.stringify(validatedData))
       // return;
@@ -262,10 +271,10 @@ export default function CompleteProfile() {
             </div>
           </div>
           {/* Personal Information */}
-          <div className='rounded-lg  text-xs  py-6 px-4 border'>
+          {/* <div className='rounded-lg  text-xs  py-6 px-4 border'>
             <p>Name: {user.name}</p>
             <p>Email: {user.email}</p>
-          </div>
+          </div> */}
           <div className='inputFor mt-3'>
 
             <Autocomplete required
@@ -316,6 +325,26 @@ export default function CompleteProfile() {
                   required
                   {...params}
                   label={"Program"}
+                  placeholder='Select Program'
+                  variant='outlined'
+                  fullWidth
+                />
+              )}
+            />
+          </div>
+          <div className='inputFor'>
+            <Autocomplete
+              required
+              options={Specialisations}
+              // disabled={user.specialisation ? true : false}
+              value={specialisation || ""}
+              onChange={(e, newValue) => setSpecialisation(newValue)}
+              renderInput={params => (
+                <TextField
+                  required
+                  type='text'
+                  {...params}
+                  label={"Specialisation"}
                   placeholder='Select Program'
                   variant='outlined'
                   fullWidth

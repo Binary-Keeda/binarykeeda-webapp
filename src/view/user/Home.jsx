@@ -39,12 +39,14 @@ function Home() {
               <p className='text-sm text-gray-600 dark:text-gray-300'>{user.email}</p>
             </div>
             {/* Name and Email */}
-            <div className='mt-7 flex flex-col items-start w-full text-sm'>
+            <div className='mt-7 flex flex-col gap-1 items-start w-full text-sm'>
               <small className='text-wrap'><strong>Semester:</strong> {user.semester || 'Not Provided'}</small>
               <small><strong>Program:</strong> {user.program || 'Not Provided'}</small>
               <small className='text-wrap'><strong>University:</strong> {user.university || 'Not Provided'}</small>
+              <small className='text-wrap'><strong>Specialisation:</strong> {user.specialisation || 'Not Provided'}</small>
               <small><strong>Joined:</strong> {new Date(user.createdAt).toDateString()}</small>
-              <small><strong>Status: {"  "} </strong><Chip sx={{ font: "10px" }} label="Active" size="small" color='success' /></small>
+
+              <small><strong>Status: {"  "} </strong>Active</small>
 
             </div>
 
