@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect } from 'react'
 import UserDashboard from './Userdashboard';
+import { Button } from '@mui/material';
 const Table = React.lazy(() => import('./components/Table'));
 function PracticePage() {
 
@@ -32,8 +33,11 @@ function PracticePage() {
             <img className='h-[200px] object-cover rounded-t-[22px]' src={"https://30dc.graphy.com/s/store/courses/64ff7f1be4b0607f6f9001f6/cover.jpg?v=2"} alt={i.head} />
             <div className='p-6 pb-5'>
               <h1 className='text-gray-900'>{i.head}</h1>
-              <p className='text-xs text-gray-600 mt-1'>{i.description}</p>
-              <a className='text-xs text-gray-600 underline ' href={i.link}>Link</a>
+              <p className='text-xs text-gray-600 mt-1 mb-2'>{i.description}</p>
+              <Button variant='contained' color='primary' sx={{fontSize:8}}>
+                <a href={i.link}>Solve</a>
+              </Button>
+              {/* <a className='text-xs bg-[#0149AD] px-4 py-1 text-white rounded-lg  ' href={i.link}>Solve</a> */}
             </div>
           </div>
         ))}

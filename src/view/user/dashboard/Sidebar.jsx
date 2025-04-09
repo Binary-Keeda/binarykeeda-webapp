@@ -38,19 +38,40 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
     ]
     return (
         <>
-            <aside onMouseEnter={() => { setShowMenu(true) }} onMouseLeave={() => { setShowMenu(false) }} className={`z-40 h-[calc(100vh-70px)] top-[71px]  fixed transition-all duration-50 ${showMenu ? 'w-[200px]' : 'w-0 md:w-[70px] '} border-r-[1px] left-0 border-gray-200 bg-white`}>
-                <ul>
-                    {
-                        NAV_ITEMS.map((item, i) => (
-                            <Link to={item.path} className={`flex gap-4 ${showMenu ? '' : 'hidden lg:flex justify-end'} py-4 cursor-pointer  transition-all duration-50 hover:bg-gray-600 bg-gray-800 text-[#ffffff] mx-3 px-3 rounded-3xl my-4 ${showMenu ? '' : ''} `} key={i}>
-                                <span className='text-end' >{item.icon}</span>
-                                <span className={`text-nowrap ${showMenu ? '' : 'hidden'}`} >{item.label}</span>
-                            </Link>
-                        ))
-                    }
-                    <li></li>
-                </ul>
-            </aside>
+<aside
+  onMouseEnter={() => setShowMenu(true)}
+  onMouseLeave={() => setShowMenu(false)}
+  className={`
+    z-40 h-[calc(100vh-70px)] top-[71px] fixed left-0
+    border-r border-gray-200 bg-white
+    transition-all duration-300 ease-in-out
+    ${showMenu ? 'w-[200px]' : 'w-0 md:w-[70px]'}
+    overflow-hidden
+  `}
+>
+  <ul>
+    {
+      NAV_ITEMS.map((item, i) => (
+        <Link
+          to={item.path}
+          key={i}
+          className={`
+            flex items-center gap-4
+            ${showMenu ? 'justify-start' : 'lg:justify-end'}
+            py-4 px-3 mx-3 my-4 rounded-3xl
+            bg-gray-800 text-white hover:bg-gray-600
+            transition-all duration-300 ease-in-out
+            ${showMenu ? '' : 'hidden lg:flex'}
+          `}
+        >
+          <span className="text-end">{item.icon}</span>
+          <span className={`text-nowrap ${showMenu ? 'ml-2' : 'hidden'}`}>{item.label}</span>
+        </Link>
+      ))
+    }
+  </ul>
+</aside>
+
 
         </>
     );

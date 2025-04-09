@@ -43,31 +43,31 @@ const Table = ({category}) => {
         <div className='relative flex flex-col w-full h-full overflow-scroll custom-scrollbar dark:bg-gray-800 dark:text-gray-50 text-gray-700 bg-white shadow-md rounded-lg bg-clip-border'>
           <table className='w-full overflow-x-scroll text-left table-auto min-w-max'>
             <thead>
-              <tr>
-                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-slate-50'>
-                  <p className='text-sm font-normal leading-none dark:text-gray-50 text-slate-500'>
+              <tr className=''>
+                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-orange-50'>
+                  <p className='text-sm font-normal leading-none dark:text-gray-50 text-gray-700'>
                     Title
                   </p>
                 </th>
-                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-slate-50'>
-                  <p className='text-sm font-normal leading-none dark:text-gray-50 text-slate-500'>
+                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-orange-50'>
+                  <p className='text-sm font-normal leading-none dark:text-gray-50 text-gray-700'>
                     Difficulty
                   </p>
                 </th>
-                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-slate-50'>
-                  <p className='text-sm font-normal leading-none dark:text-gray-50 text-slate-500'>
+                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-orange-50'>
+                  <p className='text-sm font-normal leading-none dark:text-gray-50 text-gray-700'>
                     Duration
                   </p>
                 </th>
-                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-slate-50'>
-                  <select  onChange={changehandeler} className='text-sm bg-transparent font-normal leading-none dark:text-gray-50 text-slate-500'>
+                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-orange-50'>
+                  <select  onChange={changehandeler} className='text-sm bg-transparent font-normal leading-none dark:text-gray-50 text-gray-700'>
                     <option value="">All</option>
                     <option value="Aptitude">Aptitude</option>
                     <option value="Core">Core</option>
                     <option value="Miscellaneous">Misc.</option>
                   </select>
                 </th>
-                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-slate-50'>
+                <th className='p-4 border-b border-slate-200 dark:bg-gray-800 dark:text-gray-50 bg-orange-50'>
                   <p className='text-sm font-normal leading-none dark:text-gray-50 text-slate-500'>
                     Attempt
                   </p>
@@ -95,7 +95,7 @@ const Table = ({category}) => {
                     </td>
                     <td className='p-4 py-5'>
                       <p className='text-sm dark:text-gray-50 text-slate-500'>
-                        {i.duration + ' ' + 'min.'}
+                        {i.duration + ' ' + 'min'}
                       </p>
                     </td>
                     <td className='p-4 py-5'>
@@ -103,11 +103,11 @@ const Table = ({category}) => {
                     </td>
                     <td className='p-4 py-5'>
                       {i.isSubmitted ? (
-                        <p className='text-sm dark:text-gray-50 text-slate-500'>Submitted</p>
+                        <p className='text-sm dark:text-gray-50 text-green-500'>Submitted</p>
                       ) : 
                       i.isAvailable ?<>
                        <Link
-                          className='text-sm dark:text-gray-50 text-slate-500'
+                          className='text-sm dark:text-gray-50 text-blue-500'
                           to={`/user/solution/${i._id}`}
                         >
                           Attempt
