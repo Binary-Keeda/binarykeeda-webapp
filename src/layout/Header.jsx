@@ -89,7 +89,7 @@ export default function Header() {
         >
           <div className='flex items-center gap-6'>
             <ScrollLink to='home' smooth className='cursor-pointer'>
-            <img src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg' className='h-14' alt='' />
+            <img src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg' className='h-14' alt='' />
 
             </ScrollLink>
           </div>

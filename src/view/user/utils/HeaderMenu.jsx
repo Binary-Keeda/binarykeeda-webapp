@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Box,
   Avatar,
@@ -9,101 +9,110 @@ import {
   IconButton,
   Typography,
   Tooltip,
-} from "@mui/material";
+  Switch
+} from '@mui/material'
 import {
   PersonAdd,
   Settings,
   Logout,
-} from "@mui/icons-material";
-import { useSelector } from "react-redux";
+  DarkMode,
+  LightMode
+} from '@mui/icons-material'
+import { useSelector } from 'react-redux'
 
-const AccountMenu = ({handleLogout}) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl); 
-  const {user} = useSelector((s)=> s.auth)
+const AccountMenu = ({ handleLogout }) => {
+  const [darkMode, setDarkMode] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+  const { user } = useSelector(s => s.auth)
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <Tooltip title='Account settings'>
           <IconButton
             onClick={handleClick}
-            size="small"
+            size='small'
             sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
+            aria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup='true'
+            aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar  src={user.avatar}  sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar src={user.avatar} sx={{ width: 32, height: 32 }}>
+              M
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
+        id='account-menu'
         open={open}
         onClose={handleClose}
         onClick={handleClose}
         PaperProps={{
           elevation: 0,
           sx: {
-            overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
             mt: 1.5,
-            "& .MuiAvatar-root": {
+            '& .MuiAvatar-root': {
               width: 32,
               height: 32,
               ml: -0.5,
-              mr: 1,
+              mr: 1
             },
-            "&::before": {
+            '&::before': {
               content: '""',
-              display: "block",
-              position: "absolute",
+              display: 'block',
+              position: 'absolute',
               top: 0,
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0,
-            },
-          },
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0
+            }
+          }
         }}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar src={user.avatar} /> Profile
+          <Avatar src={user.avatar} /> <small>Profile</small>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+
+        <MenuItem disableRipple>
+          <ListItemIcon>{darkMode ? <DarkMode /> : <LightMode />}</ListItemIcon>
+          <small>
+
+            {darkMode ? 'Dark Mode' : 'Light Mode'}
+          </small>
+          <Switch
+            checked={darkMode}
+            onChange={() => setDarkMode(prev => !prev)}
+            size='small'
+          />
         </MenuItem>
-        <Divider />
-        
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
+
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <Logout fontSize='small' />
           </ListItemIcon>
-          Logout
+          <small>Logout</small>
         </MenuItem>
       </Menu>
     </>
-  );
-};
+  )
+}
 
-export default AccountMenu;
+export default AccountMenu

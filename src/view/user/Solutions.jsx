@@ -88,8 +88,7 @@ const Solution = () => {
       handleFullScreen()
     }
   }
-  // UFM Protection measures ends
-  // Pagination Logic starts here
+
   const indexOfLastQuestion = currentPage * questionsPerPage
   const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage
   const currentQuestions =

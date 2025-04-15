@@ -37,7 +37,7 @@ const  Header = React.memo(({user,menuOpen,setMenuOpen,darkMode,toggleMode}) => 
               muted
               className='h-[60px] rounded-[20px]'
             ></video> */}
-            <img src='/assets/logo/F1948A99-E208-45B2-A79C-D1E5FCE620AA_4_5005_c.jpeg' className='h-12' alt='' />
+            <img src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg' className='h-12' alt='' />
           </div>
           <div className='flex items-center gap-3'>
             <AccountMenu handleLogout={handleLogout}/>

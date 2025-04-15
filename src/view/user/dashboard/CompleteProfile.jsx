@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {
   TextField,
-  Button,
   Autocomplete,
   CircularProgress,
   Backdrop,
-  Avatar
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import * as zod from 'zod'
@@ -216,27 +214,23 @@ export default function CompleteProfile() {
     if (user && !user.isVerified) {
       const preventScroll = e => {
         e.preventDefault()
-        window.scrollTo(0, 0) // Keeps the user at the top of the page
+        window.scrollTo(0, 0) 
       }
 
       document.body.addEventListener('scroll', preventScroll, {
         passive: false
       })
-
-      // Cleanup the event listener when the component unmounts
       return () => {
         document.body.removeEventListener('scroll', preventScroll)
       }
     }
   }, [user])
 
-  // Debounce API calls for university
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (university) fetchUniversities(university)
-    }, 300) // 300ms debounce delay
-
-    return () => clearTimeout(timeout) // Cleanup on input change
+    }, 300)
+    return () => clearTimeout(timeout) 
   }, [university])
 
   return (

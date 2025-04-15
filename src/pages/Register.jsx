@@ -48,7 +48,7 @@ const Register = () => {
         </Link>
         <div className='mb-10  overflow-hidden  relative '>
           <img
-            src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg'
+            src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
             className='h-14 rounded-md'
             alt=''
           />

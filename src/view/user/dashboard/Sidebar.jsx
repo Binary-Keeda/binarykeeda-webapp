@@ -45,7 +45,7 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
     z-40 h-[calc(100vh-70px)] top-[71px] fixed left-0
     border-r border-gray-200 bg-white
     transition-all duration-300 ease-in-out
-    ${showMenu ? 'w-[200px]' : 'w-0 md:w-[70px]'}
+    ${showMenu ? 'w-[200px]' : 'w-0 lg:w-[70px]'}
     overflow-hidden
   `}
 >
