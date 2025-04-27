@@ -1,0 +1,1 @@
+import{f as a,d as r,r as s,j as l}from"./index-cH5oMfpd.js";function d(){const{id:t}=a(),{solutions:n}=r(o=>o.solution),{data:u}=r(o=>o.quiz),[e,i]=s.useState();return s.useEffect(()=>{const o=n.find(c=>c._id===t);i(o)},[t]),s.useEffect(()=>{console.log(u),console.log(e)},[e]),l.jsx("div",{children:"Preview"})}export{d as default};

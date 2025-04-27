@@ -20,7 +20,6 @@ const avtars = [
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/teams_1.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_19.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
-  
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/toon_7.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/toon_6.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_17.png",
