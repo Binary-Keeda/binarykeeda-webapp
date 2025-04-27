@@ -16,7 +16,7 @@ export default function Hero() {
             />
 
             {/* Content Overlay */}
-            <div className="absolute inset-0 flex flex-col items-start justify-center text-start text-white px-6 z-40">
+            <div className="absolute inset-0 flex flex-col items-start justify-center text-start text-white px-10 z-40">
                 <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-2xl">
                     Master Your Skills with Binary Keeda
                 </h1>

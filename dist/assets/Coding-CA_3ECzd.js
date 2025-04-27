@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Problemset-CIFHoSpI.js","assets/index-CxpMfilV.js","assets/index-B8OrY-9J.css"])))=>i.map(i=>d[i]);
+import{j as r,r as e,S as t}from"./index-CxpMfilV.js";const s=e.lazy(()=>t(()=>import("./Problemset-CIFHoSpI.js"),__vite__mapDeps([0,1,2])));function n(){return r.jsx(r.Fragment,{children:r.jsx(e.Suspense,{fallback:r.jsx(r.Fragment,{children:"Loading ..."}),children:r.jsx(s,{})})})}export{n as default};
