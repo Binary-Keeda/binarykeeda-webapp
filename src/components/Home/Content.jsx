@@ -15,7 +15,7 @@ const Content = () => {
         <div className='mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-1'>
           <div className='lg:pr-8 lg:pt-4'>
             <div className='lg:max-w-lg'>
-              {/* <h2 className='text-base font-semibold leading-7 text-[#0149ad]'>
+              {/* <h2 className='text-base font-semibold leading-7 text-[#ca5a27]'>
                 Empower Learning
               </h2> */}
               <p className='mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
@@ -32,7 +32,7 @@ const Content = () => {
                       viewBox='0 0 20 20'
                       fill='currentColor'
                       aria-hidden='true'
-                      className='absolute left-1 top-1 h-5 w-5 text-[#0149ad]'
+                      className='absolute left-1 top-1 h-5 w-5 text-[#ca5a27]'
                     >
                       <path d='M3.196 12.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 12.87z' />
                       <path d='M3.196 8.87l-.825.483a.75.75 0 000 1.294l7.25 4.25a.75.75 0 00.758 0l7.25-4.25a.75.75 0 000-1.294l-.825-.484-5.666 3.322a2.25 2.25 0 01-2.276 0L3.196 8.87z' />
@@ -52,7 +52,7 @@ const Content = () => {
                       viewBox='0 0 20 20'
                       fill='currentColor'
                       aria-hidden='true'
-                      className='absolute left-1 top-1 h-5 w-5 text-[#0149ad]'
+                      className='absolute left-1 top-1 h-5 w-5 text-[#ca5a27]'
                     >
                       <path
                         fillRule='evenodd'
@@ -74,7 +74,7 @@ const Content = () => {
                       viewBox='0 0 20 20'
                       fill='currentColor'
                       aria-hidden='true'
-                      className='absolute left-1 top-1 h-5 w-5 text-[#0149ad]'
+                      className='absolute left-1 top-1 h-5 w-5 text-[#ca5a27]'
                     >
                       <path
                         fillRule='evenodd'
@@ -93,7 +93,7 @@ const Content = () => {
               <div className='mt-10 flex items-center gap-x-6'>
                 <Link
                   to='/signup'
-                  className='text-sm font-semibold leading-6 bg-gradient-to-r from-blue-500 to-[#0149ad] text-white  rounded-2xl px-4 py-1 hover:shadow-xl hover:bg-opacity-80 transition-all duration-200'
+                  className='text-sm font-semibold leading-6 bg-gradient-to-r from-orange-400 to-[#ca5a27] text-white  rounded-2xl px-4 py-1 hover:shadow-xl hover:bg-opacity-80 transition-all duration-200'
                 >
                   Register <span aria-hidden='true'>→</span>
                 </Link>

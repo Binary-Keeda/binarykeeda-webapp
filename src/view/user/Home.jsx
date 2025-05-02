@@ -17,7 +17,7 @@ function Home() {
     console.log('Home Dashboard mounted')
     const userinfo = localStorage.getItem('info')
     setUserInfoModal(userinfo)
-  }, [])
+  }, []);
 
   return (
     <>

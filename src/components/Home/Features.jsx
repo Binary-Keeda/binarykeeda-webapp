@@ -25,7 +25,7 @@ export default function Features () {
               </p>
               <a
                 href='#'
-                className='flex flex-row items-center justify-center gap-2 text-base font-semibold text-[#0149ad] lg:justify-start hover:text-[#0149ad] '
+                className='flex flex-row items-center justify-center gap-2 text-base font-semibold text-[#ca5a27] lg:justify-start hover:text-[#ca5a27] '
               >
                 Sign Up{' '}
                 <svg
@@ -48,7 +48,7 @@ export default function Features () {
             {/* <div className='relative w-full text-center  lg:text-left lg:w-2/4'></div> */}
           </div>
           <div className='flex justify-center items-center  gap-x-5 gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8'>
-            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#0149ad]'>
+            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#ca5a27]'>
               <div className='bg-white rounded-full flex justify-center items-center mb-5 w-14 h-14 '>
                 <svg
                   width='30'
@@ -72,8 +72,8 @@ export default function Features () {
                 boost learning and improve retention.
               </p>
             </div>
-            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#0149ad]'>
-              <div className='bg-white text-[#0149ad] rounded-full flex justify-center items-center mb-5 w-14 h-14 '>
+            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#ca5a27]'>
+              <div className='bg-white text-[#ca5a27] rounded-full flex justify-center items-center mb-5 w-14 h-14 '>
                 <svg
                   width='30'
                   height='30'
@@ -98,7 +98,7 @@ export default function Features () {
                 your academic or career goals.
               </p>
             </div>
-            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#0149ad]'>
+            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#ca5a27]'>
               <div className='bg-white rounded-full flex justify-center items-center mb-5 w-14 h-14 '>
                 <svg
                   width='30'
@@ -124,7 +124,7 @@ export default function Features () {
                 opportunities, and make informed career decisions.
               </p>
             </div>
-            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#0149ad]'>
+            <div className='group relative w-full bg-gray-100 rounded-2xl p-4 transition-all duration-500 max-md:max-w-md max-md:mx-auto md:w-2/5 md:h-64 xl:p-7 xl:w-1/4 hover:bg-[#ca5a27]'>
               <div className='bg-white rounded-full flex justify-center items-center mb-5 w-14 h-14 '>
                 <svg
                   width='30'

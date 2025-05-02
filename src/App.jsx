@@ -11,6 +11,7 @@ import { RoleBasedRoutes, UserRoute } from './auth/ProtectedRoutes'
 import { getQuiz } from './redux/api/getQuiz'
 import NotFound from './utilities/NotFound'
 import QuizList from './view/user/QuizList'
+import { getTestAdmin } from './redux/api/getTest'
 // Lazy-loaded pages
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
@@ -34,12 +35,22 @@ const App = () => {
   const UserTestList = React.lazy(() => import('./view/user/TestList'))
   const UserTest = React.lazy(() => import('./view/user/Test'))
   const UserQuizList = React.lazy(() => import('./view/user/QuizList'))
+
+  // admin routes
+  const AdminLayout = React.lazy(() =>import('./view/admin/layout/AdminDashboard'))
+  const Users = lazy(() => import('./view/admin/Users'))
+  const EditQuiz = lazy(() => import('./view/admin/EditQuiz'))
+  const ViewQuiz = lazy(() => import('./view/admin/Quiz'))
+  const AdminHome = React.lazy(() => import('./view/admin/Home'))
+  const AdminTestSeries = React.lazy(() => import('./view/admin/Test') )
+  const AdminTestEdit = React.lazy(() => import('./view/admin/TestEdit'));
   useEffect(() => {
     dispatch(getUser(token))
   }, [])
   useEffect(() => {
     if (user) {
-      getQuiz()
+      getQuiz();
+      getTestAdmin();
     }
   }, [user])
   const { loading } = useSelector(s => s.auth)
@@ -53,7 +64,7 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route element={<UserRoute />}>
-            <Route path='/login' element={<Login />} />
+              <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/signin' element={<Redirect />} />
               <Route path='/verify/:id' element={<MagicSignup />} />
@@ -63,7 +74,7 @@ const App = () => {
               path='/user'
               element={
                 <RoleBasedRoutes requiredRole={'user'}>
-                  <UserLayout />{' '}
+                  <UserLayout />
                 </RoleBasedRoutes>
               }
             >
@@ -82,9 +93,18 @@ const App = () => {
             </Route>
             <Route
               path='/admin'
-              element={<RoleBasedRoutes requiredRole={'admin'} />}
+              element={
+                <RoleBasedRoutes requiredRole={'admin'}>
+                  <AdminLayout />
+                </RoleBasedRoutes>
+              }
             >
-              <Route index element={<></>} />
+              <Route index element={<AdminHome />} />
+              <Route path='edit/:id' element={<EditQuiz />} />
+              <Route path='edit/test/:id' element={<AdminTestEdit />} />
+              <Route path='users' element={<Users />} />
+              <Route path='view/:id' element={<ViewQuiz />} />
+              <Route path='test-series'  element={<AdminTestSeries />} />
             </Route>
             <Route path='*' element={<NotFound />} />
           </Routes>

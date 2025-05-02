@@ -5,7 +5,7 @@ const Card = ({index ,icon , heading , description}) => {
     <div style={{
       boxShadow: "0px 0px 15px 5px #f0f0f0"
     }} className='w-full bg-white rounded-lg  p-9 space-y-3 relative overflow-hidden'>
-      <div className='w-24 h-24 bg-[#0149ad] rounded-full absolute -right-5 -top-7'>
+      <div className='w-24 h-24 bg-[#da5f26] rounded-full absolute -right-5 -top-7'>
         <p className='absolute bottom-6 left-7 text-white text-2xl'>{index}</p>
       </div>
       <div className='fill-violet-500  w-12'>
