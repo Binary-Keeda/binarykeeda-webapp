@@ -12,6 +12,7 @@ import { getQuiz } from './redux/api/getQuiz'
 import NotFound from './utilities/NotFound'
 import QuizList from './view/user/QuizList'
 import { getTestAdmin } from './redux/api/getTest'
+import { getTestUser } from './redux/api/getTestUser'
 // Lazy-loaded pages
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
@@ -23,6 +24,10 @@ const App = () => {
   const dispatch = useDispatch()
   const token = Cookies.get('token')
   const { user } = useSelector(state => state.auth)
+
+  // Pages
+  const Sheet210Days = React.lazy(() => import('./pages/Sheet210Days'))
+
   /// User routes
   const UserLayout = React.lazy(() => import('./view/user/Userdashboard'))
   const UserDashboard = React.lazy(() => import('./view/user/Home'))
@@ -35,22 +40,28 @@ const App = () => {
   const UserTestList = React.lazy(() => import('./view/user/TestList'))
   const UserTest = React.lazy(() => import('./view/user/Test'))
   const UserQuizList = React.lazy(() => import('./view/user/QuizList'))
-
   // admin routes
-  const AdminLayout = React.lazy(() =>import('./view/admin/layout/AdminDashboard'))
+  const AdminLayout = React.lazy(() =>
+    import('./view/admin/layout/AdminDashboard')
+  )
   const Users = lazy(() => import('./view/admin/Users'))
   const EditQuiz = lazy(() => import('./view/admin/EditQuiz'))
   const ViewQuiz = lazy(() => import('./view/admin/Quiz'))
   const AdminHome = React.lazy(() => import('./view/admin/Home'))
-  const AdminTestSeries = React.lazy(() => import('./view/admin/Test') )
-  const AdminTestEdit = React.lazy(() => import('./view/admin/TestEdit'));
+  const AdminTestSeries = React.lazy(() => import('./view/admin/Test'))
+  const AdminTestEdit = React.lazy(() => import('./view/admin/TestEdit'))
   useEffect(() => {
     dispatch(getUser(token))
   }, [])
   useEffect(() => {
     if (user) {
-      getQuiz();
-      getTestAdmin();
+      getQuiz()
+      if (user.role == 'admin') {
+        getTestAdmin()
+      } else {
+        console.log("Fetching")
+        getTestUser()
+      }
     }
   }, [user])
   const { loading } = useSelector(s => s.auth)
@@ -63,6 +74,8 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='/roadmaps' element={<UserRoadmaps />} />
+            <Route path='/binary-keeda-sheet' element={<Sheet210Days />} />
             <Route element={<UserRoute />}>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
@@ -104,7 +117,7 @@ const App = () => {
               <Route path='edit/test/:id' element={<AdminTestEdit />} />
               <Route path='users' element={<Users />} />
               <Route path='view/:id' element={<ViewQuiz />} />
-              <Route path='test-series'  element={<AdminTestSeries />} />
+              <Route path='test-series' element={<AdminTestSeries />} />
             </Route>
             <Route path='*' element={<NotFound />} />
           </Routes>

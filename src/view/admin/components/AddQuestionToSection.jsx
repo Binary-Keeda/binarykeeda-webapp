@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
-export default function AddQuestionToSection () {
+import { Button, TextField, Tooltip, Typography, Radio, Box, Paper } from '@mui/material'
+import { Add } from '@mui/icons-material'
+import { BASE_URL } from '../../../lib/config'
+
+export default function AddQuestionToSection ({
+  setCurrTest,
+  setCurrSection,
+  setSnackbar,
+  sectionId,
+  testId
+}) {
   const [newQuestion, setNewQuestion] = useState({
     question: '',
     marks: 0,
@@ -12,24 +22,26 @@ export default function AddQuestionToSection () {
       { text: '', isCorrect: false }
     ]
   })
+
   const handleAddQuestion = async e => {
     e.preventDefault()
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/v2/test/${id}/section/${currSection._id}/add-question`,
+        `${BASE_URL}/api/v2/test/${testId}/section/${sectionId}/add-question`,
         newQuestion,
         { withCredentials: true }
       )
-      const updatedSection = response.data // Assuming backend returns updated section
-      setCurrSection(updatedSection)
-      // Also update currTest.sections
-      setCurrTest(prev => ({
+
+      setCurrSection(prev => ({
         ...prev,
-        sections: prev.sections.map(sec =>
-          sec._id === updatedSection._id ? updatedSection : sec
-        )
+        questionSet: [...(prev?.questionSet || []), newQuestion]
       }))
-      // Reset question form
+      
+      setSnackbar({
+        open: true,
+        message: 'Question added!',
+        severity: 'success'
+      })
       setNewQuestion({
         question: '',
         marks: 0,
@@ -43,97 +55,105 @@ export default function AddQuestionToSection () {
       })
     } catch (err) {
       console.error(err)
-      alert('Failed to add question')
+      setSnackbar({
+        open: true,
+        message: 'Failed to add question',
+        severity: 'error'
+      })
     }
   }
+
   return (
-    <>
-      <form onSubmit={handleAddQuestion}>
-        <input
-          type='text'
-          required
-          className='custominput'
-          placeholder='Question'
+    <Paper elevation={1} className='p-4 space-y-4'>
+      <Typography variant='subtitle1' sx={{ fontWeight: 600 }}>Add Question</Typography>
+      <form onSubmit={handleAddQuestion} className='space-y-3'>
+
+        <TextField
+          fullWidth
+          label='Question'
+          size='small'
+          variant='outlined'
           value={newQuestion.question}
           onChange={e =>
             setNewQuestion(prev => ({ ...prev, question: e.target.value }))
           }
-        />
-        <input
           required
-          type='number'
-          placeholder='Marks'
-          className='custominput'
-          value={newQuestion.marks}
-          onChange={e =>
-            setNewQuestion(prev => ({
-              ...prev,
-              marks: parseInt(e.target.value) || 0
-            }))
-          }
         />
 
-        <input
-          required
-          type='number'
-          placeholder='Negative'
-          className='custominput'
-          value={newQuestion.negative}
-          onChange={e =>
-            setNewQuestion(prev => ({
-              ...prev,
-              negative: parseInt(e.target.value) || 0
-            }))
-          }
-        />
-
-        {newQuestion.answerOptions.map((opt, idx) => (
-          <div className=' flex w-[400px] mt-3 gap-3' key={idx}>
-            <input
-              required
-              type='text'
-              className='custominput'
-              placeholder='Option text'
-              value={opt.text}
-              onChange={e => {
-                const updatedOptions = [...newQuestion.answerOptions]
-                updatedOptions[idx].text = e.target.value
-                setNewQuestion(prev => ({
-                  ...prev,
-                  answerOptions: updatedOptions
-                }))
-              }}
-            />
-            <input
-              type='radio'
-              name='correctOption'
-              checked={opt.isCorrect}
-              onChange={() => {
-                const updatedOptions = newQuestion.answerOptions.map(
-                  (o, i) => ({
+        <div className='grid grid-cols-2 gap-3'>
+          {newQuestion.answerOptions.map((opt, idx) => (
+            <div key={idx} className='flex items-center gap-2'>
+              <Radio
+                size='small'
+                checked={opt.isCorrect}
+                onChange={() => {
+                  const updatedOptions = newQuestion.answerOptions.map((o, i) => ({
                     ...o,
                     isCorrect: i === idx
-                  })
-                )
-                setNewQuestion(prev => ({
-                  ...prev,
-                  answerOptions: updatedOptions
-                }))
-              }}
-            />
-          </div>
-        ))}
+                  }))
+                  setNewQuestion(prev => ({
+                    ...prev,
+                    answerOptions: updatedOptions
+                  }))
+                }}
+              />
+              <TextField
+                label={`Option ${String.fromCharCode(65 + idx)}`}
+                size='small'
+                fullWidth
+                variant='standard'
+                value={opt.text}
+                onChange={e => {
+                  const updatedOptions = [...newQuestion.answerOptions]
+                  updatedOptions[idx].text = e.target.value
+                  setNewQuestion(prev => ({
+                    ...prev,
+                    answerOptions: updatedOptions
+                  }))
+                }}
+                required
+              />
+            </div>
+          ))}
+        </div>
 
-        <Tooltip title={'Add question'}>
-          <Button
-            type='submit'
-            variant='contained'
-            sx={{ fontSize: 10, marginY: '10px' }}
-          >
-            Question <Add sx={{ fontSize: 17, marginLeft: '4px' }} />
-          </Button>
-        </Tooltip>
+        <div className='flex gap-2'>
+          <TextField
+            label='Marks'
+            type='number'
+            size='small'
+            value={newQuestion.marks}
+            onChange={e =>
+              setNewQuestion(prev => ({ ...prev, marks: parseFloat(e.target.value) }))
+            }
+            required
+          />
+          <TextField
+            label='Negative'
+            type='number'
+            size='small'
+            value={newQuestion.negative}
+            onChange={e =>
+              setNewQuestion(prev => ({ ...prev, negative: parseFloat(e.target.value) }))
+            }
+            required
+          />
+        </div>
+
+        <div className='flex justify-end'>
+          <Tooltip title='Add question'>
+            <Button
+              type='submit'
+              variant='contained'
+              size='small'
+              endIcon={<Add sx={{ fontSize: 16 }} />}
+              sx={{ fontSize: 12, textTransform: 'none' }}
+            >
+              Add
+            </Button>
+          </Tooltip>
+        </div>
       </form>
-    </>
+    </Paper>
   )
 }

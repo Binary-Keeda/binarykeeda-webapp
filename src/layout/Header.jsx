@@ -60,13 +60,14 @@ import { Menu } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link as NavLink } from 'react-router-dom'
+import { Link, Link as NavLink } from 'react-router-dom'
 import { Link as ScrollLink } from 'react-scroll'
 
-export default function Header() {
+export default function Header () {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scroll, setScroll] = useState(false)
   const { user } = useSelector(s => s.auth)
+  const [showDropDown, setShowDropDown] = useState(false);
   useEffect(() => {
     window.addEventListener('scroll', () => {
       if (window.scrollY > 1) {
@@ -89,8 +90,13 @@ export default function Header() {
         >
           <div className='flex items-center gap-6'>
             <ScrollLink to='home' smooth className='cursor-pointer'>
-            <img src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg' className='h-10' alt='' />
-
+              <Link to={'/'}>
+                <img
+                  src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
+                  className='h-10'
+                  alt=''
+                />
+              </Link>
             </ScrollLink>
           </div>
           <div className='lg:flex hidden'>
@@ -113,7 +119,7 @@ export default function Header() {
                 >
                   Features
                 </ScrollLink>
-                <ScrollLink
+                {/* <ScrollLink
                   to={'content'}
                   smooth
                   offset={-60}
@@ -121,7 +127,11 @@ export default function Header() {
                   className='cursor-pointer nav-link'
                 >
                   Quiz Portal
-                </ScrollLink>
+                </ScrollLink> */}
+                <Link to={'/binary-keeda-sheet'} className='relative'>
+                  BK Sheet
+                </Link>
+
                 <ScrollLink
                   to={'contact'}
                   smooth
@@ -158,13 +168,12 @@ export default function Header() {
                     class='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                   >
                     Sign Up
-                    
                   </NavLink>
                 </>
               ) : (
                 <>
                   <NavLink
-                    to={`${user.role}`}
+                    to={`/${user.role}`}
                     class='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                   >
                     Continue to Dashboard
@@ -195,12 +204,14 @@ export default function Header() {
         {/* Small Screen Nab */}
         <span
           onClick={toggleMenu}
-          className={`${menuOpen ? '' : 'hidden '
-            } fixed top-0 left-0 z-40 h-[100vh] w-[100vw] bg-black bg-opacity-60`}
+          className={`${
+            menuOpen ? '' : 'hidden '
+          } fixed top-0 left-0 z-40 h-[100vh] w-[100vw] bg-black bg-opacity-60`}
         ></span>
         <header
-          className={` ${menuOpen ? 'translate-x-0' : '-translate-x-full'
-            }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
+          className={` ${
+            menuOpen ? 'translate-x-0' : '-translate-x-full'
+          }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
         >
           <div className='w-full absolute flex justify-end p-2'>
             {/* <IconButton onClick={toggleMenu}>
@@ -255,24 +266,32 @@ export default function Header() {
                 Contact
               </ScrollLink>
               <hr className='my-5' />
-              {user ? <>
-                <NavLink
-                  to={'/user'}
-                  className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50' >
-                  Dashboard
-                </NavLink>
-              </> : <><NavLink
-                to={'/login'}
-                className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50' >
-                Login
-              </NavLink>
-                <NavLink
-                  to={'/register'}
-                  className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50' >
-                  Signup
-                </NavLink></>}
+              {user ? (
+                <>
+                  <NavLink
+                    to={'/user'}
+                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+                  >
+                    Dashboard
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to={'/login'}
+                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to={'/register'}
+                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+                  >
+                    Signup
+                  </NavLink>
+                </>
+              )}
             </div>
-
           </ul>
         </header>
       </header>
