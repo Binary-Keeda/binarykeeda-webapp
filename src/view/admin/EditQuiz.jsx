@@ -330,6 +330,9 @@ const AddQuestion = ({
           required
         />
         <TextField
+          rows={2}
+          multiline
+          
           onChange={changeHandler}
           value={formData.question}
           name='question'

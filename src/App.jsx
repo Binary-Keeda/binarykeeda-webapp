@@ -98,10 +98,11 @@ const App = () => {
               <Route path='roadmaps' element={<UserRoadmaps />} />
               <Route path='practice/:name' element={<QuizList />} />
               <Route element={<UserTestList />} path='test/' />
+              <Route element={<UserPreview />} path='preview/:id' />
+
             </Route>
             <Route element={<RoleBasedRoutes requiredRole={'user'} />}>
               <Route element={<UserSolution />} path='user/solution/:id' />
-              <Route element={<UserPreview />} path='user/preview/:id' />
               <Route element={<UserTest />} path='user/test/:id' />
             </Route>
             <Route
