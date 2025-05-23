@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import Submissions from './components/Solutions'
 import Leaderboard from './components/LeaderBoard'
 import ProgressArea from './components/ProgressArea'
+import { Link } from 'react-router-dom'
 
 function Home () {
   const { user } = useSelector(s => s.auth)
@@ -58,12 +59,14 @@ function Home () {
               </small>
             </div>
           </div>
-          <Button variant='contained' color='primary' sx={{ fontSize: 9 }}>
-            Edit Profile
-          </Button>
+          <Link to={'profile'}>
+            <Button variant='contained' color='primary' sx={{ fontSize: 9 }}>
+              Edit Profile
+            </Button>
+          </Link>
         </div>
 
-        <ProgressArea  solutions={user.solutions}/>
+        <ProgressArea solutions={user.solutions} />
         <Leaderboard />
       </section>
 
