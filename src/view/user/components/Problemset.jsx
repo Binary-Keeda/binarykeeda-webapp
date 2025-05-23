@@ -84,7 +84,11 @@ export default function ProblemSet () {
           />
         </div>
       )} */}
-
+{/*  [ 
+    {
+      .. problems
+    }
+] */}
       <div className='flex-1 flex flex-col gap-3'>
         {problemset.map((topic, index) => (
           <div

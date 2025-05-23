@@ -1,8 +1,7 @@
-// Sheet210Days.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Header from "../layout/Header";
+import Layout from "../layout/Layout";
 gsap.registerPlugin(ScrollTrigger);
 
 const Sheet210Days = () => {
@@ -93,7 +92,7 @@ const Sheet210Days = () => {
             ease: "power2.out",
             scrollTrigger: {
               trigger: section,
-              start: "top 90%",
+              start: "top 60%",
             },
           }
         );
@@ -115,25 +114,24 @@ const Sheet210Days = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="w-16 h-16 rounded-full border-4 border-indigo-300 border-t-indigo-600 animate-spin"></div>
+        <div className="loader1"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 w-full min-h-screen bg-gray-50" ref={containerRef}>
-      <div className="sticky top-0 z-50 bg-gray-50 pb-4 pt-3 border-b border-gray-200">
-        <Header />
+    <div  ref={containerRef}>
+      <div className="sticky px-6 py-10 top-[73px] z-50 bg-gray-50 pb-4 pt-3 border-b border-gray-200">
         <div className="text-left">
           <h1 className="text-4xl font-extrabold text-black mb-2 drop-shadow-md tracking-wide">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#db5602] to-[#ffe5d0]">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#db5602] to-orange-300">
               220 Days Roadmap
             </span>
           </h1>
           <p className="text-lg font-medium text-gray-800 italic">
             You're making progress!{" "}
-            <span className="font-bold text-indigo-600">{completedCount}</span>{" "}
-            of <span className="font-bold text-indigo-600">{totalCount}</span>{" "}
+            <span className="font-bold text-[#db5602]">{completedCount}</span>{" "}
+            of <span className="font-bold text-[#db5602]">{totalCount}</span>{" "}
             tasks completed (
             <span className="font-bold">{Math.round(progress)}%</span>)
           </p>
@@ -141,7 +139,7 @@ const Sheet210Days = () => {
         <div className="w-full mt-3 px-2">
           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-700 ease-in-out shadow-inner"
+              className="h-2 bg-gradient-to-r from-[#db5602] to-orange-500 rounded-full transition-all duration-700 ease-in-out shadow-inner"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -151,7 +149,7 @@ const Sheet210Days = () => {
       {Object.keys(groupedData).map((topicKey, topicIndex) => (
         <div
           key={topicIndex}
-          className="topic-section mb-12 bg-white shadow-md rounded-xl p-4 w-full mx-auto"
+          className="topic-section px-7 mb-12 bg-white shadow-md rounded-xl p-4 w-full mx-auto"
         >
           <h2 className="text-2xl font-bold text-gray-700 mb-4 border-b pb-2">
             Topic {topicIndex + 1}: {displayNames[topicKey]}
@@ -159,7 +157,7 @@ const Sheet210Days = () => {
 
           <div className="w-full overflow-x-auto">
             <table className="w-full table-auto text-left">
-              <thead className="bg-indigo-100 text-base text-indigo-700 font-semibold">
+              <thead className="bg-indigo-100 text-base text-[#db5602] font-semibold">
                 <tr>
                   <th className="px-4 py-3 text-left w-24">Day</th>
                   <th className="px-4 py-3 text-left w-[50%]">Topic</th>
@@ -185,7 +183,7 @@ const Sheet210Days = () => {
                           href={entry.resourceLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600 text-sm transition shadow-md hover:shadow-lg"
+                          className="bg-[#db5602] text-white px-3 py-1 rounded hover:bg-indigo-600 text-sm transition shadow-md hover:shadow-lg"
                         >
                           Learn
                         </a>
@@ -212,4 +210,4 @@ const Sheet210Days = () => {
   );
 };
 
-export default Sheet210Days;
+export default Layout(Sheet210Days);

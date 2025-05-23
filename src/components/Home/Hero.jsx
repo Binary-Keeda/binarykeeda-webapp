@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 export default function Hero() {
+    const {user} = useSelector(s=>s.auth)
     return (
         <section className="relative h-[480px] lg:h-[430px] max-h-lvh backdrop-blur-xl">
             {/* Gradient Overlay */}
@@ -16,18 +20,18 @@ export default function Hero() {
             />
 
             {/* Content Overlay */}
-            <div className="absolute inset-0 flex flex-col items-start justify-center text-start text-white px-6 z-40">
+            <div className="absolute inset-0 flex flex-col items-start justify-center text-start text-white px-10 z-40">
                 <h1 className="text-4xl md:text-5xl font-extrabold drop-shadow-2xl">
                     Master Your Skills with Binary Keeda
                 </h1>
                 <p className="mt-4 text-lg text-start md:text-xl max-w-2xl">
                     Learn, practice, and excel in coding, aptitude, reasoning, and core subjects with expert-curated quizzes and challenges.
                 </p>
-                <a href="#buttons-with-link" className="mt-7">
-                    <button class="rounded-md bg-[#0249ad] py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white hover:text-white hover:opacity-80 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                <Link to={user ? `/${user.role}` : '/login'} className="mt-7">
+                    <button class="rounded-md bg-[#ca5a27] py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white hover:text-white hover:opacity-80 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
                         Start Learning
                     </button>
-                </a>
+                </Link>
             </div>
         </section>
     );

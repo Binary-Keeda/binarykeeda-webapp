@@ -20,27 +20,14 @@ const avtars = [
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/teams_1.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_19.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/upstream_20.png",
-  
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/toon_7.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/toon_6.png",
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_17.png",
 ]
+const Specialisations = ['Data Science', 'Full Stack Development', 'Artificial Intelligence & Machine Learning (AI/ML)', 'Cyber Security', 'Cloud Computing', 'Software Engineering', 'Blockchain Technology', 'Internet of Things (IoT)', 'Game Development', 'Augmented Reality (AR) & Virtual Reality (VR)', 'Computer Vision', 'Natural Language Processing (NLP)', 'DevOps', 'Mobile App Development', 'Embedded Systems', 'Human-Computer Interaction', 'Robotics', 'Quantum Computing', 'Big Data Analytics', 'Information Systems', 'Bioinformatics', 'High Performance Computing', 'Edge Computing', 'Computer Graphics & Animation', 'Other'];
+const years = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035', '2036', '2037'];
 
-const Specialisations = [
-  'Data Scient',
-  'FulL Stack',
-  'AIML',
-  'Others'
-]
-const years = [
-  '2029',
-  '2028',
-  '2027',
-  '2027',
-  '2026',
-  '2025',
-  '2024',
-]
+
 const programs = [
   // Engineering
   'B.Tech in Computer Science Engineering',
