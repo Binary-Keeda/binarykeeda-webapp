@@ -35,6 +35,7 @@ const App = () => {
   const UserCoding = React.lazy(() => import('./view/user/Coding'))
   const UserRoadmaps = React.lazy(() => import('./view/user/Roadmap'))
   const UserSolution = React.lazy(() => import('./view/user/Solutions'))
+  const UserProfile = React.lazy(() => import('./view/user/Profile'))
   const UserPreview = React.lazy(() => import('./view/user/Preview'))
   const UserPlayground = React.lazy(() => import('./view/user/Playground'))
   const UserTestList = React.lazy(() => import('./view/user/TestList'))
@@ -98,6 +99,7 @@ const App = () => {
               <Route path='playground' element={<UserPlayground />} />
               <Route path='roadmaps' element={<UserRoadmaps />} />
               <Route path='practice/:name' element={<QuizList />} />
+              <Route path='profile' element={<UserProfile/>}/>
               <Route element={<UserTestList />} path='test/' />
               <Route element={<UserPreview />} path='preview/:id' />
 

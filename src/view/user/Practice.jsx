@@ -1,61 +1,109 @@
-import React, { Suspense, useEffect } from "react";
-import UserDashboard from "./Userdashboard";
-import { Button } from "@mui/material";
+
+import React, { Suspense } from "react";
 import { Link } from "react-router-dom";
-const Table = React.lazy(() => import("./components/Table"));
+import { Button, Chip, CircularProgress } from "@mui/material";
+import SchoolIcon from "@mui/icons-material/School";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import HubIcon from "@mui/icons-material/Hub";
+
+const ICONS = [<PsychologyIcon />, <HubIcon />, <SchoolIcon />];
+
+const CARDS = [
+  {
+    head: "Aptitude",
+    description:
+      "Sharpen your logic, math, and verbal reasoning to boost placement readiness.",
+    points: ["Quantitative", "Verbal Ability", "Logical Reasoning"],
+    link: "/user/practice/Aptitude",
+    image: "/icons/hero.png",
+  },
+  {
+    head: "Miscellaneous",
+    description:
+      "Explore puzzles, GK, and tricky challenges to test your intellect.",
+    points: ["Puzzles", "General Knowledge", "Fun Challenges"],
+    link: "/user/practice/Miscellaneous",
+    image: "/icons/Home.png",
+  },
+  {
+    head: "Core Subjects",
+    description:
+      "Master CS fundamentals like DSA, DBMS, OS, CN, and System Design.",
+    points: ["DSA", "OS", "DBMS", "CN", "System Design"],
+    link: "/user/practice/Core",
+    image: "/icons/roadmap.png",
+  },
+];
+
 function PracticePage() {
-  const CARDS = [
-    {
-      head: "Aptitude",
-      description:
-        "Sharpen your problem-solving skills with logical reasoning, quantitative aptitude, and verbal ability.",
-      src: "",
-      link: "/user/practice/Aptitude",
-    },
-    {
-      head: "Miscellaneous",
-      description:
-        "Explore a variety of topics, including general knowledge, coding challenges, and brain teasers.",
-      src: "",
-      link: "/user/practice/Miscellaneous",
-    },
-    {
-      head: "Core Subjects",
-      description:
-        "Dive deep into essential subjects like Data Structures, Algorithms, OS, DBMS, and Computer Networks.",
-      src: "",
-      link: "/user/practice/Core",
-    },
-  ];
   return (
-    <Suspense fallback={<>LOADING ... </>}>
-      {/* <Table /> */}
-      <section className="grid p-4 md:grid-cols-2  grid-cols-1 lg:grid-cols-4 gap-4">
-        {CARDS.map((i, idx) => (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[300px]">
+          <CircularProgress />
+          <span className="ml-3 text-gray-600 dark:text-gray-300">
+            Loading practice modules...
+          </span>
+        </div>
+      }
+    >
+      <section className="grid p-5 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {CARDS.map((card, idx) => (
           <div
-            className="flex shadow-lg pb-4 flex-col hover:shadow-xl transition-all duration-200 hover:scale-105 h-[350px] rounded-[22px]"
             key={idx}
+            className="flex flex-col bg-white dark:bg-gray-800 rounded-[22px] shadow-lg hover:shadow-2xl shadow-gray-300 dark:shadow-black/40 transition-all duration-300 hover:scale-[1.02] overflow-hidden border border-gray-100 dark:border-gray-700"
           >
             <img
-              className="h-[200px] object-cover rounded-t-[22px]"
-              src={
-                "https://30dc.graphy.com/s/store/courses/64ff7f1be4b0607f6f9001f6/cover.jpg?v=2"
-              }
-              alt={i.head}
+              className="h-[200px] object-contain w-full"
+              src={card.image}
+              alt={card.head}
             />
-            <div className="p-6 pb-5">
-              <h1 className="text-gray-900">{i.head}</h1>
-              <p className="text-xs text-gray-600 mt-1 mb-2">{i.description}</p>
-              <a href={i.link}>
+
+            {/* Short dark horizontal line */}
+            <div className="flex justify-center my-2 mt-4">
+              <hr className="w-[90%] border-t-[1.5px] border-gray-300 dark:border-gray-400" />
+            </div>
+
+            <div className="px-5 pb-5 flex flex-col justify-between flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-blue-600 dark:text-blue-400">
+                  {ICONS[idx]}
+                </span>
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
+                  {card.head}
+                </h2>
+              </div>
+
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                {card.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {card.points.map((pt, i) => (
+                  <Chip
+                    key={i}
+                    label={pt}
+                    size="small"
+                    sx={{
+                      fontSize: "0.7rem",
+                      backgroundColor: "#fff7ed", // light orange
+                      color: "#f97316",
+                      fontWeight: 500,
+                    }}
+                  />
+                ))}
+              </div>
+
+              <Link to={card.link}>
                 <Button
                   variant="contained"
                   color="primary"
-                  sx={{ fontSize: 8 }}
+                  size="small"
+                  sx={{ fontWeight: "bold", borderRadius: "8px" }}
                 >
-                  Solve
+                  Start Solving
                 </Button>
-              </a>
-              {/* <a className='text-xs bg-[#0149AD] px-4 py-1 text-white rounded-lg  ' href={i.link}>Solve</a> */}
+              </Link>
             </div>
           </div>
         ))}
@@ -63,4 +111,5 @@ function PracticePage() {
     </Suspense>
   );
 }
+
 export default PracticePage;
