@@ -74,6 +74,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />
+            {/* <Route path='/' element={<>Home</>}></Route> */}
             <Route path='/roadmaps' element={<UserRoadmaps />} />
             <Route path='/binary-keeda-sheet' element={<Sheet210Days />} />
             <Route element={<UserRoute />}>
