@@ -48,7 +48,7 @@ export default function QuizInterface ({
         { withCredentials: true }
       )
       .then(() => {
-        // window.location.reload()
+        window.location.reload()
       })
       .catch(e => console.log(e))
   }
