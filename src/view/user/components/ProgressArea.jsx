@@ -16,7 +16,7 @@ export default function ProgressArea({ solutions }) {
           series={[
             {
               data: [
-                { value: 130, color: "#9ca3af", label: "All" },
+                { value: 10, color: "#9ca3af", label: "All" },
                 {
                   value: solutions?.Aptitude?.attempted || 0,
                   color: "#6366f1",
