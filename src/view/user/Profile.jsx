@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../lib/config";
 
 const avatars = [
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_20.png",
@@ -14,7 +15,152 @@ const avatars = [
   "https://cdn.jsdelivr.net/gh/alohe/avatars/png/vibrent_17.png",
 ];
 
+const Specialisations = [
+  "Data Science",
+  "Full Stack Development",
+  "Artificial Intelligence & Machine Learning (AI/ML)",
+  "Cyber Security",
+  "Cloud Computing",
+  "Software Engineering",
+  "Blockchain Technology",
+  "Internet of Things (IoT)",
+  "Game Development",
+  "Augmented Reality (AR) & Virtual Reality (VR)",
+  "Computer Vision",
+  "Natural Language Processing (NLP)",
+  "DevOps",
+  "Mobile App Development",
+  "Embedded Systems",
+  "Human-Computer Interaction",
+  "Robotics",
+  "Quantum Computing",
+  "Big Data Analytics",
+  "Information Systems",
+  "Bioinformatics",
+  "High Performance Computing",
+  "Edge Computing",
+  "Computer Graphics & Animation",
+  "Other",
+];
+const years = [
+  "2025",
+  "2026",
+  "2027",
+  "2028",
+  "2029",
+  "2030",
+  "2031",
+  "2032",
+  "2033",
+  "2034",
+  "2035",
+  "2036",
+  "2037",
+];
+const sem = ["1", "2", "3", "4", "5", "6"];
+
+const programs = [
+  // Engineering
+  "B.Tech in Computer Science Engineering",
+  "B.Tech in Mechanical Engineering",
+  "B.Tech in Electrical Engineering",
+  "B.Tech in Civil Engineering",
+  "B.Tech in Electronics and Communication Engineering",
+
+  // Information Technology
+  "Bachelor of Computer Applications (BCA)",
+  "B.Sc in Information Technology",
+
+  // Business and Management
+  "Bachelor of Business Administration (BBA)",
+  "Bachelor of Commerce (B.Com)",
+  "Bachelor of Economics (B.Econ)",
+
+  // Arts and Humanities
+  "Bachelor of Arts (BA) in English Literature",
+  "BA in History",
+  "BA in Sociology",
+  "BA in Political Science",
+
+  // Science
+  "Bachelor of Science (B.Sc) in Physics",
+  "B.Sc in Chemistry",
+  "B.Sc in Mathematics",
+  "B.Sc in Biotechnology",
+  "B.Sc in Environmental Science",
+
+  // Medical and Allied Sciences
+  "Bachelor of Pharmacy (B.Pharm)",
+  "Bachelor of Physiotherapy (BPT)",
+  "Bachelor of Science in Nursing (B.Sc Nursing)",
+  "MBBS (Bachelor of Medicine and Surgery)",
+  "Bachelor of Dental Surgery (BDS)",
+
+  // Fine Arts and Design
+  "Bachelor of Fine Arts (BFA)",
+  "Bachelor of Design (B.Des) in Fashion Design",
+  "B.Des in Interior Design",
+
+  // Law
+  "Bachelor of Laws (LLB)",
+
+  // Engineering
+  "M.Tech in Computer Science Engineering",
+  "M.Tech in Mechanical Engineering",
+  "M.Tech in Electrical Engineering",
+  "M.Tech in Civil Engineering",
+  "M.Tech in Electronics and Communication Engineering",
+
+  // Information Technology
+  "Masters of Computer Applications (MCA)",
+  "M.Sc in Information Technology",
+
+  // Business and Management
+  "Master of Business Administration (MBA)",
+  "Master of Commerce (M.Com)",
+  "Master of Economics (M.Econ)",
+
+  // Arts and Humanities
+  "Master of Arts (MA) in English Literature",
+  "MA in History",
+  "MA in Sociology",
+  "MA in Political Science",
+
+  // Science
+  "Master of Science (M.Sc) in Physics",
+  "M.Sc in Chemistry",
+  "M.Sc in Mathematics",
+  "M.Sc in Biotechnology",
+  "M.Sc in Environmental Science",
+
+  // Medical and Allied Sciences
+  "Master of Pharmacy (M.Pharm)",
+  "Master of Physiotherapy (MPT)",
+  "Master of Science in Nursing (M.Sc Nursing)",
+
+  // Fine Arts and Design
+  "Master of Fine Arts (MFA)",
+  "Master of Design (M.Des) in Fashion Design",
+  "M.Des in Interior Design",
+
+  // Law
+  "Master of Laws (LLM)",
+];
+
 const Profile = () => {
+  const dropdownRefs = useRef({});
+
+  // Function to check if dropdown should open upwards
+  const shouldOpenUpwards = (field) => {
+    const inputElement = dropdownRefs.current[`${field}-input`];
+    if (!inputElement) return false;
+
+    const inputRect = inputElement.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - inputRect.bottom;
+    const dropdownHeight = 200; // Same as max-h-[200px]
+
+    return spaceBelow < dropdownHeight;
+  };
   const user = useSelector((state) => state.auth.user);
   const [formData, setFormData] = useState({
     yearOfGraduation: "",
@@ -28,6 +174,15 @@ const Profile = () => {
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [universitySuggestions, setUniversitySuggestions] = useState([]);
+  const [showUniversitySuggestions, setShowUniversitySuggestions] =
+    useState(false);
+  const [showDropdowns, setShowDropdowns] = useState({
+    program: false,
+    specialisation: false,
+    yearOfGraduation: false,
+    semester: false,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,8 +199,76 @@ const Profile = () => {
   }, [user]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Only allow changes for university field (other fields are select-only)
+    if (e.target.name === "university") {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+      fetchUniversities(e.target.value);
+      setShowUniversitySuggestions(e.target.value.length > 0);
+    }
   };
+
+  // const fetchUniversities = async (query) => {
+  //   if (!query) return;
+  //   try {
+  //     // const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+  //     // const response = await axios.get(`${backendURL}/university/data/${query}`);
+  //     const response = await axios.get(`${BASE_URL}/university/data/${query}`);
+  //     setUniversitySuggestions(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching universities:", error);
+  //   }
+  // };
+  const fetchUniversities = async (query) => {
+    if (!query) return;
+    try {
+      const response = await axios.get(`${BASE_URL}/university/data/${query}`);
+      // Extract just the names from the university objects
+      const universityNames = response.data.map((uni) => uni.name);
+      setUniversitySuggestions(universityNames);
+    } catch (error) {
+      console.error("Error fetching universities:", error);
+    }
+  };
+
+  const handleUniversitySelect = (university) => {
+    setFormData({ ...formData, university });
+    setShowUniversitySuggestions(false);
+  };
+
+  const handleSelectOption = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+    setShowDropdowns({ ...showDropdowns, [field]: false });
+  };
+
+  const toggleDropdown = (field) => {
+    // Close all other dropdowns when opening one
+    const newState = Object.keys(showDropdowns).reduce((acc, key) => {
+      acc[key] = key === field ? !showDropdowns[key] : false;
+      return acc;
+    }, {});
+    setShowDropdowns(newState);
+    setShowUniversitySuggestions(false); // Ensure university suggestions are closed
+  };
+
+  const handleClickOutside = (e) => {
+    // Close dropdowns when clicking outside
+    if (!e.target.closest(".dropdown-container")) {
+      setShowDropdowns({
+        program: false,
+        specialisation: false,
+        yearOfGraduation: false,
+        semester: false,
+      });
+      setShowUniversitySuggestions(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleAvatarSelect = (url) => {
     setAvatarSelectedUrl(url);
@@ -58,8 +281,8 @@ const Profile = () => {
 
     try {
       setLoading(true);
-      const backendURL =
-        import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
+      // const backendURL =
+      //   import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
       const payload = {
         ...formData,
@@ -67,7 +290,7 @@ const Profile = () => {
         avatar: avatarSelectedUrl,
       };
 
-      await axios.post(`${backendURL}/auth/complete-profile`, payload, {
+      await axios.post(`${BASE_URL}/auth/complete-profile`, payload, {
         withCredentials: true,
       });
 
@@ -176,39 +399,227 @@ const Profile = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { name: "university", label: "University", required: true },
-                { name: "program", label: "Program", required: true },
-                {
-                  name: "specialisation",
-                  label: "Specialisation",
-                  required: true,
-                },
-                { name: "semester", label: "Semester", required: false },
-                {
-                  name: "yearOfGraduation",
-                  label: "Graduation Year",
-                  required: true,
-                },
-              ].map((field) => (
-                <div key={field.name} className="space-y-1">
-                  <label className="text-sm font-medium text-gray-700">
-                    {field.label}
-                    {field.required && (
-                      <span className="text-red-500 ml-1">*</span>
-                    )}
-                  </label>
+              {/* University Field with Suggestions */}
+              <div className="space-y-1 relative dropdown-container">
+                <label className="text-sm font-medium text-gray-700">
+                  University
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <div className="relative">
                   <input
                     type="text"
-                    name={field.name}
-                    value={formData[field.name]}
+                    name="university"
+                    value={formData.university}
                     onChange={handleChange}
-                    required={field.required}
-                    placeholder={field.label}
+                    required
+                    placeholder="Search for your university"
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#db5602] focus:border-transparent"
                   />
+                  {showUniversitySuggestions &&
+                    universitySuggestions.length > 0 && (
+                      <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60  max-h-[200px] overflow-auto">
+                        {universitySuggestions.map((uni, index) => (
+                          <div
+                            key={index}
+                            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleUniversitySelect(uni)}
+                          >
+                            {uni}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                 </div>
-              ))}
+              </div>
+
+              {/* Program Field with Dropdown */}
+              <div className="space-y-1 relative dropdown-container">
+                <label className="text-sm font-medium text-gray-700">
+                  Program
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <div className="relative">
+                  <div
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#db5602] focus:border-transparent bg-white cursor-pointer flex items-center truncate"
+                    onClick={() => toggleDropdown("program")}
+                  >
+                    <span className="truncate flex-1">
+                      {formData.program || "Select your program"}
+                    </span>
+                    <svg
+                      className="h-5 w-5 text-gray-400 ml-2 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
+                    </svg>
+                  </div>
+                  {showDropdowns.program && (
+                    <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-[200px] overflow-y-auto">
+                      {programs.map((program, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => handleSelectOption("program", program)}
+                        >
+                          {program}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Specialisation Field with Dropdown */}
+              <div className="space-y-1 relative dropdown-container">
+                <label className="text-sm font-medium text-gray-700">
+                  Specialisation
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <div className="relative">
+                  <div
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#db5602] focus:border-transparent bg-white cursor-pointer flex items-center truncate"
+                    onClick={() => toggleDropdown("specialisation")}
+                  >
+                    <span className="truncate flex-1">
+                      {formData.specialisation || "Select your specialisation"}
+                    </span>
+                    <svg
+                      className="h-5 w-5 text-gray-400 ml-2 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
+                    </svg>
+                  </div>
+                  {showDropdowns.specialisation && (
+                    <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 max-h-[130px] overflow-auto">
+                      {Specialisations.map((spec, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() =>
+                            handleSelectOption("specialisation", spec)
+                          }
+                        >
+                          {spec}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Semester Field with Dropdown */}
+              <div className="space-y-1 relative dropdown-container">
+                <label className="text-sm font-medium text-gray-700">
+                  Semester
+                </label>
+                <div className="relative">
+                  <div
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#db5602] focus:border-transparent bg-white cursor-pointer flex justify-between items-center"
+                    onClick={() => toggleDropdown("semester")}
+                  >
+                    {formData.semester || "Select your semester"}
+                    <svg
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
+                    </svg>
+                  </div>
+                  {showDropdowns.semester && (
+                    <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 max-h-[130px] overflow-auto">
+                      {sem.map((semester, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() =>
+                            handleSelectOption("semester", semester)
+                          }
+                        >
+                          {semester}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Year of Graduation Field with Dropdown */}
+              <div className="space-y-1 relative dropdown-container">
+                <label className="text-sm font-medium text-gray-700">
+                  Graduation Year
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <div className="relative">
+                  <div
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#db5602] focus:border-transparent bg-white cursor-pointer flex justify-between items-center truncate overflow-x-auto whitespace-nowrap"
+                    onClick={() => toggleDropdown("yearOfGraduation")}
+                    ref={(el) =>
+                      (dropdownRefs.current["yearOfGraduation-input"] = el)
+                    }
+                  >
+                    {formData.yearOfGraduation || "Select graduation year"}
+                    <svg
+                      className="h-5 w-5 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 9l-7 7-7-7"
+                      ></path>
+                    </svg>
+                  </div>
+                  {showDropdowns.yearOfGraduation && (
+                    <div
+                      className={`absolute z-10 ${
+                        shouldOpenUpwards("yearOfGraduation")
+                          ? "bottom-full mb-1"
+                          : "mt-1"
+                      } w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-[130px] overflow-y-auto`}
+                      ref={(el) =>
+                        (dropdownRefs.current["yearOfGraduation-dropdown"] = el)
+                      }
+                    >
+                      {years.map((year, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() =>
+                            handleSelectOption("yearOfGraduation", year)
+                          }
+                        >
+                          {year}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             <button

@@ -120,7 +120,7 @@ const Sheet210Days = () => {
   }
 
   return (
-    <div  ref={containerRef}>
+    <div ref={containerRef}>
       <div className="sticky px-6 py-10 top-[73px] z-50 bg-gray-50 pb-4 pt-3 border-b border-gray-200">
         <div className="text-left">
           <h1 className="text-4xl font-extrabold text-black mb-2 drop-shadow-md tracking-wide">
@@ -128,13 +128,20 @@ const Sheet210Days = () => {
               220 Days Roadmap
             </span>
           </h1>
-          <p className="text-lg font-medium text-gray-800 italic">
-            You're making progress!{" "}
-            <span className="font-bold text-[#db5602]">{completedCount}</span>{" "}
-            of <span className="font-bold text-[#db5602]">{totalCount}</span>{" "}
-            tasks completed (
-            <span className="font-bold">{Math.round(progress)}%</span>)
-          </p>
+          {completedCount > 0 ? (
+            <p className="text-lg font-medium text-gray-800 italic">
+              You're making progress!{" "}
+              <span className="font-bold text-[#db5602]">{completedCount}</span>{" "}
+              of <span className="font-bold text-[#db5602]">{totalCount}</span>{" "}
+              tasks completed (
+              <span className="font-bold">{Math.round(progress)}%</span>)
+            </p>
+          ) : (
+            <p className="text-lg font-medium text-gray-800">
+              <span className="font-bold text-[#db5602]">{totalCount}</span>{" "}
+              tasks waiting to be solved!
+            </p>
+          )}
         </div>
         <div className="w-full mt-3 px-2">
           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
