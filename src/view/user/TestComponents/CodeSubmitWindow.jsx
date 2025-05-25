@@ -9,7 +9,7 @@ import { BASE_URL, CODE_EXECUTION_API, headers } from '../../../lib/config'
 const CodeSubmitWindow = ({
   setShowSubmitWindow,
   setSubmittedProblems,
-  
+  problemName,
   code,
   currProblem,
   testCases,
@@ -87,7 +87,7 @@ const CodeSubmitWindow = ({
         problemId: currProblem._id,
         language,
         sourceCode: code,
-        codeReview: {}, // Placeholder
+        codeReview: codeReview, 
         passedTestCases: passedCount,
         totalTestCases: testCases.length,
         executionTime: averageTime,
@@ -107,7 +107,7 @@ const CodeSubmitWindow = ({
   const geminiReview = () => {
     setLoading(true)
     axios
-      .post(`${BASE_URL}/api/v3/review/code`, { sourceCode: code })
+      .post(`${BASE_URL}/api/v3/review/code`, { sourceCode: code , problem:problemName})
       .then(res => {
         const parsed = cleanGeminiResponse(res.data.data)
         console.log(parsed)
@@ -132,12 +132,17 @@ const CodeSubmitWindow = ({
   
 
   useEffect(() => {
-    runCode()
-    geminiReview()
-  }, [])
+    if(!codeReview) {
+      geminiReview()
+    }else{
+      runCode()
+    }
+  }, [codeReview])
+
+
 
   const renderMetric = (label, value, threshold = 6) => {
-    const isGood = value >= threshold
+    const isGood = value >= 1
     return (
       <div
         className={`flex justify-between items-center px-4 py-2 rounded text-sm font-medium ${
@@ -145,7 +150,7 @@ const CodeSubmitWindow = ({
         }`}
       >
         <span>{label}</span>
-        <span>{value}/10 {isGood ? '✅' : '❌'}</span>
+        <span>{value} {isGood ? 'Passed' : 'Failed'}</span>
       </div>
     )
   }
@@ -192,6 +197,7 @@ const CodeSubmitWindow = ({
                   {renderMetric('Variable Naming', codeReview.variable_name_convention)}
                   {renderMetric('Time Complexity', codeReview.time_complexity)}
                   {renderMetric('Space Complexity', codeReview.space_complexity)}
+                  {renderMetric('Final' , codeReview.finalScore)}
                 </div>
               ) : (
                 <div className='text-gray-500 text-sm'>

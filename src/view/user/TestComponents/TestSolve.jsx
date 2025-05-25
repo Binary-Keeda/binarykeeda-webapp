@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useEffect, useState } from 'react'
 import QuizInterface from './QuizInterface'
-import { Button, Divider, IconButton, Typography } from '@mui/material'
-import { BASE_URL, LOGO } from '../../../lib/config'
+import { Divider, IconButton } from '@mui/material'
+import { LOGO } from '../../../lib/config'
 import { useSelector } from 'react-redux'
 import CodingInterface from './CodingInterface'
 import {
@@ -12,6 +11,7 @@ import {
   Lock,
   ShortText
 } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 export default function TestSolve ({
   userId,
@@ -24,8 +24,7 @@ export default function TestSolve ({
   const [timeLeft, setTimeLeft] = useState(0)
   const { user } = useSelector(s => s.auth)
   const [showSidebar, setShowSideBar] = useState(false)
-  // Set Timer for Quiz
-  
+
   useEffect(() => {
     if (test && testSubmission) {
       const startTime = new Date(testSubmission.startedAt).getTime()
@@ -48,15 +47,13 @@ export default function TestSolve ({
   const handleSubmit = () => {
     console.log("Time's up! Submitting test...")
   }
-  if(testSubmission.isSubmitted)  { 
-    return <>Quiz has been submitted
-      view Response in home section
-    </>
+  if (testSubmission.isSubmitted) {
+    return <><SubmissionPage testSubmission={testSubmission} /></>
   }
   return (
     <>
-      <header className='flex gap-8 relative h-[70px] items-center left-0 shadow-sm w-full p-4'>
-        <nav className='flex gap-8 fixed h-[70px] z-20 justify-between bg-white left-0 top-0 items-center shadow-sm w-full p-4'>
+      <header className='flex gap-8 relative h-[60px] items-center left-0 shadow-sm w-full p-4'>
+        <nav className='flex gap-8 fixed h-[60px] z-20 justify-between bg-white left-0 top-0 items-center shadow-sm w-full p-4'>
           <div className='flex items-center gap-5'>
             <img src={LOGO} className='h-9' alt='Logo' />
           </div>
@@ -64,7 +61,7 @@ export default function TestSolve ({
           <div className='flex items-center gap-5'>
             <p>Time left</p>
             {timeLeft > 0 ? (
-              <div className='flex gap-4 items-center px-3 p-1 bg-orange-500 text-gray-900 rounded-sm shadow-md'>
+              <div className='flex gap-4 items-center px-3 p-1 bg-gray-300 text-gray-900 rounded-sm shadow-md'>
                 <div className='flex items-center gap-2 text-md '>
                   <span className='text-lg animate-pulse'></span>
                   {Math.floor(timeLeft / 60000)} m
@@ -80,39 +77,13 @@ export default function TestSolve ({
                 </div>
               </div>
             ) : (
-              <span className='text-red-500 font-bold'>
-                Time's Up! Submitting...
-              </span>
+              <span className='text-red-500 font-bold'>Loading....</span>
             )}
           </div>
         </nav>
       </header>
 
-      <div className='flex fixed justify-end right-0  pt-4 px-4   z-50 '>
-         
-        <IconButton
-          onClick={() => {
-            setShowSideBar(true)
-          }}
-          color='primary'
-        >
-          <ShortText />
-        </IconButton>
-      </div>
-      <div
-        className={`fixed ${
-          showSidebar ? '' : 'translate-x-full'
-        } top-[70px] transition-all duration-50 ease-linear right-0 bg-gray-50 p-5 w-[200px] h-[calc(100vh-70px)] z-50 flex flex-col gap-5`}
-      >
-        <div className='flex  justify-start'>
-          <IconButton
-            onClick={() => {
-              setShowSideBar(false)
-            }}
-          >
-            <ArrowRight />
-          </IconButton>
-        </div>
+      <div className='flex px-3 py-2 shadow-sm bg-gray-50 items-center gap-2'>
         {test?.sections.map((section, idx) => {
           const isActive = idx === currSection
           const isCompleted = idx < currSection
@@ -121,31 +92,76 @@ export default function TestSolve ({
           return (
             <div
               key={idx}
-              className={`py-3 text-sm w-full rounded-lg flex justify-between items-center px-3 cursor-pointer transition duration-300
-              ${
-                isActive
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-orange-400 text-white hover:bg-orange-500'
-              }
-            `}
+              className={`w-[140px] py-2 px-3 rounded-lg shadow-sm text-sm flex justify-between items-center cursor-pointer transition duration-300
+    ${
+      isActive
+        ? 'bg-blue-600 text-white'
+        : 'bg-white hover:bg-blue-50 text-blue-800'
+    }
+  `}
             >
-              <span>{section.name}</span>
-              {isCompleted && (
-                <CheckCircle fontSize='small' className='text-white' />
-              )}
-              {isLocked && <Lock fontSize='small' className='text-gray-200' />}
+              <span className='mr-2 font-medium truncate'>{section.name}</span>
+              <div className='flex items-center gap-1'>
+                {isCompleted && (
+                  <CheckCircle fontSize='small' className='text-blue-400' />
+                )}
+                {isLocked && (
+                  <Lock fontSize='small' className='text-blue-200' />
+                )}
+              </div>
             </div>
           )
         })}
       </div>
 
       {test.sections[currSection].sectionType == 'Quiz' ? (
-        <QuizInterface testSubmissionId={testSubmission._id} sectionId={test.sections[currSection]._id} questionSet={test.sections[currSection]?.questionSet}/>
+        <QuizInterface
+          testSubmissionId={testSubmission._id}
+          sectionId={test.sections[currSection]._id}
+          questionSet={test.sections[currSection]?.questionSet}
+        />
       ) : (
-        <CodingInterface testSubmission={testSubmission} currSection={currSection} test={test} />
+        <CodingInterface
+          testSubmission={testSubmission}
+          currSection={currSection}
+          test={test}
+        />
       )}
     </>
   )
 }
 
+
+
+
+
+function SubmissionPage({ testSubmission }) {
+  if (!testSubmission?.isSubmitted) return null;
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="bg-white shadow-lg rounded-xl p-8 max-w-xl w-full text-center">
+        <h1 className="text-2xl font-bold text-green-700 mb-4">
+          Test Submitted Successfully
+        </h1>
+        <p className="text-gray-700 text-base mb-6">
+          Your test response has been successfully recorded. <br />
+          You may review your answers in the <span className="font-medium text-blue-600">Preview</span> section.
+        </p>
+        <div className="flex justify-center gap-4">
+          <Link to="/">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm transition-all">
+              Return to Home
+            </button>
+          </Link>
+          <Link to="/user">
+            <button className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2 rounded-md text-sm transition-all">
+              View Response
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 

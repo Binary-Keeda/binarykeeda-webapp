@@ -9,14 +9,14 @@ export const CODE_EXECUTION_API = "https://judge0-ce.p.rapidapi.com";
 //     'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
 // };
 
-// export const headers =  {
-//     'x-rapidapi-key': '956e7c2da4msh97a2ee9ea3a709bp1f430ajsn3ef6b1356638',
-//     'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
-// };
 export const headers =  {
-    'x-rapidapi-key': 'ad9cef04d8msh34ea71dcf759e1cp11b95ejsn90b1fe990149',
+    'x-rapidapi-key': '956e7c2da4msh97a2ee9ea3a709bp1f430ajsn3ef6b1356638',
     'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
 };
+// export const headers =  {
+//     'x-rapidapi-key': 'ad9cef04d8msh34ea71dcf759e1cp11b95ejsn90b1fe990149',
+//     'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
+// };
 export const LOGO  = "https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg";
 // async function fetchData() {
 // 	try {
