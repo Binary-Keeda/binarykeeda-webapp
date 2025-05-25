@@ -157,17 +157,9 @@ export default function CodeView ({
 
   return (
     <>
-      {submittedProblems.some(problem => problem.pNo === currProblem) && (
-        <div className='fixed inset-0 top-[140px] bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-40'>
-          <div className='bg-white text-black p-6 rounded shadow-lg text-center'>
-            <h2 className='text-lg font-semibold mb-2'>Submission Notice</h2>
-            <p>You have already submitted this problem.</p>
-          </div>
-        </div>
-      )}
-
-      <section className='p-5'>
-        <div>
+      <section className='p-5   relative flex mr-20'>
+  
+        <div className='flex-[0.4] px-5'>
           <p className='text-lg font-semibold'>
             <strong>Problem:</strong> {problem.title}
           </p>
@@ -175,7 +167,7 @@ export default function CodeView ({
             <strong>Description:</strong> {problem.description}
           </p>
 
-          <div>
+          <div className='relative'>
             <p className='text-lg font-semibold mb-2'>Example</p>
             {problem.sampleTestCases.map((test, idx) => {
               const result = testResults[idx]
@@ -183,15 +175,6 @@ export default function CodeView ({
                 <div key={idx} className='mb-6 border rounded p-4 bg-gray-50'>
                   <div className='mb-2 flex justify-between items-center'>
                     <strong>Test Case #{idx + 1}</strong>
-                    {result && (
-                      <span
-                        className={`font-semibold ${
-                          result.passed ? 'text-green-600' : 'text-red-600'
-                        }`}
-                      >
-                        {result.passed ? '✅ Passed' : '❌ Failed'}
-                      </span>
-                    )}
                   </div>
 
                   <div className='mb-2'>
@@ -200,31 +183,12 @@ export default function CodeView ({
                       {formatEscapedNewlines(test.input)}
                     </pre>
                   </div>
-
                   <div className='mb-2'>
                     <strong>Expected Output:</strong>
                     <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                      {test.output}
+                      {formatEscapedNewlines(test.output)}
                     </pre>
                   </div>
-
-                  {result && (
-                    <>
-                      <div className='mb-2'>
-                        <strong>Your Output:</strong>
-                        <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                          {result.output || 'No output'}
-                        </pre>
-                      </div>
-
-                      {result.error && (
-                        <div className='text-red-500'>
-                          <strong>Error:</strong> {result.error}
-                        </div>
-                      )}
-                    </>
-                  )}
-
                   <div>
                     <strong>Explanation:</strong>
                     <p className='mt-1'>{test.explanation}</p>
@@ -234,66 +198,74 @@ export default function CodeView ({
             })}
           </div>
         </div>
+
+        <div className='mb-10 relative flex-1'>
+          {submittedProblems.some(problem => problem.pNo === currProblem) && (
+          <div className='absolute h-full w-full inset-0  bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-40'>
+            <div className='bg-white text-black p-6 rounded shadow-lg text-center'>
+              <h2 className='text-lg font-semibold mb-2'>Submission Notice</h2>
+              <p>You have already submitted this problem.</p>
+            </div>
+          </div>
+        )}
+          <div className='bg-gray-50 flex justify-between p-5 mx-5 rounded-t-lg'>
+            <div className='flex flex-col  ml-1'>
+              <label className='text-xs mb-1'>Choose language</label>
+              <select
+                value={language}
+                onChange={handleLanguageSelect}
+                className='custominput'
+              >
+                <option value='cpp'>C++</option>
+                <option value='c'>C</option>
+                <option value='java'>Java</option>
+                <option value='python'>Python</option>
+              </select>
+            </div>
+            <div className='flex justify-end flex-1 items-center gap-2'>
+              <button
+                onClick={runCode}
+                className='rounded-md border border-slate-300 py-2 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 disabled:opacity-50'
+                type='button'
+                disabled={isExecuting}
+              >
+                {isExecuting ? 'Running...' : 'Run Code'}
+              </button>
+              <button
+                onClick={submitCode}
+                className='rounded-md border border-slate-300 py-2 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800'
+                type='button'
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+          <div className='bg-gray-50 shadow-lg border mx-5 custom-scrollbar'>
+            <Editor
+              height='500px'
+              language={language}
+              value={code}
+              onChange={handleEditorChange}
+              options={{
+                theme: 'light',
+                minimap: { enabled: false },
+                fontSize: 14
+              }}
+            />
+            {(isExecuting || testResults.length > 0) && (
+              <SampleTestCaseWindow
+                isExecuting={isExecuting}
+                testResults={testResults}
+                data={problem?.sampleTestCases}
+              />
+            )}
+          </div>
+        </div>
       </section>
-
-      <div className='mb-10'>
-        <div className='bg-gray-50 flex justify-between p-5 mx-5 rounded-t-lg'>
-          <div className='flex flex-col w-[100px] ml-1'>
-            <label className='text-xs mb-1'>Choose language</label>
-            <select
-              value={language}
-              onChange={handleLanguageSelect}
-              className='custominput'
-            >
-              <option value='cpp'>C++</option>
-              <option value='c'>C</option>
-              <option value='java'>Java</option>
-              <option value='python'>Python</option>
-            </select>
-          </div>
-          <div className='flex justify-end flex-1 items-center gap-2'>
-            <button
-              onClick={runCode}
-              className='rounded-md border border-slate-300 py-2 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 disabled:opacity-50'
-              type='button'
-              disabled={isExecuting}
-            >
-              {isExecuting ? 'Running...' : 'Run Code'}
-            </button>
-            <button
-              onClick={submitCode}
-              className='rounded-md border border-slate-300 py-2 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800'
-              type='button'
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-        <div className='bg-gray-50 shadow-lg border mx-5 custom-scrollbar'>
-          <Editor
-            height='400px'
-            language={language}
-            value={code}
-            onChange={handleEditorChange}
-            options={{
-              theme: 'light',
-              minimap: { enabled: false },
-              fontSize: 14
-            }}
-          />
-        </div>
-      </div>
-
-      {(isExecuting || testResults.length > 0) && (
-        <SampleTestCaseWindow
-          isExecuting={isExecuting}
-          testResults={testResults}
-          data={problem?.sampleTestCases}
-        />
-      )}
 
       {showWindow && (
         <CodeSubmitWindow
+        problemName={problem.title}
           problemId={problem._id}
           setShowSubmitWindow={setShowSubmitWindow}
           code={code}
@@ -311,7 +283,7 @@ export default function CodeView ({
 
 const SampleTestCaseWindow = ({ isExecuting, code, data, testResults }) => {
   return (
-    <div className='grid grid-cols-4 gap-3 mx-5 w-full'>
+    <div className='grid mt-5 grid-cols-4 gap-3 mx-5 w-full'>
       {data?.map((test, idx) => {
         const result = testResults[idx]
         return (
