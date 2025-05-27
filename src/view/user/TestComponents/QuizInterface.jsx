@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../../lib/config'
-export default function QuizInterface ({
+import { Button, Modal, Box, Typography } from '@mui/material'
+
+export default function QuizInterface({
   questionSet = [],
   sectionId,
   testSubmissionId
 }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   const currentQuestion = questionSet[currentIndex]
 
@@ -31,33 +35,32 @@ export default function QuizInterface ({
   }
 
   const handleSubmit = () => {
-    const payload = Object.entries(answers).map(
-      ([questionId, selectedOptionId]) => ({
-        questionId,
-        selectedOptionId
-      })
-    )
+    setLoading(true)
     axios
       .post(
         `${BASE_URL}/api/v2/test/submit-section/${testSubmissionId}`,
         {
           sectionId: sectionId,
           sectionType: 'Quiz',
-          quizAnswers: payload
+          quizAnswers: answers
         },
         { withCredentials: true }
       )
       .then(() => {
+        setShowConfirmModal(false)
         window.location.reload()
       })
-      .catch(e => console.log(e))
+      .catch(e => {
+        console.log(e)
+        setLoading(false)
+      })
   }
 
   return (
     <div className='flex flex-col h-[calc(100vh-52px-70px)] lg:flex-row font-sans bg-white text-gray-800'>
       {/* Left: Question Area */}
-      <div className='flex-1 flex-col justify-between flex h-full  p-10'>
-        <div className='border w-full border-gray-200 rounded-md p-8 shadow-sm'>
+      <div className='flex-1 flex-col justify-between flex h-full p-5'>
+        <div className='border w-full border-gray-200 rounded-sm p-8 shadow-sm'>
           <div className='mb-6'>
             <h2 className='text-lg font-semibold mb-2'>
               Question {currentIndex + 1} of {questionSet.length}
@@ -90,6 +93,7 @@ export default function QuizInterface ({
             })}
           </div>
         </div>
+
         <div className='mt-8 justify-end flex items-center gap-4'>
           <button
             onClick={() => setCurrentIndex(i => Math.max(i - 1, 0))}
@@ -110,9 +114,9 @@ export default function QuizInterface ({
         </div>
       </div>
 
-      {/* Right: Navigator */}
+      {/* Right: Navigator & Info */}
       <div className='w-full h-full lg:w-1/4 border-t lg:border-t-0 lg:border-l border-gray-200 p-6 bg-white flex flex-col justify-between'>
-        <div className='w-full h-full border-t  lg:border border-gray-200 p-6 bg-white flex flex-col justify-between'>
+        <div className='w-full h-full flex flex-col justify-between'>
           <div>
             <h3 className='text-md font-semibold mb-4'>Question Navigator</h3>
             <div className='grid grid-cols-5 gap-2 lg:grid-cols-3'>
@@ -126,18 +130,82 @@ export default function QuizInterface ({
                 </button>
               ))}
             </div>
+
+            {/* Instructions */}
+            <div className='mt-6'>
+              <h4 className='text-sm font-semibold mb-1'>Quiz Instructions</h4>
+              <ul className='text-sm text-gray-700 list-disc list-inside space-y-1'>
+                <li>Select the correct option for each question.</li>
+                <li>You can navigate through questions using the buttons.</li>
+                <li>Click "Submit" when you're ready. You can't change answers afterward.</li>
+              </ul>
+            </div>
+
+            {/* Color Legend */}
+            <div className='mt-6'>
+              <h4 className='text-sm font-semibold mb-2'>Color Legend</h4>
+              <div className='flex flex-col gap-2 text-sm'>
+                <div className='flex items-center gap-2'>
+                  <span className='w-4 h-4 rounded-sm bg-blue-700 inline-block'></span>
+                  <span>Current Question</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <span className='w-4 h-4 rounded-sm bg-blue-100 border border-blue-300 inline-block'></span>
+                  <span>Answered</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <span className='w-4 h-4 rounded-sm bg-gray-100 border border-gray-300 inline-block'></span>
+                  <span>Unanswered</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className='mt-6'>
-            <button
-              onClick={handleSubmit}
-              className='w-full px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700'
-            >
-              Submit
-            </button>
-          </div>
+          {/* Submit Button */}
+          <Button
+            onClick={() => setShowConfirmModal(true)}
+            variant='contained'
+            color='primary'
+            fullWidth
+            disabled={loading}
+          >
+            Submit
+          </Button>
         </div>
       </div>
+
+      {/* Submission Confirmation Modal */}
+      <Modal
+        open={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        aria-labelledby="submit-confirm-title"
+        aria-describedby="submit-confirm-description"
+      >
+        <Box
+          className="absolute bg-white p-6 rounded-md shadow-lg"
+          sx={{
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 300
+          }}
+        >
+          <Typography id="submit-confirm-title" variant="h6" component="h2" className="mb-4">
+            Confirm Submission
+          </Typography>
+          <Typography id="submit-confirm-description" className="mb-4 text-sm text-gray-700">
+            Are you sure you want to submit your quiz? You won't be able to change your answers later.
+          </Typography>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button onClick={() => setShowConfirmModal(false)} variant="outlined">
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} variant="contained" color="primary">
+              Confirm
+            </Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   )
 }

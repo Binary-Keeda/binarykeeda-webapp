@@ -3,13 +3,14 @@ import CodeView from './CodeView'
 import axios from 'axios'
 import { BASE_URL } from '../../../lib/config'
 import { useSelector } from 'react-redux'
-import { Button } from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
+import { CheckCircle } from '@mui/icons-material'
 
 export default function CodingInterface ({ test, currSection, testSubmission }) {
   const [currProblem, setCurrProblem] = useState(0)
   const [submittedProblems, setSubmittedProblems] = useState([])
   const { user } = useSelector(s => s.auth)
-
+  const [submitting, setSubmitting] = useState()
   const [currSetting, setCurrentSection] = useState(() => {
     return test.sections[currSection].problemset.map((problem, id) => ({
       id,
@@ -96,6 +97,7 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
 
   const submitSection = async () => {
     try {
+      setSubmitting(true)
       await axios.post(
         `${BASE_URL}/api/v2/test/submit-section/${testSubmission._id}`,
         {
@@ -109,8 +111,16 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
       // setCurrentSection(currSection+1)
     } catch (err) {
       console.error('Submit error:', err)
+    } finally {
+      setSubmitting(false)
     }
   }
+  useEffect(() => {
+    if (
+      submittedProblems.length == test.sections[currSection].problemset.length
+    )
+      submitSection()
+  }, [submittedProblems])
 
   return (
     <>
@@ -118,11 +128,12 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
         test.sections[currSection].problemset.length && (
         <div className='fixed top-[67px]  flex w-full justify-end pr-24'>
           <Button
+            disabled={submitting}
             onClick={submitSection}
             variant='contained'
             sx={{ bgcolor: '#000' }}
           >
-            Submit
+            {submitting ? <CircularProgress size={14} /> : 'Submit'}
           </Button>
         </div>
       )}
@@ -130,7 +141,7 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
       <div className='fixed right-0 top-[70px] h-[calc(100vh-70px)] px-5 py-4 bg-gray-50 shadow-sm rounded-md mb-4'>
         <div className='relative flex flex-col items-center gap-6'>
           {/* Vertical Line */}
-          <div className='absolute top-0 bottom-0 left-1/2 w-[2px] bg-gray-300 z-0'></div>
+          <div className='absolute top-0 bottom-0 left-1/2 w-[2px] bg-gray-400 z-0'></div>
 
           {test.sections[currSection].problemset.map((problem, idx) => {
             const isSubmitted = submittedProblems.some(p => p?.pNo === idx)
@@ -144,34 +155,36 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
                   setCurrProblem(idx)
                 }}
                 disabled={isSubmitted}
-                className={`relative z-10 flex justify-center items-center h-[35px] w-[35px] rounded-full text-sm font-medium transition duration-200
+                className={`relative border-gray-300 border-2 z-10 flex justify-center items-center h-[35px] w-[35px] rounded-full text-sm font-medium transition duration-200
             ${
               isSubmitted
-                ? 'bg-green-500 text-white border-green-600 cursor-not-allowed'
+                ? 'bg-blue-500 text-white border-green-600 cursor-not-allowed'
                 : isActive
-                ? 'bg-orange-500 text-white shadow-md'
-                : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border-gray-300'
+                ? 'bg-blue-500  text-white cursor-pointer shadow-md'
+                : 'bg-gray-100 text-gray-800 cursor-pointer hover:bg-gray-200 border-gray-300'
             }
           `}
                 title={isSubmitted ? 'Already submitted' : 'Click to open'}
               >
-                {idx + 1}
+                {isSubmitted ?   <CheckCircle fontSize='small' className='text-blue-400' />:idx+1} 
               </span>
             )
           })}
         </div>
       </div>
-
-      <CodeView
-        currProblem={currProblem}
-        submittedProblems={submittedProblems}
-        problem={test.sections[currSection].problemset[currProblem]}
-        currSetting={currSetting}
-        setSubmittedProblems={setSubmittedProblems}
-        setCurrentSection={setCurrentSection}
-        handleCodeChange={handleCodeChange}
-        handleLanguageChange={handleLanguageChange}
-      />
+      {currProblem < test.sections[currSection].problemset.length && (
+        <CodeView
+          setCurrProblem={setCurrProblem}
+          currProblem={currProblem}
+          submittedProblems={submittedProblems}
+          problem={test.sections[currSection].problemset[currProblem]}
+          currSetting={currSetting}
+          setSubmittedProblems={setSubmittedProblems}
+          setCurrentSection={setCurrentSection}
+          handleCodeChange={handleCodeChange}
+          handleLanguageChange={handleLanguageChange}
+        />
+      )}
     </>
   )
 }

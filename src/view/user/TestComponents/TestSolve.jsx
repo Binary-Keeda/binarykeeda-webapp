@@ -79,6 +79,9 @@ export default function TestSolve ({
             ) : (
               <span className='text-red-500 font-bold'>Loading....</span>
             )}
+            <div className='cursor-pointer'>
+            <ShortText/>
+            </div>
           </div>
         </nav>
       </header>

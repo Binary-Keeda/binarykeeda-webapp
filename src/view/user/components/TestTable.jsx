@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentPage } from '../../../redux/reducers/testReducerUser'
 import { getTestUser } from '../../../redux/api/getTestUser'
 import { Link } from 'react-router-dom'
-import { EditNote, Lock, Source } from '@mui/icons-material'
+import {Lock, NavigateNext } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 
 const TestsTable = () => {
   const { hasMore, page, loading, data, currentPage, totalPages } = useSelector(
@@ -86,7 +87,10 @@ const TestsTable = () => {
                   <td className='p-4 py-5'>
                    {
                     i.canAttempt ?  <Link to={`/user/test/${i._id}`}>
-                    <Source />
+                      <IconButton>
+
+                    <NavigateNext />
+                      </IconButton>
                   </Link>:<Lock />
                    }
                   </td>

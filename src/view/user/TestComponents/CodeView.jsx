@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { Editor } from '@monaco-editor/react'
 import axios from 'axios'
 import { BASE_URL, CODE_EXECUTION_API, headers } from '../../../lib/config'
 import { IconButton } from '@mui/material'
-import { Close } from '@mui/icons-material'
-import CodeSubmitWindow from './CodeSubmitWindow'
+import { Close, NavigateBefore, NavigateNext } from '@mui/icons-material'
+import CodeSubmitWindow from './CodeSubmission'
 
 function formatEscapedNewlines (text) {
   return text.replace(/\\n/g, '\n')
@@ -21,6 +21,7 @@ const getLanguageId = lang => {
 }
 
 export default function CodeView ({
+  setCurrProblem,
   currProblem,
   submittedProblems,
   problem,
@@ -30,6 +31,7 @@ export default function CodeView ({
   handleCodeChange,
   handleLanguageChange
 }) {
+  const CodeOutputWindow = React.lazy(() => import('./CodeOutput'))
   const [language, setLanguage] = useState(currSetting[currProblem].language)
   const [code, setCode] = useState(currSetting[currProblem].code)
   const [isExecuting, setIsExecuting] = useState(false)
@@ -141,6 +143,7 @@ export default function CodeView ({
       code,
       language
     }
+    setShowSubmitWindow(false)
 
     const isConfirmed = window.confirm(
       'Are you sure you want to submit the code?'
@@ -149,7 +152,6 @@ export default function CodeView ({
     if (isConfirmed) {
       window.scrollTo({ top: 0, behavior: 'smooth' })
       setShowSubmitWindow(true)
-    } else {
     }
   }
 
@@ -157,57 +159,117 @@ export default function CodeView ({
 
   return (
     <>
-      <section className='p-5   relative flex mr-20'>
-  
-        <div className='flex-[0.4] px-5'>
-          <p className='text-lg font-semibold'>
-            <strong>Problem:</strong> {problem.title}
-          </p>
-          <p className='mb-4'>
-            <strong>Description:</strong> {problem.description}
-          </p>
+      <section className='p-5  h-[calc(100vh-60px-52px)]  overflow-x-hidden overflow-y-hidden left-0  relative flex w-[calc(100vw-70px)]'>
+        <div className='flex-[0.6] relative min-w-[200px] custom-scrollbar overflow-y-hidden'>
+          <div className='flex-[0.4] overflow-y-scroll h-full p-4 space-y-4 text-sm'>
+            <h1 className='text-2xl font-bold'>{problem.title}</h1>
 
-          <div className='relative'>
-            <p className='text-lg font-semibold mb-2'>Example</p>
-            {problem.sampleTestCases.map((test, idx) => {
-              const result = testResults[idx]
-              return (
-                <div key={idx} className='mb-6 border rounded p-4 bg-gray-50'>
-                  <div className='mb-2 flex justify-between items-center'>
-                    <strong>Test Case #{idx + 1}</strong>
-                  </div>
+            <div>
+              <h2 className='text-lg font-semibold'>Description</h2>
+              <p className='text-gray-700 whitespace-pre-line'>
+                {problem.description}
+              </p>
+            </div>
 
-                  <div className='mb-2'>
-                    <strong>Input:</strong>
-                    <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                      {formatEscapedNewlines(test.input)}
-                    </pre>
-                  </div>
-                  <div className='mb-2'>
-                    <strong>Expected Output:</strong>
-                    <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                      {formatEscapedNewlines(test.output)}
-                    </pre>
-                  </div>
-                  <div>
-                    <strong>Explanation:</strong>
-                    <p className='mt-1'>{test.explanation}</p>
-                  </div>
+            {problem.constraints && (
+              <div>
+                <h2 className='text-lg font-semibold'>Constraints</h2>
+                <ul className='list-disc list-inside text-gray-600'>
+                  {problem.constraints.map((constraint, i) => (
+                    <li key={i}>{constraint}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {problem.topics && (
+              <div>
+                <h2 className='text-lg font-semibold'>Topics</h2>
+                <div className='flex flex-wrap gap-2'>
+                  {problem.topics.map((topic, i) => (
+                    <span
+                      key={i}
+                      className='bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded'
+                    >
+                      {topic}
+                    </span>
+                  ))}
                 </div>
-              )
-            })}
+              </div>
+            )}
+
+            {problem.hints && (
+              <div>
+                <h2 className='text-lg font-semibold'>Hints</h2>
+                <ul className='list-disc list-inside text-gray-600'>
+                  {problem.hints.map((hint, i) => (
+                    <li key={i}>{hint}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {problem.sampleTestCases && (
+              <div>
+                <h2 className='text-lg font-semibold'>Sample Test Cases</h2>
+                {problem.sampleTestCases.map((test, i) => (
+                  <div key={i} className='mb-2 p-2 bg-gray-100 rounded'>
+                    <p>
+                      <strong>Input:</strong> {test.input}
+                    </p>
+                    <p>
+                      <strong>Output:</strong> {test.output}
+                    </p>
+                    <p>
+                      <strong>Explanation:</strong> {test.explanation}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div
+            className={`absolute w-full h-[] top-0 transition-all duration-300 ease-linear  ${
+              showWindow ? 'top-0' : 'top-[100vh] invisible '
+            }`}
+          >
+            {showWindow && (
+                <CodeSubmitWindow
+                setCurrProblem={setCurrProblem}
+                  problemName={problem.title}
+                  problemId={problem._id}
+                  setShowSubmitWindow={setShowSubmitWindow}
+                  code={code}
+                  language={language}
+                  testCases={problem.testCases}
+                  getLanguageId={getLanguageId}
+                  fetchResult={fetchResult}
+                  currProblem={currProblem}
+                  setSubmittedProblems={setSubmittedProblems}
+                />
+            )}
           </div>
         </div>
-
+        <div className='flex flex-col items-center'>
+          <hr className='bg-gray-300  flex-1 w-[2px]' />
+          <div className='hover:bg-blue-500 hover:text-white cursor-grab bg-gray-300 h-[25px] w-[25px] flex items-center  rounded-full'>
+            <NavigateBefore sx={{ marginRight: '-3px' }} fontSize='12' />
+            <NavigateNext sx={{ marginLeft: '-3px' }} fontSize='12' />
+          </div>
+          <hr className='bg-gray-300 flex-1 w-[2px]' />
+        </div>
         <div className='mb-10 relative flex-1'>
           {submittedProblems.some(problem => problem.pNo === currProblem) && (
-          <div className='absolute h-full w-full inset-0  bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-40'>
-            <div className='bg-white text-black p-6 rounded shadow-lg text-center'>
-              <h2 className='text-lg font-semibold mb-2'>Submission Notice</h2>
-              <p>You have already submitted this problem.</p>
+            <div className='absolute h-full w-full inset-0  bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-10'>
+              <div className='bg-white text-black p-6 rounded shadow-lg text-center'>
+                <h2 className='text-lg font-semibold mb-2'>
+                  Submission Notice
+                </h2>
+                <p>You have already submitted this problem.</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
           <div className='bg-gray-50 flex justify-between p-5 mx-5 rounded-t-lg'>
             <div className='flex flex-col  ml-1'>
               <label className='text-xs mb-1'>Choose language</label>
@@ -242,7 +304,7 @@ export default function CodeView ({
           </div>
           <div className='bg-gray-50 shadow-lg border mx-5 custom-scrollbar'>
             <Editor
-              height='500px'
+              height='550px'
               language={language}
               value={code}
               onChange={handleEditorChange}
@@ -262,21 +324,6 @@ export default function CodeView ({
           </div>
         </div>
       </section>
-
-      {showWindow && (
-        <CodeSubmitWindow
-        problemName={problem.title}
-          problemId={problem._id}
-          setShowSubmitWindow={setShowSubmitWindow}
-          code={code}
-          language={language}
-          testCases={problem.testCases}
-          getLanguageId={getLanguageId}
-          fetchResult={fetchResult}
-          currProblem={currProblem}
-          setSubmittedProblems={setSubmittedProblems}
-        />
-      )}
     </>
   )
 }
