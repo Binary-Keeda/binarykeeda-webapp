@@ -70,9 +70,9 @@ export default function ProblemSet() {
       : 0;
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full ">
       {/* Progress Header Section - Sticky */}
-      <div className="sticky px-6 py-4 top-[73px] z-50 bg-gray-50 dark:bg-gray-800 pb-4 pt-3 border-b border-gray-200 dark:border-gray-700">
+      <div className="sticky px-6 py-4 dark:bg-support  top-[73px] z-50 bg-primary pb-4 pt-3 border-b border-gray-200 dark:border-gray-700">
         <div className="text-left">
           {progress.problemsSolved > 0 ? (
             <p className="text-xl font-medium text-gray-800 dark:text-gray-300 italic">
@@ -97,7 +97,7 @@ export default function ProblemSet() {
           )}
         </div>
         <div className="w-full mt-3 px-2">
-          <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+          <div className="w-full h-2.5 bg-primary  rounded-full overflow-hidden">
             <div
               className="h-2.5 bg-gradient-to-r from-[#db5602] to-orange-500 rounded-full transition-all duration-700 ease-in-out shadow-inner"
               style={{ width: `${progressPercentage}%` }}
@@ -107,13 +107,13 @@ export default function ProblemSet() {
       </div>
 
       {/* Problems List Section */}
-      <div className="flex-1 flex flex-col gap-3 w-full p-6">
+      <div className="flex-1 flex flex-col gap-3 w-full mt-3">
         {problemset.map((topic, index) => (
           <div
             key={index}
-            className="rounded-lg bg-clip-border shadow-md dark:bg-gray-800 text-gray-900 dark:text-gray-50 bg-white transition-shadow duration-300"
+            className="rounded-lg bg-clip-border shadow-md bg-primary text-gray-900 dark:text-gray-50 bg-white transition-shadow duration-300"
           >
-            <h3 className="text-2xl px-6 py-5 font-bold leading-none border-slate-100 text-gray-800 dark:text-gray-50 bg-orange-50 dark:bg-gray-700">
+            <h3 className="text-2xl px-6 py-5 font-bold leading-none border-slate-100 text-gray-800 dark:text-gray-50 bg-orange-50 dark:bg-support">
               {`Topic ${index + 1}: ${topic.topicName}`}
             </h3>
 
@@ -163,7 +163,7 @@ export default function ProblemSet() {
 
               {topic.problems?.map((problem, idx) => (
                 <div
-                  className="flex hover:bg-gray-50 hover:dark:bg-gray-700 justify-between dark:text-gray-50 items-center border-b dark:border-gray-700 py-5 px-6 last:border-b-0"
+                  className="flex hover:bg-support  justify-between dark:text-gray-50 items-center border-b dark:border-gray-700 py-5 px-6 last:border-b-0"
                   key={idx}
                 >
                   <p className="text-lg px-4 font-normal leading-none dark:text-gray-50 text-gray-700">

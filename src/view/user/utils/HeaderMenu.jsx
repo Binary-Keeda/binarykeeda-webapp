@@ -21,7 +21,6 @@ import {
 import { useSelector } from 'react-redux'
 
 const AccountMenu = ({ handleLogout }) => {
-  const [darkMode, setDarkMode] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const { user } = useSelector(s => s.auth)
@@ -91,18 +90,7 @@ const AccountMenu = ({ handleLogout }) => {
           <Avatar src={user.avatar} /> <small>Profile</small>
         </MenuItem>
 
-        <MenuItem disableRipple>
-          <ListItemIcon>{darkMode ? <DarkMode /> : <LightMode />}</ListItemIcon>
-          <small>
-
-            {darkMode ? 'Dark Mode' : 'Light Mode'}
-          </small>
-          <Switch
-            checked={darkMode}
-            onChange={() => setDarkMode(prev => !prev)}
-            size='small'
-          />
-        </MenuItem>
+      
 
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

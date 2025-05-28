@@ -54,7 +54,6 @@ const App = () => {
   }, [])
   useEffect(() => {
     if (user) {
-      getQuiz()
       if (user.role == 'admin') {
         getTestAdmin()
       } else {
@@ -67,8 +66,7 @@ const App = () => {
   return loading ? (
     <Loaader />
   ) : (
-    <GoogleOAuthProvider clientId={CLIENT_ID}>
-      {/* <GoogleSignInPopup /> */}
+
       <Suspense fallback={<Loaader />}>
         <BrowserRouter>
           <Routes>
@@ -125,8 +123,8 @@ const App = () => {
           </Routes>
         </BrowserRouter>
       </Suspense>
-    </GoogleOAuthProvider>
   )
 }
 
 export default App
+

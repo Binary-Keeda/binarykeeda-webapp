@@ -5,6 +5,7 @@ import Submissions from './components/Solutions'
 import Leaderboard from './components/LeaderBoard'
 import ProgressArea from './components/ProgressArea'
 import { Link } from 'react-router-dom'
+import ProfileCard from './components/ProfileCard'
 
 function Home () {
   const { user } = useSelector(s => s.auth)
@@ -12,15 +13,14 @@ function Home () {
   const [progress, setProgress] = useState(70)
 
   useEffect(() => {
-    console.log('Home Dashboard mounted')
     const userinfo = localStorage.getItem('info')
     setUserInfoModal(userinfo)
   }, [])
 
   return (
     <>
-      <section className='bg-gray-50 gap-6 dark:text-gray-50 text-gray-700 flex flex-col lg:flex-row dark:bg-gray-700'>
-        <div className='relative flex flex-[.5] bg-white shadow-lg p-6 rounded-xl dark:bg-gray-800 flex-col items-center'>
+      <section className='bg-secondary gap-6 dark:text-gray-50 text-gray-700 flex flex-col lg:flex-row '>
+        {/* <div className='relative flex flex-[.5] bg-white shadow-lg p-6 rounded-xl dark:bg-gray-800 flex-col items-center'>
           <div className='h-full items-end w-full'>
             <div className='relative h-[93px] flex justify-center items-end w-full rounded-md bg-[#fff6e9]'>
               <Avatar
@@ -64,8 +64,8 @@ function Home () {
               Edit Profile
             </Button>
           </Link>
-        </div>
-
+        </div> */}
+        <ProfileCard user={user} />
         <ProgressArea solutions={user.solutions} />
         <Leaderboard />
       </section>

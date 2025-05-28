@@ -4,6 +4,7 @@ import { Button, Chip, CircularProgress } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import HubIcon from "@mui/icons-material/Hub";
+import { useEffect } from "react";
 
 const ICONS = [<PsychologyIcon />, <HubIcon />, <SchoolIcon />];
 
@@ -35,6 +36,7 @@ const CARDS = [
 ];
 
 function PracticePage() {
+
   return (
     <Suspense
       fallback={
@@ -50,7 +52,7 @@ function PracticePage() {
         {CARDS.map((card, idx) => (
           <div
             key={idx}
-            className="flex flex-col bg-white dark:bg-gray-800 rounded-[22px] shadow-lg hover:shadow-2xl shadow-gray-300 dark:shadow-black/40 transition-all duration-300 hover:scale-[1.02] overflow-hidden border border-gray-100 dark:border-gray-700"
+            className="flex flex-col bg-primary  rounded-[22px] shadow-lg hover:shadow-2xl shadow-gray-300 dark:shadow-black/40 transition-all duration-300 hover:scale-[1.02] overflow-hidden border border-gray-100 dark:border-gray-700"
           >
             <img
               className="h-[200px] object-contain w-full"

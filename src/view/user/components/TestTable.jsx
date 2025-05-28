@@ -28,33 +28,33 @@ const TestsTable = () => {
   return (
     <>
       {loading && <div className='loader'></div>}
-      <div className='relative flex flex-col w-full  overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border'>
+      <div className='relative flex flex-col w-full  overflow-scroll dark:text-white bg-white shadow-md rounded-lg bg-clip-border'>
         <table className='w-full text-left table-auto min-w-max'>
-          <thead>
-            <tr>
-              <th className='p-4 border-b border-slate-200 bg-slate-50'>
-                <p className='text-sm font-normal leading-none text-slate-500'>
+          <thead >
+            <tr className='bg-support'>
+              <th className='p-4 border-b border-slate-200 '>
+                <p className='text-sm font-normal leading-none '>
                   Title
                 </p>
               </th>
-              <th className='p-4 border-b border-slate-200 bg-slate-50'>
-                <p className='text-sm font-normal leading-none text-slate-500'>
+              <th className='p-4 border-b border-slate-200 '>
+                <p className='text-sm font-normal leading-none '>
                   Description
                 </p>
               </th>
-              <th className='p-4 border-b border-slate-200 bg-slate-50'>
-                <p className='text-sm font-normal leading-none text-slate-500'>
+              <th className='p-4 border-b border-slate-200 '>
+                <p className='text-sm font-normal leading-none '>
                   Duration
                 </p>
               </th>
 
-              <th className='p-4 border-b border-slate-200 bg-slate-50'>
-                <p className='text-sm font-normal leading-none text-slate-500'>
+              <th className='p-4 border-b border-slate-200 '>
+                <p className='text-sm font-normal leading-none '>
                   Attempts
                 </p>
               </th>
-              <th className='p-4 border-b border-slate-200 bg-slate-50'>
-                <p className='text-sm font-normal leading-none text-slate-500'>
+              <th className='p-4 border-b border-slate-200 '>
+                <p className='text-sm font-normal leading-none '>
                   Solve
                 </p>
               </th>
@@ -65,24 +65,24 @@ const TestsTable = () => {
               <>
                 <tr
                   key={key}
-                  className='hover:bg-slate-50 border-b border-slate-200'
+                  className='bg-primary'
                 >
                   <td className='p-4 py-5'>
-                    <p className='block font-semibold text-sm text-slate-800'>
+                    <p className='block font-semibold text-sm '>
                       {i.name}
                     </p>
                   </td>
                   <td className='p-4 py-5'>
-                    <p className='text-sm text-slate-500'>{i.description}</p>
+                    <p className='text-sm '>{i.description}</p>
                   </td>
                   <td className='p-4 py-5'>
-                    <p className='text-sm text-slate-500'>
+                    <p className='text-sm '>
                       {i.duration + ' ' + 'min.'}
                     </p>
                   </td>
 
                   <td className='p-4 py-5'>
-                      <p className='text-sm text-slate-500'>{i.attempts} / 1</p>
+                      <p className='text-sm '>{i.attempts} / 1</p>
                   </td>
                   <td className='p-4 py-5'>
                    {
@@ -100,15 +100,15 @@ const TestsTable = () => {
           </tbody>
         </table>
 
-        <div className='flex justify-between items-center px-4 py-3'>
-          <div className='text-sm text-slate-500'>
+        <div className='flex bg-support justify-between items-center px-4 py-3'>
+          <div className='text-sm '>
             Showing <b>1-{data[currentPage]?.length}</b> of {totalPages}
           </div>
-          <div className='flex space-x-1'>
+          <div className='flex  space-x-1'>
             <button
               onClick={prevPage}
               disabled={currentPage == 1}
-              className='px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease'
+              className='px-3 py-1 min-w-9 min-h-9 text-sm font-normal  bg-primary border border-slate-200 rounded hover: hover:border-slate-400 transition duration-200 ease'
             >
               Prev
             </button>
@@ -116,7 +116,7 @@ const TestsTable = () => {
             <button
               disabled={!hasMore && currentPage == page - 1}
               onClick={nextPage}
-              className='px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease'
+              className='px-3 py-1 min-w-9 min-h-9 text-sm font-normal  bg-primary border border-slate-200 rounded hover: hover:border-slate-400 transition duration-200 ease'
             >
               Next
             </button>

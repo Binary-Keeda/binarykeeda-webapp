@@ -18,9 +18,9 @@ function Leaderboard ({ userUniversity }) {
   const [tab, setTab] = useState('university')
 
   return (
-    <div className='flex-[.7] dark:bg-gray-800 bg-white rounded-lg shadow-lg p-3 flex flex-col'>
-      <div className='flex-[0.8] dark:bg-gray-800 bg-white rounded-lg  flex flex-col'>
-        <div className='flex h-[50px] rounded-lg text-white gap-3 bg-gray-600 items-center px-4'>
+    <div className='flex-[.7]  bg-primary rounded-lg shadow-lg p-3 flex flex-col'>
+      <div className='flex-[0.8]  rounded-lg  flex flex-col'>
+        <div className='flex h-[50px] rounded-lg text-white gap-3 bg-support items-center px-4'>
           <Button
             variant={tab === 'university' ? 'contained' : 'text'}
             onClick={() => setTab('university')}
@@ -57,7 +57,7 @@ function Leaderboard ({ userUniversity }) {
           {leaderboardData[tab].map((user, i) => (
             <div
               key={i}
-              className='flex justify-between items-center px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-md'
+              className='flex justify-between items-center px-4 py-2 bg-support rounded-md'
             >
               <div className='flex gap-3 items-center'>
                 <span className='text-sm font-semibold text-gray-700 dark:text-gray-100'>

@@ -5,6 +5,8 @@ import { BASE_URL, CODE_EXECUTION_API, headers } from '../../../lib/config'
 import { IconButton } from '@mui/material'
 import { Close, NavigateBefore, NavigateNext } from '@mui/icons-material'
 import CodeSubmitWindow from './CodeSubmission'
+import CodeOutputWindow from './CodeOutput';
+import { geminiReview, runCodeBatch } from './codeUtils'
 
 function formatEscapedNewlines (text) {
   return text.replace(/\\n/g, '\n')
@@ -31,12 +33,14 @@ export default function CodeView ({
   handleCodeChange,
   handleLanguageChange
 }) {
-  const CodeOutputWindow = React.lazy(() => import('./CodeOutput'))
   const [language, setLanguage] = useState(currSetting[currProblem].language)
   const [code, setCode] = useState(currSetting[currProblem].code)
   const [isExecuting, setIsExecuting] = useState(false)
+  const [summary, setSummary] = useState()
   const [testResults, setTestResults] = useState([])
-  const [showWindow, setShowSubmitWindow] = useState()
+  const [showWindow, setShowSubmitWindow] = useState(false)
+  const [showOutputWindow, setShowOutputWindow] = useState(false)
+  const [codeReview , setCodeReview] = useState();
   useEffect(() => {
     if (submittedProblems.includes(currProblem)) {
       document.body.style.overflow = 'hidden'
@@ -53,7 +57,7 @@ export default function CodeView ({
     const setting = currSetting[currProblem]
     setLanguage(setting.language)
     setCode(setting.code)
-    setTestResults([]) // reset on problem switch
+    // setTestResults([])
   }, [currProblem, currSetting])
 
   const handleEditorChange = newValue => {
@@ -91,51 +95,26 @@ export default function CodeView ({
     return { stderr: 'Timed out.' }
   }
 
-  const runCode = async () => {
-    setIsExecuting(true)
-    const results = []
-
-    for (const test of problem.sampleTestCases) {
-      try {
-        const res = await axios.post(
-          `${CODE_EXECUTION_API}/submissions?base64_encoded=false`,
-          {
-            source_code: code,
-            language_id: getLanguageId(language),
-            stdin: test.input,
-            cpu_time_limit: 5,
-            memory_limit: 128000
-          },
-          { headers }
-        )
-
-        const token = res.data.token
-        const output = await fetchResult(token)
-        const decodedOutput = output?.stdout ? output.stdout.trim() : ''
-        const expectedOutput = test.output.trim()
-
-        results.push({
-          input: test.input,
-          output: decodedOutput,
-          expected: expectedOutput,
-          passed: decodedOutput === expectedOutput,
-          error: output.stderr || null
-        })
-      } catch (err) {
-        console.error('Test case error:', err)
-        results.push({
-          input: test.input,
-          output: '',
-          expected: test.output,
-          passed: false,
-          error: 'Execution failed'
-        })
-      }
-    }
-
-    setTestResults(results)
-    setIsExecuting(false)
+  const runTestCases = async () => {
+    setShowOutputWindow(true);
+    setTestResults([]);
+    await runCodeBatch({
+      code,
+      language,
+      testCases: problem.testCases,
+      setIsExecuting,
+      setSummary,
+      setTestResults,
+      headers,
+      CODE_EXECUTION_API,
+      getLanguageId
+    })
+   await geminiReview({setCodeReview:setCodeReview ,code, problemName:problem.title});
   }
+  useEffect(() => {
+    if (testResults.length > 0) {
+    }
+  }, [testResults, summary])
 
   const submitCode = () => {
     const submission = {
@@ -231,23 +210,33 @@ export default function CodeView ({
 
           <div
             className={`absolute w-full h-[] top-0 transition-all duration-300 ease-linear  ${
-              showWindow ? 'top-0' : 'top-[100vh] invisible '
+              showOutputWindow ? 'top-0' : 'top-[100vh] invisible '
             }`}
           >
             {showWindow && (
-                <CodeSubmitWindow
+              <CodeSubmitWindow
                 setCurrProblem={setCurrProblem}
-                  problemName={problem.title}
-                  problemId={problem._id}
-                  setShowSubmitWindow={setShowSubmitWindow}
-                  code={code}
-                  language={language}
-                  testCases={problem.testCases}
-                  getLanguageId={getLanguageId}
-                  fetchResult={fetchResult}
-                  currProblem={currProblem}
-                  setSubmittedProblems={setSubmittedProblems}
+                problemName={problem.title}
+                problemId={problem._id}
+                setShowSubmitWindow={setShowSubmitWindow}
+                code={code}
+                language={language}
+                testCases={problem.testCases}
+                getLanguageId={getLanguageId}
+                fetchResult={fetchResult}
+                currProblem={currProblem}
+                setSubmittedProblems={setSubmittedProblems}
+              />
+            )}
+            {showOutputWindow && (
+              <>
+                <CodeOutputWindow
+                codeReview={codeReview}
+                  setShowOutputWindow={setShowOutputWindow}
+                  testResults={testResults}
+                  summary={summary}
                 />
+              </>
             )}
           </div>
         </div>
@@ -286,7 +275,7 @@ export default function CodeView ({
             </div>
             <div className='flex justify-end flex-1 items-center gap-2'>
               <button
-                onClick={runCode}
+                onClick={runTestCases}
                 className='rounded-md border border-slate-300 py-2 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 disabled:opacity-50'
                 type='button'
                 disabled={isExecuting}
@@ -314,13 +303,6 @@ export default function CodeView ({
                 fontSize: 14
               }}
             />
-            {(isExecuting || testResults.length > 0) && (
-              <SampleTestCaseWindow
-                isExecuting={isExecuting}
-                testResults={testResults}
-                data={problem?.sampleTestCases}
-              />
-            )}
           </div>
         </div>
       </section>
@@ -328,69 +310,69 @@ export default function CodeView ({
   )
 }
 
-const SampleTestCaseWindow = ({ isExecuting, code, data, testResults }) => {
-  return (
-    <div className='grid mt-5 grid-cols-4 gap-3 mx-5 w-full'>
-      {data?.map((test, idx) => {
-        const result = testResults[idx]
-        return (
-          <div key={idx} className='mb-6 border rounded p-4 bg-gray-50'>
-            {isExecuting ? (
-              <div className='flex justify-center'>
-                {' '}
-                <div className='loader3'></div>
-              </div>
-            ) : (
-              <>
-                <div className='mb-2 flex justify- items-center'>
-                  <strong>Test Case #{idx + 1}</strong>
+// const SampleTestCaseWindow = ({ isExecuting, code, data, testResults }) => {
+//   return (
+//     <div className='grid mt-5 grid-cols-4 gap-3 mx-5 w-full'>
+//       {data?.map((test, idx) => {
+//         const result = testResults[idx]
+//         return (
+//           <div key={idx} className='mb-6 border rounded p-4 bg-gray-50'>
+//             {isExecuting ? (
+//               <div className='flex justify-center'>
+//                 {' '}
+//                 <div className='loader3'></div>
+//               </div>
+//             ) : (
+//               <>
+//                 <div className='mb-2 flex justify- items-center'>
+//                   <strong>Test Case #{idx + 1}</strong>
 
-                  {result && (
-                    <span
-                      className={`font-semibold ${
-                        result.passed ? 'text-green-600' : 'text-red-600'
-                      }`}
-                    >
-                      {result.passed ? '✅ Passed' : '❌ Failed'}
-                    </span>
-                  )}
-                </div>
+//                   {result && (
+//                     <span
+//                       className={`font-semibold ${
+//                         result.passed ? 'text-green-600' : 'text-red-600'
+//                       }`}
+//                     >
+//                       {result.passed ? '✅ Passed' : '❌ Failed'}
+//                     </span>
+//                   )}
+//                 </div>
 
-                <div className='mb-2'>
-                  <strong>Input:</strong>
-                  <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                    {formatEscapedNewlines(test.input)}
-                  </pre>
-                </div>
+//                 <div className='mb-2'>
+//                   <strong>Input:</strong>
+//                   <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
+//                     {formatEscapedNewlines(test.input)}
+//                   </pre>
+//                 </div>
 
-                <div className='mb-2'>
-                  <strong>Expected Output:</strong>
-                  <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                    {test.output}
-                  </pre>
-                </div>
+//                 <div className='mb-2'>
+//                   <strong>Expected Output:</strong>
+//                   <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
+//                     {test.output}
+//                   </pre>
+//                 </div>
 
-                {result && (
-                  <>
-                    <div className='mb-2'>
-                      <strong>Your Output:</strong>
-                      <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-                        {result.output || 'No output'}
-                      </pre>
-                    </div>
+//                 {result && (
+//                   <>
+//                     <div className='mb-2'>
+//                       <strong>Your Output:</strong>
+//                       <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
+//                         {result.output || 'No output'}
+//                       </pre>
+//                     </div>
 
-                    {result.error && (
-                      <div className='text-red-500'>
-                        <strong>Error:</strong> {result.error}
-                      </div>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
+//                     {result.error && (
+//                       <div className='text-red-500'>
+//                         <strong>Error:</strong> {result.error}
+//                       </div>
+//                     )}
+//                   </>
+//                 )}
+//               </>
+//             )}
+//           </div>
+//         )
+//       })}
+//     </div>
+//   )
+// }

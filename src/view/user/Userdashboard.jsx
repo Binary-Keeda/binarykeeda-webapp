@@ -25,7 +25,7 @@ const UserDashboardLayout = ({children}) => {
       document.getElementById("root").classList.remove("dark");
       setDarkMode(false);
     }
-  }, []);
+  }, [darkMode]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -50,7 +50,7 @@ const UserDashboardLayout = ({children}) => {
         showMenu={menuOpen}
         toggleMenu={toggleMenu}
       />
-      <main className={` ${menuOpen ? "pl-[230px] " : "pl-5 lg:pl-[90px]" }  pr-5 py-5 dark:bg-gray-900 bg-gray-50 min-h-[calc(100vh-80px)] text-gray-800 transition-all`}>
+      <main className={` ${menuOpen ? "pl-[230px] " : "pl-5 lg:pl-[90px]" }  pr-5 py-5  bg-secondary min-h-[calc(100vh-70px)] text-gray-800 transition-all`}>
       {  children || <Outlet /> } 
       </main>
     </>
