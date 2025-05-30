@@ -82,7 +82,7 @@
 }
 
 * {
-  transition:0.1s linear all;
+  /* transition:0.1s linear all; */
 }
 h1{
   font-family: 'Roboto Condensed', sans-serif;

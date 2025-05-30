@@ -29,6 +29,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-json-editor-ajrm": "^2.5.14",
+    "react-json-view": "^1.21.3",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.2.0",
     "react-scroll": "^1.9.3",

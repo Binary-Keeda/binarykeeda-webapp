@@ -203,7 +203,16 @@ export const runCodeBatch = async ({
     });
 
     // Step 5: Update UI state
-    setSummary({ passed: passedCount, failed: testCases.length - passedCount });
+    const avgTime = totalTime / testCases.length;
+    const avgMemory = totalMemory / testCases.length;
+
+    setSummary({ 
+      passed: passedCount, 
+      failed: testCases.length - passedCount ,
+      total:testCases.length,
+      avgTime: avgTime.toFixed(3),
+      avgMemory: avgMemory.toFixed(2)
+    });
     setTestResults(results);
   } catch (err) {
     console.error('Batch execution error:', err);
@@ -277,7 +286,7 @@ function cleanGeminiResponse (data) {
       return null
     }
   }
-export  const geminiReview = ({code, setCodeReview ,problemName}) => {
+export  const geminiReview = async ({code, setCodeReview ,problemName}) => {
     axios
       .post(`${BASE_URL}/api/v3/review/code`, {
         sourceCode: code,
@@ -289,5 +298,4 @@ export  const geminiReview = ({code, setCodeReview ,problemName}) => {
         return parsed;
       })
       .catch(err => console.error(err))
-      .finally(() => setLoading(false))
   }

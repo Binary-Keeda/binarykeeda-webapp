@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { BASE_URL } from '../../../lib/config'
 import { Button, Modal, Box, Typography } from '@mui/material'
@@ -10,10 +10,17 @@ export default function QuizInterface({
 }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState({})
+  const [visitedQuestions, setVisitedQuestions] = useState(new Set())
   const [loading, setLoading] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   const currentQuestion = questionSet[currentIndex]
+
+  useEffect(() => {
+    if (currentQuestion?._id) {
+      setVisitedQuestions(prev => new Set(prev).add(currentQuestion._id))
+    }
+  }, [currentIndex, currentQuestion])
 
   const handleOptionChange = (questionId, optionId) => {
     setAnswers(prev => ({
@@ -25,16 +32,24 @@ export default function QuizInterface({
   const getButtonStyle = qId => {
     const isCurrent = questionSet[currentIndex]?._id === qId
     const isAnswered = answers[qId]
-    return `px-3 py-1 border text-sm rounded-sm ${
-      isCurrent
-        ? 'bg-blue-700 text-white border-blue-700'
-        : isAnswered
-        ? 'bg-blue-100 border-blue-300 text-blue-800'
-        : 'bg-gray-100 border-gray-300 text-gray-700'
-    }`
+    const isVisited = visitedQuestions.has(qId)
+
+    let base = 'p-2 border text-sm'
+
+    if (isCurrent) {
+      return `${base} bg-blue-700 text-white border-blue-700`
+    }
+    if (isAnswered) {
+      return `${base} bg-green-100 border-green-400 text-green-800`
+    }
+    if (isVisited) {
+      return `${base} bg-orange-100 border-orange-400 text-orange-800`
+    }
+    return `${base} bg-red-100 border-red-400 text-red-800`
   }
 
   const handleSubmit = () => {
+    setShowConfirmModal(false)
     setLoading(true)
     axios
       .post(
@@ -98,7 +113,7 @@ export default function QuizInterface({
           <button
             onClick={() => setCurrentIndex(i => Math.max(i - 1, 0))}
             disabled={currentIndex === 0}
-            className='px-4 py-2 border rounded-md text-sm bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50'
+            className='px-4 py-2 border rounded-md text-sm bg-[#1876d2] text-white disabled:opacity-50'
           >
             Previous
           </button>
@@ -107,7 +122,7 @@ export default function QuizInterface({
               setCurrentIndex(i => Math.min(i + 1, questionSet.length - 1))
             }
             disabled={currentIndex === questionSet.length - 1}
-            className='px-4 py-2 border rounded-md text-sm bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50'
+            className='px-4 py-2 border rounded-md text-sm bg-[#1876d2] text-white disabled:opacity-50'
           >
             Next
           </button>
@@ -119,26 +134,16 @@ export default function QuizInterface({
         <div className='w-full h-full flex flex-col justify-between'>
           <div>
             <h3 className='text-md font-semibold mb-4'>Question Navigator</h3>
-            <div className='grid grid-cols-5 gap-2 lg:grid-cols-3'>
+            <div className='grid grid-cols-6 gap-2 lg:grid-cols-5'>
               {questionSet.map((q, idx) => (
                 <button
                   key={q._id}
                   onClick={() => setCurrentIndex(idx)}
-                  className={getButtonStyle(q._id)}
+                  className={`${getButtonStyle(q._id)} rounded-full h-[40px] w-[40px]`}
                 >
                   {idx + 1}
                 </button>
               ))}
-            </div>
-
-            {/* Instructions */}
-            <div className='mt-6'>
-              <h4 className='text-sm font-semibold mb-1'>Quiz Instructions</h4>
-              <ul className='text-sm text-gray-700 list-disc list-inside space-y-1'>
-                <li>Select the correct option for each question.</li>
-                <li>You can navigate through questions using the buttons.</li>
-                <li>Click "Submit" when you're ready. You can't change answers afterward.</li>
-              </ul>
             </div>
 
             {/* Color Legend */}
@@ -150,12 +155,16 @@ export default function QuizInterface({
                   <span>Current Question</span>
                 </div>
                 <div className='flex items-center gap-2'>
-                  <span className='w-4 h-4 rounded-sm bg-blue-100 border border-blue-300 inline-block'></span>
-                  <span>Answered</span>
+                  <span className='w-4 h-4 rounded-sm bg-green-100 border border-green-400 inline-block'></span>
+                  <span>Attempted</span>
                 </div>
                 <div className='flex items-center gap-2'>
-                  <span className='w-4 h-4 rounded-sm bg-gray-100 border border-gray-300 inline-block'></span>
-                  <span>Unanswered</span>
+                  <span className='w-4 h-4 rounded-sm bg-orange-100 border border-orange-400 inline-block'></span>
+                  <span>Seen but Unattempted</span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <span className='w-4 h-4 rounded-sm bg-red-100 border border-red-400 inline-block'></span>
+                  <span>Unseen</span>
                 </div>
               </div>
             </div>
@@ -187,7 +196,7 @@ export default function QuizInterface({
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 300
+            width: 600
           }}
         >
           <Typography id="submit-confirm-title" variant="h6" component="h2" className="mb-4">

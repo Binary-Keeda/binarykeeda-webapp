@@ -1,12 +1,13 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import { Editor } from '@monaco-editor/react'
 import axios from 'axios'
 import { BASE_URL, CODE_EXECUTION_API, headers } from '../../../lib/config'
-import { IconButton } from '@mui/material'
-import { Close, NavigateBefore, NavigateNext } from '@mui/icons-material'
-import CodeSubmitWindow from './CodeSubmission'
-import CodeOutputWindow from './CodeOutput';
+import { NavigateBefore, NavigateNext } from '@mui/icons-material'
+import CodeOutputWindow from './CodeOutput'
 import { geminiReview, runCodeBatch } from './codeUtils'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { Box, Button, Modal, Typography } from '@mui/material'
 
 function formatEscapedNewlines (text) {
   return text.replace(/\\n/g, '\n')
@@ -33,14 +34,16 @@ export default function CodeView ({
   handleCodeChange,
   handleLanguageChange
 }) {
+  const { user } = useSelector(s => s.auth)
+  const { id: testId } = useParams()
   const [language, setLanguage] = useState(currSetting[currProblem].language)
   const [code, setCode] = useState(currSetting[currProblem].code)
   const [isExecuting, setIsExecuting] = useState(false)
   const [summary, setSummary] = useState()
   const [testResults, setTestResults] = useState([])
-  const [showWindow, setShowSubmitWindow] = useState(false)
   const [showOutputWindow, setShowOutputWindow] = useState(false)
-  const [codeReview , setCodeReview] = useState();
+  const [codeReview, setCodeReview] = useState()
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
   useEffect(() => {
     if (submittedProblems.includes(currProblem)) {
       document.body.style.overflow = 'hidden'
@@ -57,7 +60,6 @@ export default function CodeView ({
     const setting = currSetting[currProblem]
     setLanguage(setting.language)
     setCode(setting.code)
-    // setTestResults([])
   }, [currProblem, currSetting])
 
   const handleEditorChange = newValue => {
@@ -76,28 +78,11 @@ export default function CodeView ({
     }
   }
 
-  const fetchResult = async token => {
-    for (let i = 0; i < 10; i++) {
-      try {
-        const res = await axios.get(
-          `${CODE_EXECUTION_API}/submissions/${token}?base64_encoded=false`,
-          { headers }
-        )
-        const data = res.data
-        if ([3, 4, 6, 11].includes(data.status?.id)) {
-          return data
-        }
-        await new Promise(r => setTimeout(r, 2000))
-      } catch {
-        return { stderr: 'Failed to fetch result.' }
-      }
-    }
-    return { stderr: 'Timed out.' }
-  }
-
   const runTestCases = async () => {
-    setShowOutputWindow(true);
-    setTestResults([]);
+    setShowOutputWindow(true)
+    setTestResults([])
+    setSummary([])
+    setCodeReview()
     await runCodeBatch({
       code,
       language,
@@ -109,28 +94,54 @@ export default function CodeView ({
       CODE_EXECUTION_API,
       getLanguageId
     })
-   await geminiReview({setCodeReview:setCodeReview ,code, problemName:problem.title});
-  }
-  useEffect(() => {
-    if (testResults.length > 0) {
-    }
-  }, [testResults, summary])
-
-  const submitCode = () => {
-    const submission = {
-      problemId: problem.id,
+    await geminiReview({
+      setCodeReview: setCodeReview,
       code,
-      language
-    }
-    setShowSubmitWindow(false)
+      problemName: problem.title
+    })
+  }
 
-    const isConfirmed = window.confirm(
-      'Are you sure you want to submit the code?'
-    )
-
-    if (isConfirmed) {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      setShowSubmitWindow(true)
+  const submitCode = async () => {
+    setShowOutputWindow(true)
+    setShowConfirmModal(false)
+    setTestResults([])
+    setSummary([])
+    setCodeReview([])
+    try {
+      await runCodeBatch({
+        code,
+        language,
+        testCases: problem.testCases,
+        setIsExecuting,
+        setSummary,
+        setTestResults,
+        headers,
+        CODE_EXECUTION_API,
+        getLanguageId
+      })
+      await geminiReview({
+        setCodeReview: setCodeReview,
+        code,
+        problemName: problem.title
+      })
+      const res = await axios.post(`${BASE_URL}/api/v3/review/submit`, {
+        userId: user._id,
+        testId,
+        problemId: problem._id,
+        language,
+        sourceCode: code,
+        codeReview: codeReview,
+        passedTestCases: summary?.passed || 0,
+        totalTestCases: summary?.total || 0,
+        executionTime: summary?.avgTime,
+        memoryUsed: summary?.avgMemory
+      })
+      setSubmittedProblems(prev => [
+        ...prev,
+        { pNo: currProblem, id: res.data.submissionId }
+      ])
+    } catch (submitErr) {
+      console.error('Submission API error:', submitErr)
     }
   }
 
@@ -213,25 +224,10 @@ export default function CodeView ({
               showOutputWindow ? 'top-0' : 'top-[100vh] invisible '
             }`}
           >
-            {showWindow && (
-              <CodeSubmitWindow
-                setCurrProblem={setCurrProblem}
-                problemName={problem.title}
-                problemId={problem._id}
-                setShowSubmitWindow={setShowSubmitWindow}
-                code={code}
-                language={language}
-                testCases={problem.testCases}
-                getLanguageId={getLanguageId}
-                fetchResult={fetchResult}
-                currProblem={currProblem}
-                setSubmittedProblems={setSubmittedProblems}
-              />
-            )}
             {showOutputWindow && (
               <>
                 <CodeOutputWindow
-                codeReview={codeReview}
+                  codeReview={codeReview}
                   setShowOutputWindow={setShowOutputWindow}
                   testResults={testResults}
                   summary={summary}
@@ -283,7 +279,7 @@ export default function CodeView ({
                 {isExecuting ? 'Running...' : 'Run Code'}
               </button>
               <button
-                onClick={submitCode}
+                onClick={() => setShowConfirmModal(true)}
                 className='rounded-md border border-slate-300 py-2 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800'
                 type='button'
               >
@@ -305,74 +301,50 @@ export default function CodeView ({
             />
           </div>
         </div>
+        <Modal
+          open={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          aria-labelledby='submit-confirm-title'
+          aria-describedby='submit-confirm-description'
+        >
+          <Box
+            className='absolute bg-white p-6 rounded-md shadow-lg'
+            sx={{
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 600
+            }}
+          >
+            <Typography
+              id='submit-confirm-title'
+              variant='h6'
+              component='h2'
+              className='mb-4'
+            >
+              Confirm Submission
+            </Typography>
+            <Typography
+              id='submit-confirm-description'
+              className='mb-4 text-sm text-gray-700'
+            >
+              Are you sure you want to submit your code ? You won't be able to
+              change your solution later.
+            </Typography>
+            <div className='flex justify-end gap-2 mt-4'>
+              <Button
+                onClick={() => setShowConfirmModal(false)}
+                variant='outlined'
+              >
+                Cancel
+              </Button>
+              <Button onClick={submitCode} variant='contained' color='primary'>
+                Confirm
+              </Button>
+            </div>
+          </Box>
+        </Modal>
       </section>
     </>
   )
 }
-
-// const SampleTestCaseWindow = ({ isExecuting, code, data, testResults }) => {
-//   return (
-//     <div className='grid mt-5 grid-cols-4 gap-3 mx-5 w-full'>
-//       {data?.map((test, idx) => {
-//         const result = testResults[idx]
-//         return (
-//           <div key={idx} className='mb-6 border rounded p-4 bg-gray-50'>
-//             {isExecuting ? (
-//               <div className='flex justify-center'>
-//                 {' '}
-//                 <div className='loader3'></div>
-//               </div>
-//             ) : (
-//               <>
-//                 <div className='mb-2 flex justify- items-center'>
-//                   <strong>Test Case #{idx + 1}</strong>
-
-//                   {result && (
-//                     <span
-//                       className={`font-semibold ${
-//                         result.passed ? 'text-green-600' : 'text-red-600'
-//                       }`}
-//                     >
-//                       {result.passed ? '✅ Passed' : '❌ Failed'}
-//                     </span>
-//                   )}
-//                 </div>
-
-//                 <div className='mb-2'>
-//                   <strong>Input:</strong>
-//                   <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-//                     {formatEscapedNewlines(test.input)}
-//                   </pre>
-//                 </div>
-
-//                 <div className='mb-2'>
-//                   <strong>Expected Output:</strong>
-//                   <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-//                     {test.output}
-//                   </pre>
-//                 </div>
-
-//                 {result && (
-//                   <>
-//                     <div className='mb-2'>
-//                       <strong>Your Output:</strong>
-//                       <pre className='bg-white p-2 border rounded whitespace-pre-wrap'>
-//                         {result.output || 'No output'}
-//                       </pre>
-//                     </div>
-
-//                     {result.error && (
-//                       <div className='text-red-500'>
-//                         <strong>Error:</strong> {result.error}
-//                       </div>
-//                     )}
-//                   </>
-//                 )}
-//               </>
-//             )}
-//           </div>
-//         )
-//       })}
-//     </div>
-//   )
-// }

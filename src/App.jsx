@@ -42,13 +42,14 @@ const App = () => {
   // admin routes
   const AdminLayout = React.lazy(() =>
     import('./view/admin/layout/AdminDashboard')
-  )
+  );
   const Users = lazy(() => import('./view/admin/Users'))
   const EditQuiz = lazy(() => import('./view/admin/EditQuiz'))
   const ViewQuiz = lazy(() => import('./view/admin/Quiz'))
   const AdminHome = React.lazy(() => import('./view/admin/Home'))
   const AdminTestSeries = React.lazy(() => import('./view/admin/Test'))
   const AdminTestEdit = React.lazy(() => import('./view/admin/TestEdit'))
+  const AdminAddProblem = lazy(() => import('./view/admin/components/AddProblem'));
   useEffect(() => {
     dispatch(getUser(token))
   }, [])
@@ -118,6 +119,7 @@ const App = () => {
               <Route path='users' element={<Users />} />
               <Route path='view/:id' element={<ViewQuiz />} />
               <Route path='test-series' element={<AdminTestSeries />} />
+              <Route path='problem' element={<AdminAddProblem/>} />
             </Route>
             <Route path='*' element={<NotFound />} />
           </Routes>
