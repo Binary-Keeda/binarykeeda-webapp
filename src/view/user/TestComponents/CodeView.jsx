@@ -25,6 +25,7 @@ const getLanguageId = lang => {
 
 export default function CodeView ({
   setCurrProblem,
+  totalQuestion,
   currProblem,
   submittedProblems,
   problem,
@@ -140,6 +141,10 @@ export default function CodeView ({
         ...prev,
         { pNo: currProblem, id: res.data.submissionId }
       ])
+      setTimeout(() => {
+        setShowOutputWindow(false)
+        setCurrProblem(prev => (prev + 1) % totalQuestion)
+      }, 3000)
     } catch (submitErr) {
       console.error('Submission API error:', submitErr)
     }

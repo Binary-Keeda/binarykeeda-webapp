@@ -65,10 +65,14 @@ const App = () => {
   }, [user])
   const { loading } = useSelector(s => s.auth)
   return loading ? (
-    <Loaader />
+   <div className='flex h-screen w-screen justify-center items-center'>
+        <div className='loader1' ></div>
+      </div>
   ) : (
 
-      <Suspense fallback={<Loaader />}>
+      <Suspense fallback={<div className='flex h-screen w-screen justify-center items-center'>
+        <div className='loader1' ></div>
+      </div>}>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />

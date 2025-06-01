@@ -123,9 +123,9 @@ export default function ProgressArea({ solutions }) {
             </div>
           </div>
 
-          <Button variant='contained' color='primary' sx={{ fontSize: 9 }}>
+          {/* <Button variant='contained' color='primary' sx={{ fontSize: 9 }}>
             View Full stats
-          </Button>
+          </Button> */}
         </>
       )}
     </div>

@@ -166,7 +166,11 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
           `}
                 title={isSubmitted ? 'Already submitted' : 'Click to open'}
               >
-                {isSubmitted ?   <CheckCircle fontSize='small' className='text-blue-400' />:idx+1} 
+                {isSubmitted ? (
+                  <CheckCircle fontSize='small' className='text-blue-400' />
+                ) : (
+                  idx + 1
+                )}
               </span>
             )
           })}
@@ -174,6 +178,7 @@ export default function CodingInterface ({ test, currSection, testSubmission }) 
       </div>
       {currProblem < test.sections[currSection].problemset.length && (
         <CodeView
+          totalQuestion={test.sections[currSection].problemset.length}
           setCurrProblem={setCurrProblem}
           currProblem={currProblem}
           submittedProblems={submittedProblems}
