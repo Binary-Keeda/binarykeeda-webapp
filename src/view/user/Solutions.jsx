@@ -15,7 +15,7 @@ import {
 import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import SolutionWarningModal from '../../components/modals/Warning'
-import { BASE_URL } from '../../lib/config'
+import { BASE_URL, LOGO } from '../../lib/config'
 import { useSelector } from 'react-redux'
 
 const Solution = () => {
@@ -167,15 +167,7 @@ const Solution = () => {
       <header className='h-[70px] bg-white relative w-full'>
         <nav className='fixed items-center bg-white z-20 px-5 w-full flex justify-between h-[70px] shadow-lg'>
           <div className='flex'>
-            {/* <video
-              src='/assets/techease.mp4'
-              autoPlay
-              muted
-              loop
-              className='h-[60px]'
-              alt=''
-            /> */}
-               <img src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg' className='h-10 rounded-full' alt='' />
+               <img src={`${LOGO}`} className='h-10 rounded-full' alt='' />
           </div>
           <div className='flex gap-5'>
             {timeLeft > 0 ? (
@@ -498,8 +490,6 @@ const ConfirmModal = ({ submitHandler, setSubmit }) => {
   )
 }
 
-
-
 const QuizSubmittedModal = ({navigate, isOpen, onClose }) => {
   if (!isOpen) return null;
 
@@ -559,6 +549,5 @@ const QuizSubmittedModal = ({navigate, isOpen, onClose }) => {
         </div>
       </div>
     </div>
-  );
-};
-
+  )
+}

@@ -26,13 +26,15 @@ import { useParams } from 'react-router-dom'
 import { calcMarks } from './utils/lib/calcMarks'
 import { useSelector } from 'react-redux'
 import { BASE_URL } from '../../lib/config'
+import JsonModal from './modals/JsonModal'
 const ExcelModal = lazy(() => import('./modals/ExcelModal'))
 
 export default function EditQuiz () {
   const {
     data
   } = useSelector(s => s.quiz)
-  const [ModalClose, setModalClose] = useState(true)
+  const [ModalClose, setModalClose] = useState(true);
+  const [showJsonModal, setShowJsonModal] = useState(false);
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const { id } = useParams()
   const [isVisible, setIsVisible] = useState(false)
@@ -110,7 +112,7 @@ export default function EditQuiz () {
                 Upload Excel <Cloud sx={{ marginLeft: '10px' }} />
               </Button>
               <Button
-                onClick={() => setIsVisible(!isVisible)}
+                onClick={() => setShowJsonModal(true)}
                 variant='contained'
               >
                 Upload JSON <UploadFile sx={{ marginLeft: '10px' }} />
@@ -221,6 +223,10 @@ export default function EditQuiz () {
           <ExcelModal id={id} setModalClose={setModalClose} />
         </Suspense>
       )}
+      {
+        showJsonModal && 
+        <JsonModal setModalClose={() => setShowJsonModal(false)} id={id}/>
+      }
     </section>
   )
 }

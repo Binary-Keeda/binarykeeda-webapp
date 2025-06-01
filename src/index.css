@@ -29,15 +29,15 @@
 }
 
 .dark {
-  --bg-primary: #1d1c20; 
+  --bg-primary: #09090b; 
   --text-primary:#f1f1f1;
   --bg-primary-hover: #2a262e;
 
 
-  --bg-secondary: #000000;
+  --bg-secondary: #0f0f0f;
   --bg-secondary-hover: #1a1a1a;
 
-  --bg-support: #141414;
+  --bg-support: #18181b;
   --bg-support-hover: #1e1e1e;
 }
 

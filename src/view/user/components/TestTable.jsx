@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentPage } from '../../../redux/reducers/testReducerUser'
 import { getTestUser } from '../../../redux/api/getTestUser'
 import { Link } from 'react-router-dom'
-import {Lock, NavigateNext } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+import { Lock, NavigateNext } from '@mui/icons-material'
+import { Chip, IconButton } from '@mui/material'
 
 const TestsTable = () => {
   const { hasMore, page, loading, data, currentPage, totalPages } = useSelector(
@@ -30,69 +30,51 @@ const TestsTable = () => {
       {loading && <div className='loader'></div>}
       <div className='relative flex flex-col w-full  overflow-scroll dark:text-white bg-white shadow-md rounded-lg bg-clip-border'>
         <table className='w-full text-left table-auto min-w-max'>
-          <thead >
+          <thead>
             <tr className='bg-support'>
               <th className='p-4 border-b border-slate-200 '>
-                <p className='text-sm font-normal leading-none '>
-                  Title
-                </p>
+                <p className='text-sm font-normal leading-none '>Title</p>
               </th>
               <th className='p-4 border-b border-slate-200 '>
-                <p className='text-sm font-normal leading-none '>
-                  Description
-                </p>
+                <p className='text-sm font-normal leading-none '>Description</p>
               </th>
               <th className='p-4 border-b border-slate-200 '>
-                <p className='text-sm font-normal leading-none '>
-                  Duration
-                </p>
+                <p className='text-sm font-normal leading-none '>Duration</p>
               </th>
 
               <th className='p-4 border-b border-slate-200 '>
-                <p className='text-sm font-normal leading-none '>
-                  Attempts
-                </p>
+                <p className='text-sm font-normal leading-none '>Attempts</p>
               </th>
               <th className='p-4 border-b border-slate-200 '>
-                <p className='text-sm font-normal leading-none '>
-                  Solve
-                </p>
+                <p className='text-sm font-normal leading-none '>Solve</p>
               </th>
             </tr>
           </thead>
           <tbody>
             {data[currentPage]?.map((i, key) => (
               <>
-                <tr
-                  key={key}
-                  className='bg-primary'
-                >
+                <tr key={key} className='bg-primary'>
                   <td className='p-4 py-5'>
-                    <p className='block font-semibold text-sm '>
-                      {i.name}
-                    </p>
+                    <p className='block font-semibold text-sm '>{i.name}</p>
                   </td>
                   <td className='p-4 py-5'>
                     <p className='text-sm '>{i.description}</p>
                   </td>
                   <td className='p-4 py-5'>
-                    <p className='text-sm '>
-                      {i.duration + ' ' + 'min.'}
-                    </p>
+                    <p className='text-sm '>{i.duration + ' ' + 'min.'}</p>
                   </td>
 
                   <td className='p-4 py-5'>
-                      <p className='text-sm '>{i.attempts} / 1</p>
+                    <p className='text-sm '>{i.attempts} / 1</p>
                   </td>
                   <td className='p-4 py-5'>
-                   {
-                    i.canAttempt ?  <Link to={`/user/test/${i._id}`}>
-                      <IconButton>
-
-                    <NavigateNext />
-                      </IconButton>
-                  </Link>:<Lock />
-                   }
+                    {i.canAttempt ? (
+                      <Link to={`/user/test/${i._id}`}>
+                       <Chip label="Clickable Link" clickable />
+                      </Link>
+                    ) : (
+                      <Lock />
+                    )}
                   </td>
                 </tr>
               </>

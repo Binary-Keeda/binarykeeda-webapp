@@ -1,1 +1,0 @@
-import{U as s}from"./CircularProgress-DgyyXpUr.js";import{c as p}from"./Portal-DVCdK67x.js";function m(n){const{theme:e,name:o,props:r}=n;return!e||!e.components||!e.components[o]||!e.components[o].defaultProps?r:s(e.components[o].defaultProps,r)}function f({props:n,name:e,defaultTheme:o,themeId:r}){let t=p(o);return r&&(t=t[r]||t),m({theme:t,name:e,props:n})}export{f as u};

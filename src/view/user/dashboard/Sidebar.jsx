@@ -42,7 +42,7 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
                 onMouseLeave={() => setShowMenu(false)}  // Adjust menu state on hover
                 className={`
                     z-40 h-[calc(100vh-70px)] top-[71px] fixed left-0
-                    border-r border-gray-200 bg-primary
+                    bg-primary
                     transition-all duration-300 ease-in-out
                     ${showMenu ? 'w-[200px]' : 'w-0 lg:w-[70px]'}
                     overflow-hidden
