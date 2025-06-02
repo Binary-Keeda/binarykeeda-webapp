@@ -14,7 +14,7 @@ export default function ProgressArea({ solutions }) {
   const isEmpty = aptitude === 0 && core === 0 && misc === 0;
 
   return (
-    <div className='flex relative flex-col items-center justify-center flex-[0.5] gap-6 p-6 rounded-xl shadow-lg bg-primary bg-opacity-60 backdrop-blur-lg'>
+    <div className='flex relative flex-col items-center justify-center flex-[0.5] gap-6 p-6 rounded-xl shadow-lg bg-primary dark:bg-support bg-opacity-60 backdrop-blur-lg'>
       {isEmpty ? (
         <p className='text-center text-gray-600 dark:text-gray-300 font-semibold'>
           Not enough data to display progress

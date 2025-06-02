@@ -1,102 +1,102 @@
 [
   {
-    "Question": "If the sum of two numbers is 30 and their difference is 6, what are the numbers?",
+    "Question": "Which is the largest continent in the world?",
     "marks": 10,
     "negative": -2,
-    "option1": "12 and 18",
-    "option2": "10 and 20",
-    "option3": "14 and 16",
-    "option4": "11 and 19",
-    "correctOption": 4
-  },
-  {
-    "Question": "What is the next number in the series: 2, 6, 12, 20, 30, ?",
-    "marks": 10,
-    "negative": -2,
-    "option1": "36",
-    "option2": "40",
-    "option3": "42",
-    "option4": "48",
+    "option1": "Africa",
+    "option2": "Asia",
+    "option3": "Europe",
+    "option4": "North America",
     "correctOption": 2
   },
   {
-    "Question": "A train running at 60 km/hr crosses a pole in 18 seconds. What is the length of the train?",
+    "Question": "Who wrote the national anthem of India?",
     "marks": 10,
     "negative": -2,
-    "option1": "300 meters",
-    "option2": "350 meters",
-    "option3": "360 meters",
-    "option4": "400 meters",
-    "correctOption": 1
-  },
-  {
-    "Question": "If 5 workers can complete a task in 20 days, how many days will 10 workers take to complete the same task?",
-    "marks": 10,
-    "negative": -2,
-    "option1": "10 days",
-    "option2": "12 days",
-    "option3": "15 days",
-    "option4": "20 days",
-    "correctOption": 1
-  },
-  {
-    "Question": "What is the probability of getting a sum of 8 when two dice are rolled?",
-    "marks": 10,
-    "negative": -2,
-    "option1": "5/36",
-    "option2": "1/6",
-    "option3": "1/8",
-    "option4": "1/12",
-    "correctOption": 1
-  },
-  {
-    "Question": "Find the area of a triangle with base 10 cm and height 12 cm.",
-    "marks": 10,
-    "negative": -2,
-    "option1": "60 cm²",
-    "option2": "120 cm²",
-    "option3": "50 cm²",
-    "option4": "100 cm²",
-    "correctOption": 1
-  },
-  {
-    "Question": "A shopkeeper sells an article at 15% profit. If the cost price is ₹500, what is the selling price?",
-    "marks": 10,
-    "negative": -2,
-    "option1": "₹575",
-    "option2": "₹600",
-    "option3": "₹525",
-    "option4": "₹550",
-    "correctOption": 1
-  },
-  {
-    "Question": "What is the simple interest on ₹8000 for 3 years at the rate of 5% per annum?",
-    "marks": 10,
-    "negative": -2,
-    "option1": "₹1200",
-    "option2": "₹1500",
-    "option3": "₹1000",
-    "option4": "₹800",
+    "option1": "Bankim Chandra Chatterjee",
+    "option2": "Sarojini Naidu",
+    "option3": "Rabindranath Tagore",
+    "option4": "Subhash Chandra Bose",
     "correctOption": 3
   },
   {
-    "Question": "How many ways can 3 students be selected from a group of 7?",
+    "Question": "Which is the longest river in the world?",
     "marks": 10,
     "negative": -2,
-    "option1": "35",
-    "option2": "21",
-    "option3": "42",
-    "option4": "56",
-    "correctOption": 1
+    "option1": "Amazon",
+    "option2": "Yangtze",
+    "option3": "Nile",
+    "option4": "Mississippi",
+    "correctOption": 3
   },
   {
-    "Question": "If the ratio of the ages of two persons is 5:7 and the sum of their ages is 96, what is the age of the younger person?",
+    "Question": "Which planet is known as the Red Planet?",
     "marks": 10,
     "negative": -2,
-    "option1": "40",
-    "option2": "30",
-    "option3": "35",
-    "option4": "45",
-    "correctOption": 1
+    "option1": "Earth",
+    "option2": "Venus",
+    "option3": "Mars",
+    "option4": "Jupiter",
+    "correctOption": 3
+  },
+  {
+    "Question": "What is the capital of Australia?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Sydney",
+    "option2": "Melbourne",
+    "option3": "Canberra",
+    "option4": "Perth",
+    "correctOption": 3
+  },
+  {
+    "Question": "Which country is known as the Land of the Rising Sun?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "China",
+    "option2": "Thailand",
+    "option3": "India",
+    "option4": "Japan",
+    "correctOption": 4
+  },
+  {
+    "Question": "Who was the first President of the United States?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Abraham Lincoln",
+    "option2": "George Washington",
+    "option3": "Thomas Jefferson",
+    "option4": "John Adams",
+    "correctOption": 2
+  },
+  {
+    "Question": "Which is the smallest bone in the human body?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Femur",
+    "option2": "Stapes",
+    "option3": "Ulna",
+    "option4": "Tibia",
+    "correctOption": 2
+  },
+  {
+    "Question": "What is the currency of Japan?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Yuan",
+    "option2": "Won",
+    "option3": "Yen",
+    "option4": "Ringgit",
+    "correctOption": 3
+  },
+  {
+    "Question": "Which ocean is the largest by area?",
+    "marks": 10,
+    "negative": -2,
+    "option1": "Atlantic Ocean",
+    "option2": "Indian Ocean",
+    "option3": "Arctic Ocean",
+    "option4": "Pacific Ocean",
+    "correctOption": 4
   }
 ]

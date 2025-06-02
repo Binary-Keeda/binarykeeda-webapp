@@ -35,7 +35,7 @@ export default function ProfileCard ({ user }) {
   }, [user])
 
   return (
-    <div className='relative flex flex-[.5] bg-primary shadow-lg p-6 rounded-xl  flex-col items-center'>
+    <div className='relative flex flex-[.5] bg-primary dark:bg-support shadow-lg p-6 rounded-xl  flex-col items-center'>
       <img
         ref={imgRef}
         src={user?.avatar}
@@ -80,7 +80,7 @@ export default function ProfileCard ({ user }) {
           </small>
         </div>
       </div>
-      <Link to={'profile'}>
+      <Link to={`profile/${user._id}`}>
         <Button variant='contained' color='primary' sx={{ fontSize: 9 }}>
           Edit Profile
         </Button>

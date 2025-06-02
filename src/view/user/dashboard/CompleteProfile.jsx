@@ -205,8 +205,6 @@ export default function CompleteProfile() {
         avatar: avatar.src,
         specialisation: specialisation,
       });
-      // alert(JSON.stringify(validatedData))
-      // return;
       const token = await getUserToken();
       validatedData._id = user._id;
       const response = await axios.post(

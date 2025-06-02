@@ -43,18 +43,18 @@ const Table = ({ currCategory }) => {
       <div className="relative flex flex-col w-full h-full overflow-scroll custom-scrollbar   bg-primary shadow-md rounded-lg bg-clip-border">
         <table className="w-full overflow-x-scroll text-left table-auto min-w-max">
           <thead>
-            <tr className="">
-              <th className="p-4 border-b border-slate-200 bg-primary dark:text-gray-50 bg-orange-50">
+            <tr className="bg-support">
+              <th className="p-4 border-b border-slate-200 bg-support dark:text-gray-50 bg-orange-50">
                 <p className="text-sm font-normal leading-none dark:text-gray-50 text-gray-700">
                   Title
                 </p>
               </th>
-              <th className="p-4 border-b border-slate-200 bg-primary dark:text-gray-50 bg-orange-50">
+              <th className="p-4 border-b border-slate-200 bg-support dark:text-gray-50 bg-orange-50">
                 <p className="text-sm font-normal leading-none dark:text-gray-50 text-gray-700">
                   Difficulty
                 </p>
               </th>
-              <th className="p-4 border-b border-slate-200 bg-primary dark:text-gray-50 bg-orange-50">
+              <th className="p-4 border-b border-slate-200 bg-support dark:text-gray-50 bg-orange-50">
                 <p className="text-sm font-normal leading-none dark:text-gray-50 text-gray-700">
                   Duration
                 </p>
@@ -70,7 +70,7 @@ const Table = ({ currCategory }) => {
                   {currCategory || "All"}
                 </p>
               </th> */}
-              <th className="p-4 border-b border-slate-200 bg-primary dark:text-gray-50 bg-orange-50">
+              <th className="p-4 border-b border-slate-200 bg-support dark:text-gray-50 bg-orange-50">
                 <p className="text-sm font-normal leading-none dark:text-gray-50 text-slate-500">
                   Attempt
                 </p>
@@ -136,7 +136,7 @@ const Table = ({ currCategory }) => {
           )}
         </table>
 
-        <div className="flex justify-between items-center px-4 py-3">
+        <div className="flex bg-support justify-between items-center px-4 py-3">
           <div className="text-sm dark:text-gray-50 text-slate-500">
             Showing <b>1-{data[currentPage]?.length}</b>
           </div>

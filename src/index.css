@@ -18,7 +18,7 @@
 
 :root {
   --bg-primary: #ffffff;
-  --text-primary:#010101;
+  --text-primary: #010101;
   --bg-primary-hover: #f0f0f0;
 
   --bg-secondary: #f1f1f1;
@@ -29,10 +29,9 @@
 }
 
 .dark {
-  --bg-primary: #09090b; 
-  --text-primary:#f1f1f1;
+  --bg-primary: #09090b;
+  --text-primary: #f1f1f1;
   --bg-primary-hover: #2a262e;
-
 
   --bg-secondary: #0f0f0f;
   --bg-secondary-hover: #1a1a1a;
@@ -44,6 +43,7 @@
 @layer utilities {
   .bg-primary {
     background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
 
   .hover\:bg-primary-hover:hover {
@@ -84,16 +84,15 @@
 * {
   /* transition:0.1s linear all; */
 }
-h1{
+h1 {
   font-family: 'Roboto Condensed', sans-serif;
 }
-.slick-slide div{
+.slick-slide div {
   padding: 10px;
 }
-body{
+body {
   overflow-x: hidden;
 }
-
 
 .loader1 {
   width: 48px;
@@ -134,17 +133,9 @@ body{
   }
 }
 
-
 .custominput {
   @apply w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300  focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow;
 }
-
-
-
-
-
-
-
 
 /* HTML: <div class="loader"></div> */
 .spinner {
@@ -152,25 +143,46 @@ body{
   aspect-ratio: 1;
   display: grid;
   border-radius: 50%;
-  background:
-    linear-gradient(0deg ,rgb(0 0 0/50%) 30%,#0000 0 70%,rgb(0 0 0/100%) 0) 50%/8% 100%,
-    linear-gradient(90deg,rgb(0 0 0/25%) 30%,#0000 0 70%,rgb(0 0 0/75% ) 0) 50%/100% 8%;
+  background: linear-gradient(
+        0deg,
+        rgb(0 0 0/50%) 30%,
+        #0000 0 70%,
+        rgb(0 0 0/100%) 0
+      )
+      50%/8% 100%,
+    linear-gradient(90deg, rgb(0 0 0/25%) 30%, #0000 0 70%, rgb(0 0 0/75%) 0)
+      50%/100% 8%;
   background-repeat: no-repeat;
   animation: l23 1s infinite steps(12);
 }
 .spinner::before,
 .spinner::after {
-   content: "";
-   grid-area: 1/1;
-   border-radius: 50%;
-   background: inherit;
-   opacity: 0.915;
-   transform: rotate(30deg);
+  content: '';
+  grid-area: 1/1;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.915;
+  transform: rotate(30deg);
 }
 .spinner::after {
-   opacity: 0.83;
-   transform: rotate(60deg);
+  opacity: 0.83;
+  transform: rotate(60deg);
 }
 @keyframes l23 {
-  100% {transform: rotate(1turn)}
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+/* header css */
+.nav-link {
+  @apply text-sm cursor-pointer hover:text-orange-600 transition-all duration-100 ease-linear;
+}
+.dropdown-header {
+  @apply absolute bg-support top-[60px]  py-3  border-0 border-t-2 border-orange-500 bg-white shadow-lg   min-w-[120px];
+}
+.dropdown-header {
+  li {
+    @apply pr-6;
+  }
 }

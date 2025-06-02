@@ -84,7 +84,7 @@ export default function QuizInterface({
           </div>
           <div className='space-y-4'>
             {currentQuestion?.answerOptions?.map(option => {
-              const isChecked = answers[currentQuestion._id] === option._id
+              const isChecked = answers[currentQuestion._id] == option._id;
               return (
                 <label
                   key={option._id}

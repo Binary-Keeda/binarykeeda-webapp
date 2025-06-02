@@ -10,13 +10,14 @@ import { RoleBasedRoutes, UserRoute } from './auth/ProtectedRoutes'
 import { getQuiz } from './redux/api/getQuiz'
 import { getTestAdmin } from './redux/api/getTest'
 import { getTestUser } from './redux/api/getTestUser'
+import { HelmetProvider } from 'react-helmet-async'
 // Lazy-loaded pages
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const Redirect = lazy(() => import('./utilities/redirect'))
 const MagicSignup = lazy(() => import('./pages/Signup'))
 const Home = lazy(() => import('./pages/Home'))
-const NotFound = lazy(()=> import('./utilities/NotFound'));
+const NotFound = lazy(() => import('./utilities/NotFound'))
 const CLIENT_ID = GOOGLE_CLIENT_ID
 const App = () => {
   const dispatch = useDispatch()
@@ -42,14 +43,16 @@ const App = () => {
   // admin routes
   const AdminLayout = React.lazy(() =>
     import('./view/admin/layout/AdminDashboard')
-  );
+  )
   const Users = lazy(() => import('./view/admin/Users'))
   const EditQuiz = lazy(() => import('./view/admin/EditQuiz'))
   const ViewQuiz = lazy(() => import('./view/admin/Quiz'))
   const AdminHome = React.lazy(() => import('./view/admin/Home'))
   const AdminTestSeries = React.lazy(() => import('./view/admin/Test'))
   const AdminTestEdit = React.lazy(() => import('./view/admin/TestEdit'))
-  const AdminAddProblem = lazy(() => import('./view/admin/components/AddProblem'));
+  const AdminAddProblem = lazy(() =>
+    import('./view/admin/components/AddProblem')
+  )
   useEffect(() => {
     dispatch(getUser(token))
   }, [])
@@ -58,24 +61,29 @@ const App = () => {
       if (user.role == 'admin') {
         getTestAdmin()
       } else {
-        console.log("Fetching")
+        console.log('Fetching')
         getTestUser()
       }
     }
   }, [user])
   const { loading } = useSelector(s => s.auth)
   return loading ? (
-   <div className='flex h-screen w-screen justify-center items-center'>
-        <div className='loader1' ></div>
-      </div>
+    <div className='flex h-screen w-screen justify-center items-center'>
+      <div className='loader1'></div>
+    </div>
   ) : (
-
-      <Suspense fallback={<div className='flex h-screen w-screen justify-center items-center'>
-        <div className='loader1' ></div>
-      </div>}>
+    <HelmetProvider>
+      <Suspense
+        fallback={
+          <div className='flex h-screen w-screen justify-center items-center'>
+            <div className='loader1'></div>
+          </div>
+        }
+      >
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='user/profile/:id' element={<UserProfile />} />
             {/* <Route path='/' element={<>Home</>}></Route> */}
             <Route path='/roadmaps' element={<UserRoadmaps />} />
             <Route path='/binary-keeda-sheet' element={<Sheet210Days />} />
@@ -100,10 +108,8 @@ const App = () => {
               <Route path='playground' element={<UserPlayground />} />
               <Route path='roadmaps' element={<UserRoadmaps />} />
               <Route path='practice/:name' element={<UserQuizList />} />
-              <Route path='profile' element={<UserProfile/>}/>
-              <Route element={<UserTestList />} path='test/' />
+              <Route element={<UserTestList />} path='test-series/' />
               <Route element={<UserPreview />} path='preview/:id' />
-
             </Route>
             <Route element={<RoleBasedRoutes requiredRole={'user'} />}>
               <Route element={<UserSolution />} path='user/solution/:id' />
@@ -123,14 +129,16 @@ const App = () => {
               <Route path='users' element={<Users />} />
               <Route path='view/:id' element={<ViewQuiz />} />
               <Route path='test-series' element={<AdminTestSeries />} />
-              <Route path='problem' element={<AdminAddProblem/>} />
+              <Route path='problem' element={<AdminAddProblem />} />
             </Route>
             <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </Suspense>
+    </HelmetProvider>
   )
 }
 
 export default App
+
 

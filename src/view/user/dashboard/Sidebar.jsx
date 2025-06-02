@@ -31,7 +31,7 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
         {
             icon: <Edit />,
             label: 'Test Series',
-            path: '/user/test'
+            path: '/user/test-series'
         },
     ];
 

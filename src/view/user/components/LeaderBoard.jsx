@@ -41,14 +41,14 @@ function Leaderboard ({}) {
   const userRank = userRankEntry?.rank || 'N/A'
 
   return (
-    <div className='flex-[.7] bg-primary rounded-lg shadow-lg p-4 flex flex-col min-h-[400px]'>
+    <div className='flex-[.7] bg-primary dark:bg-support rounded-lg shadow-lg p-4 flex flex-col min-h-[400px]'>
       <div className='rounded-lg flex flex-col gap-3'>
-        <div className='flex items-center justify-between px-4 py-2 rounded-md dark:bg-support  shadow-sm'>
+        <div className='flex items-center justify-between px-4 py-2 rounded-md bg-support dark:bg-primary   shadow-sm'>
           <div className='text-sm font-medium opacity-80'>Institution</div>
           <div className='text-sm font-semibold'>{userUniversity}</div>
         </div>
 
-        <div className='flex h-[50px] rounded-lg text-white gap-3 bg-support items-center px-4'>
+        <div className='flex h-[50px] rounded-lg text-white gap-3 bg-support dark:bg-primary items-center px-4'>
           <Button
             variant={tab === 'university' ? 'contained' : 'text'}
             onClick={() => setTab('university')}
@@ -84,7 +84,7 @@ function Leaderboard ({}) {
             {activeLeaderboard.map((entry, i) => (
               <div
                 key={i}
-                className='flex justify-between items-center px-4 py-2 bg-support rounded-md'
+                className='flex justify-between items-center px-4 py-2 bg-support dark:bg-primary  rounded-md'
               >
                 <div className='flex gap-3 items-center'>
                   {getMedal(entry.rank) && (
@@ -110,7 +110,7 @@ function Leaderboard ({}) {
             ))}
 
             {userRankEntry && (
-              <div className='p-4 bg-support rounded-md mt-4 shadow'>
+              <div className='p-4 bg-support dark:bg-primary rounded-md mt-4 shadow'>
                 <h1 className='text-md font-bold text-gray-800 dark:text-white mb-2'>
                   Your Rank
                 </h1>
