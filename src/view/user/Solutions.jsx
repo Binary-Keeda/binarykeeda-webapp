@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import {
-  IconButton,
-  Button,
-  TextField,
-  Divider,
-} from '@mui/material'
+import { IconButton, Button, TextField, Divider } from '@mui/material'
 import {
   ArrowDropUp,
   Help,
   Fullscreen,
   ExitToApp,
-  ArrowDropDown,
+  ArrowDropDown
 } from '@mui/icons-material'
 import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -22,9 +17,10 @@ const Solution = () => {
   const navigate = useNavigate()
   const { user } = useSelector(s => s.auth)
   const [response, setResponse] = useState({})
+  const [isSeen, setIsSeen] = useState({})
   const [timeLeft, setTimeLeft] = useState(null)
   const [open, setOpen] = useState(false)
-  const [isOpen,setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [submit, setSubmit] = useState(false)
   const [solution, setSolution] = useState()
   const [currentQuiz, setCurrentQuiz] = useState(null)
@@ -41,11 +37,21 @@ const Solution = () => {
     const { name, value } = e.target
     setResponse({ ...response, [name]: value })
   }
+
+  const clearSelection = id => {
+    const name = id
+    setResponse(prev => {
+      const updated = { ...prev }
+      delete updated[name]
+      return updated
+    })
+  }
+
   const handleFullScreen = () => {
     document
       .getElementById('root')
       .requestFullscreen()
-      .then(() => { })
+      .then(() => {})
   }
   const getQuiz = async () => {
     try {
@@ -99,6 +105,7 @@ const Solution = () => {
     : 0
   const handleNextPage = () => {
     if (currentPage < totalPages) {
+      setIsSeen({...prev , [currentPage]:true });
       setCurrentPage(currentPage + 1)
       document.getElementById(currentPage).scrollIntoView({
         behavior: 'smooth',
@@ -162,12 +169,11 @@ const Solution = () => {
   }
 
   return (
-    <main className='font-[Lato] bg-gray-100 h-screen w-screen overflow-x-hidden overflow-y-scroll'>
-      {/* Header */}
+    <>
       <header className='h-[70px] bg-white relative w-full'>
         <nav className='fixed items-center bg-white z-20 px-5 w-full flex justify-between h-[70px] shadow-lg'>
           <div className='flex'>
-               <img src={`${LOGO}`} className='h-10 rounded-full' alt='' />
+            <img src={`${LOGO}`} className='h-10 rounded-full' alt='' />
           </div>
           <div className='flex gap-5'>
             {timeLeft > 0 ? (
@@ -191,7 +197,9 @@ const Solution = () => {
                 <span>Times Up : Redirecting ...</span>
                 <span className='bg-black backdrop-blur-md z-50 fixed h-screen w-screen top-0 left-0 bg-opacity-5 flex flex-col justify-center items-center'>
                   <div class='border-gray-300 h-10 w-10 animate-spin rounded-full border-2 border-t-blue-600' />
-                  <p className='text-gray-900 text-sm mt-1' >Please wait while we are loading your quiz</p>
+                  <p className='text-gray-900 text-sm mt-1'>
+                    Please wait while we are loading your quiz
+                  </p>
                 </span>
               </>
             )}
@@ -214,171 +222,194 @@ const Solution = () => {
           </div>
         </nav>
       </header>
-      {/* Main Content */}
-      <div className='flex md:mr-4 flex-col justify-between h-[calc(100vh-70px)] pl-5 md:pr-28 pr-5 pt-10'>
-        {currentQuestions?.map((question, index) => (
-          <div key={index} className='flex md:flex-row flex-col justify-between gap-5'>
-            <div className='mb-8 flex-1 px-2 rounded-lg'>
-              <h1 className='text-lg font-semibold mb-6 text-gray-900'>
-                Q{(currentPage - 1) * questionsPerPage + index + 1}:{' '}
-                {question.question}
-              </h1>
-              {question.image && (
-                <img
-                  src={question.image}
-                  alt={`Question ${index + 1}`}
-                  className='w-96 h-auto rounded-lg mb-4'
-                />
-              )}
-            </div>
 
-            <div className='flex justify-start flex-[0.8]'>
-              {question.category === 'MCQ' && (
-                <div className='w-full'>
-                  <h1 className='text-lg font-semibold mb-6 mx-3 text-sky-900'>
-                    Choose the correct option
+      <main className='flex flex-col h-[calc(100vh-52px-70px)] lg:flex-row font-sans bg-white text-gray-800'>
+        {/* Main Content */}
+        <div className='flex-1 flex-col justify-between flex h-full p-5'>
+          <div className='border w-full border-gray-200 rounded-sm p-8 shadow-sm'>
+            {currentQuestions?.map((question, index) => (
+              <div key={index} className=''>
+                <div className='mb-8 flex-1 px-2 rounded-lg'>
+                  <h1 className='text-lg font-semibold mb-6 text-gray-900'>
+                    Q{(currentPage - 1) * questionsPerPage + index + 1}:{' '}
+                    {question.question}
                   </h1>
-                  <div className='flex w-full flex-col gap-3'>
-                    {question.options.map(option => (
-                      <div
-                        key={option._id}
-                        className={`${response[question._id] != option._id
-                          ? 'bg-white text-gray-900  '
-                          : 'bg-sky-800 text-white'
-                          }   relative rounded-3xl cursor-pointer transition-all duration-200 hover:bg-sky-700 hover:text-white items-center px-5 w-full h-[50px] flex gap-1`}
-                      >
-                        <input
-                          required
-                          type='radio'
-                          name={`${question._id}`}
-                          value={`${option?._id}`}
-                          className='absolute w-full cursor-pointer h-full opacity-0 z-10'
-                          onChange={changehandeler}
-                        />
-                        <span className='absolute text-inherit z-9 w-full flex items-center py-2 h-[50px]'>
-                          {option.text}
-                        </span>
+                  {question.image && (
+                    <img
+                      src={question.image}
+                      alt={`Question ${index + 1}`}
+                      className='w-96 h-auto rounded-lg mb-4'
+                    />
+                  )}
+                </div>
+
+                {/*  Options */}
+                <div className='flex justify-start flex-[0.8]'>
+                  {question.category === 'MCQ' && (
+                    <div className='w-full'>
+                      <h1 className='text-lg font-semibold mb-6 mx-3 text-sky-900'>
+                        Choose the correct option
+                      </h1>
+                      <div className='flex w-full flex-col gap-3'>
+                        {question.options.map(option => (
+                          <div
+                            key={option._id}
+                            className={`${
+                              response[question._id] != option._id
+                                ? 'bg-white text-gray-900  '
+                                : 'bg-sky-800 text-white'
+                            }   relative rounded-3xl cursor-pointer transition-all duration-200 hover:bg-sky-700 hover:text-white items-center px-5 w-full h-[50px] flex gap-1`}
+                          >
+                            <input
+                              required
+                              type='radio'
+                              name={`${question._id}`}
+                              value={`${option?._id}`}
+                              className='absolute w-full cursor-pointer h-full opacity-0 z-10'
+                              onChange={changehandeler}
+                            />
+                            <span className='absolute text-inherit z-9 w-full flex items-center py-2 h-[50px]'>
+                              {option.text}
+                            </span>
+                          </div>
+                        ))}
+                        <button
+                          onClick={() => {
+                            clearSelection(question._id)
+                          }}
+                        >
+                          Clear selection
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {question.category === 'Text' && (
-                <div className='w-full pr-16'>
-                  <h1 className='text-lg font-semibold mb-6 text-sky-900'>
-                    Analyze the question & type your answer below
-                  </h1>
+                    </div>
+                  )}
+                  {question.category === 'Text' && (
+                    <div className='w-full pr-16'>
+                      <h1 className='text-lg font-semibold mb-6 text-sky-900'>
+                        Analyze the question & type your answer below
+                      </h1>
 
-                  <TextField
-                    autoFocus
-                    value={
-                      response[`${question._id}`] != undefined
-                        ? response[`${question._id}`]
-                        : ''
-                    }
-                    onChange={changehandeler}
-                    name={`${question._id}`}
-                    fullWidth
-                    variant='standard'
-                    label='Enter Answer'
-                  />
+                      <TextField
+                        autoFocus
+                        value={
+                          response[`${question._id}`] != undefined
+                            ? response[`${question._id}`]
+                            : ''
+                        }
+                        onChange={changehandeler}
+                        name={`${question._id}`}
+                        fullWidth
+                        variant='standard'
+                        label='Enter Answer'
+                      />
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
-        ))}
-        <div className='flex mb-4 justify-between  w-full' >
-          <div className='flex flex-col  items-start'>
-            <div className='flex gap-2'>
-              <span className='text-md font-semibold'>Attempted</span>
-              {Object.keys(response).length}
-            </div>
-            <div className='flex gap-2'>
-              <span className='text-md font-semibold'>Total Questions</span>
-              {currentQuiz?.questions.length}
-            </div>
-            <div className='flex items-center gap-2 mt-1'>
-              <div className='flex h-4 w-4 bg-green-500'></div>
-              <p>Attempted</p>
-            </div>
-            <div className='flex items-center gap-2 mt-1'>
-              <div className='flex h-4 w-4 bg-red-500'></div>
-              <p>Not Attempted</p>
-            </div>
-            <div className='flex items-center gap-2 mt-1'>
-              <div className='flex h-4 w-4 bg-sky-700'></div>
-              <p>Selected Option</p>
-            </div>
-          </div>
-          <div className='flex justify-center items-center'>
-            {currentPage === totalPages ? (
-              <div className='flex gap-2'>
-                <Button variant='contained' onClick={handlePreviousPage}>
-                  Prev
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSubmit(true)
-                  }}
-                  variant='contained'
-                >
-                  Submit
-                </Button>
               </div>
-            ) : (
-              <div className='flex  gap-2'>
-                {currentPage != 1 && (
+            ))}
+          </div>
+          <div className='flex mb-4 justify-between  w-full'>
+            <div className='flex flex-col  items-start'>
+              <div className='flex gap-2'>
+                <span className='text-md font-semibold'>Attempted</span>
+                {Object.keys(response).length}
+              </div>
+              <div className='flex gap-2'>
+                <span className='text-md font-semibold'>Total Questions</span>
+                {currentQuiz?.questions.length}
+              </div>
+              <div className='flex items-center gap-2 mt-1'>
+                <div className='flex h-4 w-4 bg-green-500'></div>
+                <p>Attempted</p>
+              </div>
+              <div className='flex items-center gap-2 mt-1'>
+                <div className='flex h-4 w-4 bg-red-500'></div>
+                <p>Not Attempted</p>
+              </div>
+              <div className='flex items-center gap-2 mt-1'>
+                <div className='flex h-4 w-4 bg-sky-700'></div>
+                <p>Selected Option</p>
+              </div>
+            </div>
+            <div className='flex justify-center items-center'>
+              {currentPage === totalPages ? (
+                <div className='flex gap-2'>
                   <Button variant='contained' onClick={handlePreviousPage}>
                     Prev
                   </Button>
-                )}
-                <Button variant='contained' onClick={handleNextPage}>
-                  Next
-                </Button>
-              </div>
-            )}
+                  <Button
+                    onClick={() => {
+                      setSubmit(true)
+                    }}
+                    variant='contained'
+                  >
+                    Submit
+                  </Button>
+                </div>
+              ) : (
+                <div className='flex  gap-2'>
+                  {currentPage != 1 && (
+                    <Button variant='contained' onClick={handlePreviousPage}>
+                      Prev
+                    </Button>
+                  )}
+                  <Button variant='contained' onClick={handleNextPage}>
+                    Next
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-      </div>
-
-      <div className={`relative custom-scrollbar md:block hidden`}>
-        <div className='fixed right-3 overflow-x-hidden  custom-scrollbar overflow-y-auto rounded-sm bg-[#f1f1f1] top-[80px] shadow-xl w-24 gap-5 flex flex-col items-center max-h-[calc(100vh-100px)]'>
-          <ArrowDropUp />
-          {currentQuiz?.questions.map((_, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                setCurrentPage(idx + 1)
-              }}
-              style={{
-                height: '40px',
-                width: '40px'
-              }}
-              // ${
-              //   currentPage === idx + 1
-              //     ? 'border-sky-900 border-2 bg-[#f1f1f1] text-sky-900 font-semibold shadow-sm'
-              //     : 'bg-sky-900 text-white'
-              // }
-              className={`cursor-pointer ${response[_._id]
-                ? 'bg-green-600 text-white  border-2 font-semibold shadow-sm'
-                : idx + 1 == currentPage
-                  ? 'bg-sky-700 text-white border-2'
-                  : 'bg-red-500 text-white border-2'
-                } flex items-center p-3 relative z-50 justify-center h-10 w-10 rounded-full`}
-            >
-              <span id={idx + 1}>{idx + 1}</span>
+        <div className='w-full h-full lg:w-1/4 border-t lg:border-t-0 lg:border-l border-gray-200 p-6 bg-white flex flex-col justify-between'>
+          <div className='w-full h-full flex flex-col justify-between'>
+            <div>
+              <h3 className='text-md font-semibold mb-4'>Question Navigator</h3>
+              <div className='grid grid-cols-6 gap-2 lg:grid-cols-5'>
+                {currentQuiz?.questions.map((_, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setCurrentPage(idx + 1)
+                    }}
+                    style={{
+                      height: '40px',
+                      width: '40px'
+                    }}
+                    // ${
+                    //   currentPage === idx + 1
+                    //     ? 'border-sky-900 border-2 bg-[#f1f1f1] text-sky-900 font-semibold shadow-sm'
+                    //     : 'bg-sky-900 text-white'
+                    // }
+                    className={`cursor-pointer ${
+                      !isSeen[_.id]
+                        ? 'bg-[#fff] border'
+                        : response[_._id]
+                        ? 'bg-[#7ccb40] text-white border-2 font-semibold shadow-sm'
+                        : idx + 1 === currentPage
+                        ? 'bg-sky-700 text-white border-2'
+                        : 'bg-[#c54325] text-white border-2'
+                    } flex items-center p-3 relative z-50 justify-center h-10 w-10 rounded-full`}
+                  >
+                    <span id={idx + 1}>{idx + 1}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-          <ArrowDropDown />
+          </div>
         </div>
-      </div>
-      {open && <SolutionWarningModal setOpen={setOpen} />}
-      {submit && (
-        <ConfirmModal submitHandler={submitHandler} setSubmit={setSubmit} />
-      )}
-      <QuizSubmittedModal navigate={navigate} isOpen={isOpen} setIsOpen={setIsOpen} />
-    </main>
+        {open && <SolutionWarningModal setOpen={setOpen} />}
+        {submit && (
+          <ConfirmModal submitHandler={submitHandler} setSubmit={setSubmit} />
+        )}
+        <QuizSubmittedModal
+          navigate={navigate}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+      </main>
+    </>
   )
 }
 
@@ -490,46 +521,46 @@ const ConfirmModal = ({ submitHandler, setSubmit }) => {
   )
 }
 
-const QuizSubmittedModal = ({navigate, isOpen, onClose }) => {
-  if (!isOpen) return null;
+const QuizSubmittedModal = ({ navigate, isOpen, onClose }) => {
+  if (!isOpen) return null
 
   return (
-    <div className="fixed z-50 backdrop-blur-sm inset-0 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <div className='fixed z-50 backdrop-blur-sm inset-0 overflow-y-auto'>
+      <div className='flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0'>
         {/* Background Overlay */}
-        <div className="fixed inset-0 transition-opacity">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+        <div className='fixed inset-0 transition-opacity'>
+          <div className='absolute inset-0 bg-gray-500 opacity-75'></div>
         </div>
 
-        <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>
+        <span className='hidden sm:inline-block sm:align-middle sm:h-screen'></span>
 
         {/* Modal Content */}
-        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-          <div className="sm:flex sm:items-start">
+        <div className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'>
+          <div className='sm:flex sm:items-start'>
             {/* Success Icon */}
-            <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+            <div className='mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10'>
               <svg
-                className="h-6 w-6 text-green-600"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
+                className='h-6 w-6 text-green-600'
+                stroke='currentColor'
+                fill='none'
+                viewBox='0 0 24 24'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M5 13l4 4L19 7'
                 ></path>
               </svg>
             </div>
 
             {/* Modal Text */}
-            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+            <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
+              <h3 className='text-lg leading-6 font-medium text-gray-900'>
                 Quiz Submitted Successfully!
               </h3>
-              <div className="mt-2">
-                <p className="text-sm leading-5 text-gray-500">
+              <div className='mt-2'>
+                <p className='text-sm leading-5 text-gray-500'>
                   Your quiz has been successfully submitted. You can check your
                   score in the results section.
                 </p>
@@ -538,10 +569,12 @@ const QuizSubmittedModal = ({navigate, isOpen, onClose }) => {
           </div>
 
           {/* Buttons */}
-          <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+          <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
             <button
-              onClick={()=>{navigate('/user')}}
-              className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:w-auto"
+              onClick={() => {
+                navigate('/user')
+              }}
+              className='inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:w-auto'
             >
               OK
             </button>

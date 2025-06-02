@@ -70,7 +70,7 @@ const TestsTable = () => {
                   <td className='p-4 py-5'>
                     {i.canAttempt ? (
                       <Link to={`/user/test/${i._id}`}>
-                       <Chip label="Clickable Link" clickable />
+                       <Chip label="Attempt" clickable />
                       </Link>
                     ) : (
                       <Lock />

@@ -67,7 +67,7 @@ function Home () {
         </div> */}
         <ProfileCard user={user} />
         <ProgressArea solutions={user.solutions} />
-        <Leaderboard />
+        <Leaderboard user={user} userUniversity={user.university} />
       </section>
 
       <Submissions />
