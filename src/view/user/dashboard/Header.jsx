@@ -46,11 +46,7 @@ const Header = React.memo(
               <Link to='/'>
                 {' '}
                 {/* Add this wrapper */}
-                <img
-                  src={LOGO}
-                  className='h-10'
-                  alt='Logo'
-                />
+                <img src={LOGO} className='h-10' alt='Logo' />
               </Link>
             </div>
             <div className='flex items-center gap-3'>
@@ -74,17 +70,21 @@ const Header = React.memo(
                   <AccountMenu handleLogout={handleLogout} />
                 </>
               ) : (
-               <div className="flex items-center space-x-4">
-  <button className="text-sm font-medium hover:underline">Login</button>
-  
-  <Divider
-    orientation="vertical"
-    flexItem
-    sx={{ bgcolor: 'grey.500' }}
-  />
+                <div className='flex items-center space-x-4'>
+                  <Link to='/login' className='text-sm font-medium hover:underline'>
+                    Login
+                  </Link>
 
-  <button className="text-sm font-medium hover:underline">Signup</button>
-</div>
+                  <Divider
+                    orientation='vertical'
+                    flexItem
+                    sx={{ bgcolor: 'grey.500' }}
+                  />
+
+                  <Link to={'/register'} className='text-sm font-medium hover:underline'>
+                    Signup
+                  </Link>
+                </div>
               )}
             </div>
           </nav>
