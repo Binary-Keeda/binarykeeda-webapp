@@ -1,9 +1,7 @@
 import React, { Suspense } from "react";
 import { Link } from "react-router-dom";
 import { Button, Chip, CircularProgress } from "@mui/material";
-import SchoolIcon from "@mui/icons-material/School";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import HubIcon from "@mui/icons-material/Hub";
+import {Psychology as PsychologyIcon ,Hub as HubIcon , School as SchoolIcon} from "@mui/icons-material";
 import { useEffect } from "react";
 
 const ICONS = [<PsychologyIcon />, <HubIcon />, <SchoolIcon />];

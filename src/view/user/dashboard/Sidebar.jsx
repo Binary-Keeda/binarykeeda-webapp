@@ -78,6 +78,8 @@
 
 import {
   ArrowLeft,
+  Assessment,
+  AutoStories,
   Book,
   Code,
   Dashboard,
@@ -86,6 +88,7 @@ import {
   HomeMax,
   LocationCity,
   Person,
+  School,
   ShortText,
   Summarize,
   VolunteerActivism
@@ -107,26 +110,41 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
   // Removed: useEffect(() => { setShowMenu(false); }, [location.pathname]);
 
   const NAV_ITEMS = [
-    { icon: <Dashboard color='inherit' />, label: 'Dashboard', path: '/user' },
+    {
+      icon: <Dashboard color='inherit' />,
+      label: 'Dashboard',
+      path: '/user',
+      type: 'private'
+    },
     {
       icon: <Book color='inherit' />,
       label: 'Practice',
-      path: '/user/practice'
+      path: '/user/practice',
+      type: 'private'
     },
     {
       icon: <Code color='inherit' />,
       label: 'Coding',
-      path: '/user/coding'
+      path: '/user/binarykeeda-dsa-sheet',
+      type: 'public'
     },
     {
-      icon: <LocationCity color='inherit' />,
+        icon:<AutoStories/>,
+        label:"BK Sheet", 
+        path:'/user/binarykeeda-210-sheet',
+        type:"public"
+    },
+    {
+      icon: <School color='inherit' />,
       label: 'Roadmaps',
-      path: '/user/roadmaps'
+      path: '/user/binarykeeda-roadmap-sheet',
+      type: 'public'
     },
     {
-      icon: <Edit />,
+      icon: <Assessment />,
       label: 'Test Series',
-      path: '/user/test-series'
+      path: '/user/test-series',
+      type: 'private'
     }
   ]
 
@@ -145,16 +163,16 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
                     overflow-hidden
                 `}
       >
-        <ul>
+        <ul className='pt-5'>
           {NAV_ITEMS.map((item, i) => {
             const isActive = item.path === path.pathname
-
+            if(!user && item.type == "private") return;
             return (
               <Link
                 to={item.path}
                 key={i}
                 className={`
-          flex flex-col items-center gap-1 ${i == 0 ? 'mt-4' : ''}
+          flex flex-col items-center gap-1
           ${showMenu ? 'justify-start' : 'lg:justify-center'}
           py-3
            dark:text-white text-black hover:bg-gray-500 hover:text-gray-100
@@ -164,7 +182,9 @@ const Drawer = React.memo(({ showMenu, setShowMenu }) => {
         `}
               >
                 <span className='text-end'>{item.icon}</span>
-                <span className='text-xs text-nowrap text-start'>{item.label}</span>
+                <span className='text-xs text-nowrap text-start'>
+                  {item.label}
+                </span>
                 {showMenu && (
                   <span className='text-nowrap ml-2'>{item.label}</span>
                 )}

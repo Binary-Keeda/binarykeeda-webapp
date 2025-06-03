@@ -39,9 +39,9 @@ const UserDashboardLayout = ({ children }) => {
   return (
     <>
       <Helmet>
-        <title>{user.name} - Dashboard</title>
+        <title>{user?.name || "User"} - Dashboard</title>
       </Helmet>
-      {!user?.isVerified && <Suspense fallback={<>Loader...</>}> <CompleteProfile /></Suspense>}
+      {user && !user?.isVerified && <Suspense fallback={<>Loader...</>}> <CompleteProfile /></Suspense>}
       <Header
         toggleMode={toggleMode}
         darkMode={darkMode}
@@ -58,7 +58,7 @@ const UserDashboardLayout = ({ children }) => {
       />
       <main
         className={` ${
-          menuOpen ? 'pl-[230px] ' : 'pl-5 lg:pl-[120px]'
+          menuOpen ? 'pl-[230px] ' : 'pl-5 lg:pl-[110px]'
         }  pr-5 py-5  bg-secondary min-h-[calc(100vh-59px)] text-gray-800 transition-all`}
       >
         {children || <Outlet />}

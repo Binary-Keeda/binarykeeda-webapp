@@ -56,245 +56,365 @@
 
 // export default Header;
 
-import { Menu } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+// import { Menu } from '@mui/icons-material'
+// import { IconButton } from '@mui/material'
+// import React, { useEffect, useState } from 'react'
+// import { useSelector } from 'react-redux'
+// import { Link, Link as NavLink } from 'react-router-dom'
+// import { Link as ScrollLink } from 'react-scroll'
+// import { ExpandMore, DarkMode , LightMode } from '@mui/icons-material'
+// import { LOGO } from '../lib/config'
+// export default function Header () {
+//   const [menuOpen, setMenuOpen] = useState(false)
+//   const { user } = useSelector(s => s.auth)
+//   const [practiceOpen, setPracticeOpen] = useState(false)
+//   const [studyOpen, setStudyOpen] = useState(false)
+//   const [darkMode, setDarkMode] = useState(false)
+//   const toggleMode = () => {
+//     localStorage.setItem('mode', darkMode ? 'light' : 'dark')
+//     setDarkMode(!darkMode)
+//   }
+
+//   useEffect(() => {
+//     const mode = localStorage.getItem('mode')
+//     if (mode === 'dark') {
+//       document.getElementById('root').classList.add('dark')
+//       setDarkMode(true)
+//     } else {
+//       document.getElementById('root').classList.remove('dark')
+//       setDarkMode(false)
+//     }
+//   }, [darkMode])
+//   useEffect(() => {
+//     window.addEventListener('scroll', () => {
+//       if (window.scrollY > 1) {
+//         setScroll(true)
+//       } else {
+//         setScroll(false)
+//       }
+//     })
+//   }, [])
+//   const toggleMenu = () => {
+//     setMenuOpen(!menuOpen)
+//   }
+//   return (
+//     <>
+//       <header className='relative  bg-primary h-[60px] w-full'>
+//         <nav
+//           onMouseLeave={() => {
+//             setPracticeOpen(false)
+//             setStudyOpen(false)
+//           }}
+//           className='fixed shadow-sm bg-bg-primary dark:bg-support flex items-center px-3 pr-16 justify-between h-[60px] w-full  z-10'
+//         >
+//           <img src={LOGO} className='h-10' alt='Logo' />
+//           <ul className='list-none gap-4 text-sm flex items-center'>
+//             <li className='nav-link mr-2 cursor-pointer'>
+//               <Link to={'/'}>Home</Link>
+//             </li>
+//             <li className='nav-link mr-2 cursor-pointer'>
+//               <Link to={'/user'}>Dashboard</Link>
+//             </li>
+
+//             <li
+//               className='nav-link cursor-pointer  flex items-center'
+//               onMouseEnter={() => {
+//                 setStudyOpen(true), setPracticeOpen(false)
+//               }}
+//             >
+//               Study
+//               <ExpandMore
+//                 sx={{
+//                   fontSize: 20,
+//                   transition: 'transform 0.5s ease',
+//                   transform: studyOpen ? 'rotate(360deg)' : 'rotate(0deg)'
+//                 }}
+//               />
+//               {studyOpen && (
+//                 <ul className='dropdown-header'>
+//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+//                     <Link to={'/user/binarykeeda-dsa-sheet'}>DSA Sheet</Link>
+//                   </li>
+//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+//                     <Link to={'/user/binarykeeda-210-sheet'}>
+//                       210 Roadmaps Sheet
+//                     </Link>
+//                   </li>
+//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+//                     <Link to={'/user/binarykeeda-roadmap-sheet'}>Roadmaps</Link>
+//                   </li>
+//                 </ul>
+//               )}
+//             </li>
+
+//             <li
+//               className='nav-link mr-2 cursor-pointer  flex items-center'
+//               onMouseEnter={() => {
+//                 setPracticeOpen(true)
+//                 setStudyOpen(false)
+//               }}
+//             >
+//               Practice
+//               <ExpandMore
+//                 sx={{
+//                   fontSize: 20,
+//                   transition: 'transform 0.2s ease',
+//                   transform: practiceOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+//                 }}
+//               />
+//               {practiceOpen && (
+//                 <ul className='dropdown-header'>
+//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+//                     <Link to={'/user/test-series'}>Test Series</Link>
+//                   </li>
+//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+//                     <Link to={'/user/practice'}>Go to quiz section</Link>
+//                   </li>
+//                 </ul>
+//               )}
+//             </li>
+
+//             <li>
+//               {' '}
+//               <span onClick={toggleMode} className='cursor-pointer'>
+//                 {' '}
+//                 {darkMode ? (
+//                   <LightMode sx={{ fontSize: 21 }} />
+//                 ) : (
+//                   <DarkMode sx={{ fontSize: 21 }} />
+//                 )}
+//               </span>
+//             </li>
+//           </ul>
+//         </nav>
+//       </header>
+//     </>
+//   )
+// }
+
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, Link as NavLink } from 'react-router-dom'
-import { Link as ScrollLink } from 'react-scroll'
+import { Link } from 'react-router-dom'
+import { ExpandMore, DarkMode, LightMode, Menu } from '@mui/icons-material'
+import Joyride from 'react-joyride'
+import { LOGO } from '../lib/config'
+import { Divider } from '@mui/material'
 
 export default function Header () {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scroll, setScroll] = useState(false)
   const { user } = useSelector(s => s.auth)
-  const [showDropDown, setShowDropDown] = useState(false);
+  const [practiceOpen, setPracticeOpen] = useState(false)
+  const [studyOpen, setStudyOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+  const [runTour, setRunTour] = useState(false)
+
+  // Toggle Dark/Light mode and save in localStorage
+  const toggleMode = () => {
+    localStorage.setItem('mode', darkMode ? 'light' : 'dark')
+    setDarkMode(!darkMode)
+  }
+
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 1) {
-        setScroll(true)
-      } else {
-        setScroll(false)
-      }
-    })
+    const mode = localStorage.getItem('mode')
+    if (mode === 'dark') {
+      document.getElementById('root').classList.add('dark')
+      setDarkMode(true)
+    } else {
+      document.getElementById('root').classList.remove('dark')
+      setDarkMode(false)
+    }
+  }, [darkMode])
+
+  // Scroll effect if needed (you can add scroll state if you want)
+  useEffect(() => {
+    // example scroll listener here if
+    const run = localStorage.getItem('run')
+    if (run) return
+    setRunTour(true)
+    localStorage.setItem('run', true)
   }, [])
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen)
   }
+
+  // Joyride steps for the walkthrough
+  const steps = [
+    {
+      target: '[data-tour="home-link"]',
+      content: 'Click here to go to the Home page.'
+    },
+    {
+      target: '[data-tour="dashboard-link"]',
+      content: 'This is your Dashboard where you can track your progress.'
+    },
+    {
+      target: '[data-tour="study-menu"]',
+      content: 'Hover here to explore study resources and sheets.'
+    },
+    {
+      target: '[data-tour="practice-menu"]',
+      content: 'Hover here to practice quizzes and test series.'
+    },
+    {
+      target: '[data-tour="dark-mode-toggle"]',
+      content: 'Toggle between Light and Dark mode here.'
+    },
+    {
+      target: '[data-tour="login-link"]',
+      content: 'Login using this'
+    },
+    {
+      target: '[data-tour="sign-link"]',
+      content: 'Sign in using this'
+    },
+    
+    // {
+    //   target:'[data-tour="modal-link"]',
+    //   content:"Website Under Maintainance"
+    // }
+  ]
+
   return (
     <>
-      <header id='home' className='relative h-[73px] w-full'>
+      {/* Joyride component */}
+      <Joyride
+        steps={steps}
+        run={runTour}
+        continuous={true}
+        showSkipButton={true}
+        styles={{
+          options: {
+            zIndex: 10000
+          }
+        }}
+        callback={data => {
+          if (data.status === 'finished' || data.status === 'skipped') {
+            setRunTour(false)
+          }
+        }}
+      />
+
+      <header className='relative bg-primary h-[60px] w-full'>
         <nav
-          className={`fixed w-full flex justify-between 
-           shadow-lg px-3 md:px-5 pl-1
-           transition-all duration-200  items-center h-[73px] top-0  bg-white z-40`}
+          onMouseLeave={() => {
+            setPracticeOpen(false)
+            setStudyOpen(false)
+          }}
+          className='fixed shadow-sm bg-bg-primary dark:bg-support flex items-center px-3 pr-16 justify-between h-[60px] w-full z-10'
         >
-          <div className='flex items-center gap-6'>
-            <ScrollLink to='home' smooth className='cursor-pointer'>
-              <Link to={'/'}>
-                <img
-                  src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
-                  className='h-10'
-                  alt=''
+          <img src={LOGO} className='h-10' alt='Logo' />
+
+          <ul className='list-none gap-4 text-sm flex items-center'>
+            <li className='nav-link mr-2 cursor-pointer' data-tour='home-link'>
+              <Link to={'/'}>Home</Link>
+            </li>
+            {user && (
+              <li
+                className='nav-link mr-2 cursor-pointer'
+                data-tour='dashboard-link'
+              >
+                <Link to={'/user'}>Dashboard</Link>
+              </li>
+            )}
+
+            <li
+              className='nav-link cursor-pointer flex items-center'
+              data-tour='study-menu'
+              onMouseEnter={() => {
+                setStudyOpen(true)
+                setPracticeOpen(false)
+              }}
+            >
+              Study
+              <ExpandMore
+                sx={{
+                  fontSize: 20,
+                  transition: 'transform 0.5s ease',
+                  transform: studyOpen ? 'rotate(360deg)' : 'rotate(0deg)'
+                }}
+              />
+              {studyOpen && (
+                <ul className='dropdown-header'>
+                  <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+                    <Link to={'/user/binarykeeda-dsa-sheet'}>DSA Sheet</Link>
+                  </li>
+                  <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+                    <Link to={'/user/binarykeeda-210-sheet'}>
+                      210 Roadmaps Sheet
+                    </Link>
+                  </li>
+                  <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+                    <Link to={'/user/binarykeeda-roadmap-sheet'}>Roadmaps</Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+
+            {user && (
+              <li
+                className='nav-link mr-2 cursor-pointer flex items-center'
+                data-tour='practice-menu'
+                onMouseEnter={() => {
+                  setPracticeOpen(true)
+                  setStudyOpen(false)
+                }}
+              >
+                Practice
+                <ExpandMore
+                  sx={{
+                    fontSize: 20,
+                    transition: 'transform 0.2s ease',
+                    transform: practiceOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                  }}
                 />
-              </Link>
-            </ScrollLink>
-          </div>
-          <div className='lg:flex hidden'>
-            <div className='flex gap-2'>
-              <div className='flex items-center gap-6 mr-5'>
-                <ScrollLink
-                  to={'about'}
-                  smooth
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  About
-                </ScrollLink>
-                <ScrollLink
-                  to={'features'}
-                  smooth
-                  offset={-60}
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  Features
-                </ScrollLink>
-                {/* <ScrollLink
-                  to={'content'}
-                  smooth
-                  offset={-60}
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  Quiz Portal
-                </ScrollLink> */}
-                <Link to={'/binary-keeda-sheet'} className='relative'>
-                  BK Sheet
-                </Link>
+                {practiceOpen && (
+                  <ul className='dropdown-header'>
+                    <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+                      <Link to={'/user/test-series'}>Test Series</Link>
+                    </li>
+                    <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
+                      <Link to={'/user/practice'}>Go to quiz section</Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            )}
 
-                <ScrollLink
-                  to={'contact'}
-                  smooth
-                  duration={1000}
-                  className='cursor-pointer nav-link'
+            {!user && (
+              <>
+                <li
+                  className='nav-link cursor-pointer'
+                  data-tour='login-link'
                 >
-                  Contact Us
-                </ScrollLink>
-                {/* <Link>Practice</Link> */}
-              </div>
+                  <Link to={'/login'}>Login</Link>
+                </li>
+                <Divider flexItem orientation='vertical' sx={{
+                  color:'gray'
+                }} />
+                <li
+                  className='nav-link mr-2 cursor-pointer'
+                  data-tour='sign-link'
+                >
+                  <Link to={'/register'}>Register</Link>
+                </li>
+              </>
+            )}
 
-              {!user ? (
-                <>
-                  <NavLink
-                    to='/login'
-                    class='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-black hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  >
-                    Login
-                    {/* <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                      class='w-4 h-4 ml-1.5'
-                    >
-                      <path
-                        fill-rule='evenodd'
-                        d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
-                        clip-rule='evenodd'
-                      />
-                    </svg> */}
-                  </NavLink>
-                  <NavLink
-                    to='/register'
-                    class='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  >
-                    Sign Up
-                  </NavLink>
-                </>
-              ) : (
-                <>
-                  <NavLink
-                    to={`/${user.role}`}
-                    class='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  >
-                    Continue to Dashboard
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                      class='w-4 h-4 ml-1.5'
-                    >
-                      <path
-                        fill-rule='evenodd'
-                        d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
-                        clip-rule='evenodd'
-                      />
-                    </svg>
-                  </NavLink>
-                </>
-              )}
-            </div>
-          </div>
-          <div className='lg:hidden flex'>
-            <IconButton onClick={toggleMenu}>
-              <Menu />
-            </IconButton>
-          </div>
-        </nav>
-
-        {/* Small Screen Nab */}
-        <span
-          onClick={toggleMenu}
-          className={`${
-            menuOpen ? '' : 'hidden '
-          } fixed top-0 left-0 z-40 h-[100vh] w-[100vw] bg-black bg-opacity-60`}
-        ></span>
-        <header
-          className={` ${
-            menuOpen ? 'translate-x-0' : '-translate-x-full'
-          }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
-        >
-          <div className='w-full absolute flex justify-end p-2'>
-            {/* <IconButton onClick={toggleMenu}>
-              <Close />
-            </IconButton> */}
-          </div>
-          <ul className='px-5 py-7 flex justify-between h-full flex-col'>
-            <div className='flex flex-col gap-2 '>
-              <img className='w-[140px]' src='/assets/logo.jpg' alt='' />
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='about'
-                className='text-gray-800 mt-6 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                About
-              </ScrollLink>
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='features'
-                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                Features
-              </ScrollLink>
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='content'
-                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                Quiz Portal
-              </ScrollLink>
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='contact'
-                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                Contact
-              </ScrollLink>
-              <hr className='my-5' />
-              {user ? (
-                <>
-                  <NavLink
-                    to={'/user'}
-                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
-                  >
-                    Dashboard
-                  </NavLink>
-                </>
-              ) : (
-                <>
-                  <NavLink
-                    to={'/login'}
-                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
-                  >
-                    Login
-                  </NavLink>
-                  <NavLink
-                    to={'/register'}
-                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
-                  >
-                    Signup
-                  </NavLink>
-                </>
-              )}
-            </div>
+            <li data-tour='dark-mode-toggle'>
+              <span onClick={toggleMode} className='cursor-pointer'>
+                {darkMode ? (
+                  <LightMode sx={{ fontSize: 21 }} />
+                ) : (
+                  <DarkMode sx={{ fontSize: 21 }} />
+                )}
+              </span>
+            </li>
           </ul>
-        </header>
+        </nav>
       </header>
+
+      {/* Button to start the walkthrough */}
     </>
   )
 }

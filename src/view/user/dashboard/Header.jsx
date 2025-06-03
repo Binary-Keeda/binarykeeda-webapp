@@ -1,11 +1,12 @@
 import {
   DarkMode,
+  Home,
   LightMode,
   NoteAdd,
   PowerSettingsNew,
   ShortText
 } from '@mui/icons-material'
-import { Avatar, IconButton } from '@mui/material'
+import { Avatar, Divider, Icon, IconButton } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { logOutUser } from '../../../redux/reducers/UserThunks'
 import Cookies from 'js-cookie'
@@ -14,6 +15,7 @@ import AccountMenu from '../utils/HeaderMenu'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
+import { LOGO } from '../../../lib/config'
 // import { handleLogout } from "../../../utils/libs/logout";
 
 const Header = React.memo(
@@ -41,27 +43,49 @@ const Header = React.memo(
               <ShortText onClick={() => setMenuOpen(!menuOpen)} />
             </div>
             <div className='flex gap-1 items-center'>
-              {/* <video
-              src='/assets/techease.mp4'
-              autoPlay
-              loop
-              playsInline
-              muted
-              className='h-[60px] rounded-[20px]'
-            ></video> */}
               <Link to='/'>
                 {' '}
                 {/* Add this wrapper */}
                 <img
-                  src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
+                  src={LOGO}
                   className='h-10'
                   alt='Logo'
                 />
               </Link>
             </div>
             <div className='flex items-center gap-3'>
-              <IconButton color={darkMode ? "#fff" :"#000"} onClick={toggleMode}>{darkMode ? <LightMode sx={{color:"#f1f1f1"}} /> : <DarkMode color='inherit' />}</IconButton>
-              <AccountMenu handleLogout={handleLogout} />
+              <Link className='text-[#757575] dark:text-white' to={'/'}>
+                <IconButton color='inherit'>
+                  <Home />
+                </IconButton>
+              </Link>
+              <IconButton
+                color={darkMode ? '#fff' : '#000'}
+                onClick={toggleMode}
+              >
+                {darkMode ? (
+                  <LightMode sx={{ color: '#f1f1f1' }} />
+                ) : (
+                  <DarkMode color='inherit' />
+                )}
+              </IconButton>
+              {user ? (
+                <>
+                  <AccountMenu handleLogout={handleLogout} />
+                </>
+              ) : (
+               <div className="flex items-center space-x-4">
+  <button className="text-sm font-medium hover:underline">Login</button>
+  
+  <Divider
+    orientation="vertical"
+    flexItem
+    sx={{ bgcolor: 'grey.500' }}
+  />
+
+  <button className="text-sm font-medium hover:underline">Signup</button>
+</div>
+              )}
             </div>
           </nav>
         </header>

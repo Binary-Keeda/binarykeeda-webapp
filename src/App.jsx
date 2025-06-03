@@ -26,9 +26,9 @@ const App = () => {
   const { user } = useSelector(state => state.auth)
 
   // Pages
-  const Sheet210Days = React.lazy(() => import('./pages/Sheet210Days'))
 
   /// User routes
+  const UserRoadMapSheet = React.lazy(() => import('./view/user/RoadMapSheet'));
   const UserLayout = React.lazy(() => import('./view/user/Userdashboard'))
   const UserDashboard = React.lazy(() => import('./view/user/Home'))
   const UserPractice = React.lazy(() => import('./view/user/Practice'))
@@ -85,9 +85,6 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='user/profile/:id' element={<UserProfile />} />
-            {/* <Route path='/' element={<>Home</>}></Route> */}
-            <Route path='/roadmaps' element={<UserRoadmaps />} />
-            <Route path='/binary-keeda-sheet' element={<Sheet210Days />} />
             <Route element={<UserRoute />}>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
@@ -95,6 +92,22 @@ const App = () => {
               <Route path='/verify/:id' element={<MagicSignup />} />
             </Route>
 
+            {/*  User But Public  */}
+            <Route path='/' element={<UserLayout />}>
+              <Route
+                path='user/binarykeeda-dsa-sheet'
+                element={<UserCoding />}
+              />
+              <Route
+                path='/user/binarykeeda-210-sheet'
+                element={<UserRoadMapSheet />}
+              />
+
+              <Route
+                path='user/binarykeeda-roadmap-sheet'
+                element={<UserRoadmaps />}
+              />
+            </Route>
             <Route
               path='/user'
               element={
@@ -105,9 +118,8 @@ const App = () => {
             >
               <Route index element={<UserDashboard />} />
               <Route path='practice' element={<UserPractice></UserPractice>} />
-              <Route path='coding' element={<UserCoding />} />
               <Route path='playground' element={<UserPlayground />} />
-              <Route path='roadmaps' element={<UserRoadmaps />} />
+
               <Route path='practice/:name' element={<UserQuizList />} />
               <Route element={<UserTestList />} path='test-series/' />
               <Route element={<UserPreview />} path='preview/:id' />
@@ -141,5 +153,3 @@ const App = () => {
 }
 
 export default App
-
-

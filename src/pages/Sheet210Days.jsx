@@ -45,7 +45,7 @@ const Sheet210Days = () => {
   useEffect(() => {
     const sheetId = '1bwxqxPsdakJl0fjKRIJBFfVGZk8PbebPTzRjyR8655E'
     const apiKey = 'AIzaSyDdhv_BPkl0TiQvmqHwZCdwgKXPEXAgn10'
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?ranges=Sheet1&fields=sheets.data.rowData.values(userEnteredValue,hyperlink)&key=${apiKey}`
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/1bwxqxPsdakJl0fjKRIJBFfVGZk8PbebPTzRjyR8655E?ranges=Sheet1&fields=sheets.data.rowData.values(userEnteredValue,hyperlink)&key=AIzaSyDdhv_BPkl0TiQvmqHwZCdwgKXPEXAgn10`
 
     fetch(url)
       .then(res => res.json())
@@ -98,6 +98,7 @@ const Sheet210Days = () => {
         setGroupedData(grouped)
         setDisplayNames(displayMap)
         setLoading(false)
+        
       })
       .catch(err => {
         console.error('Error fetching sheet data:', err)
@@ -255,4 +256,4 @@ const Sheet210Days = () => {
   )
 }
 
-export default Layout(Sheet210Days);
+export default Sheet210Days;

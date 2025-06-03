@@ -30,8 +30,9 @@ function Coding () {
             </p>
           </div>
           <div className='mt-4'>
-            <h1 className='text-orange-500 font-semibold'>Note:</h1>
+           
             <p className='mt-2'>
+               <strong className='text-orange-500 font-semibold mr-2'>Note:</strong>
               Both brute-force and optimal approaches are provided for most
               problems. However, it’s recommended that you first try to solve
               the problem on your own before looking at the solutions.

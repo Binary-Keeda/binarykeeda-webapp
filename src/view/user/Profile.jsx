@@ -764,13 +764,13 @@ export default function Profile () {
               {studyOpen && (
                 <ul className='dropdown-header'>
                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'/user/coding'}>DSA Sheet</Link>
+                    <Link to={'/user/binarykeeda-dsa-sheet'}>DSA Sheet</Link>
                   </li>
                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'/binary-keeda-sheet'}>210 Roadmaps Sheet</Link>
+                    <Link to={'/user/binarykeeda-210-sheet'}>210 Roadmaps Sheet</Link>
                   </li>
                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'user/roadmaps'}>Roadmaps</Link>
+                    <Link to={'/user/binarykeeda-roadmap-sheet'}>Roadmaps</Link>
                   </li>
                 </ul>
               )}
@@ -793,9 +793,7 @@ export default function Profile () {
               />
               {practiceOpen && (
                 <ul className='dropdown-header'>
-                  <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'/user/coding'}>DSA Sheet</Link>
-                  </li>
+                  
                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
                     <Link to={'/user/test-series'}>Test Series</Link>
                   </li>
