@@ -1,16 +1,19 @@
-import React from 'react'
-import Header from './Header'
-import Footer from './Footer'
+import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
 
-export default function Layout(WrappedComponents) {
-    return () => {
-        return (
-            <>
-                <Header />
-                <WrappedComponents />
-                <Footer />
-            </>
+function LayoutComponent(WrappedComponent) {
+  const ComponentWithLayout = (props) => (
+    <>
+      <Header />
+      <WrappedComponent {...props} />
+      <Footer />
+    </>
+  );
 
-        )
-    }
+  ComponentWithLayout.displayName = `withLayout(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return ComponentWithLayout;
 }
+
+export default LayoutComponent;

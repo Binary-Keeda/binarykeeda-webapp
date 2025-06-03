@@ -4,6 +4,7 @@ import { useLocation, Outlet } from 'react-router-dom'
 import Header from './dashboard/Header'
 import Drawer from './dashboard/Sidebar'
 import { Suspense } from 'react'
+import { Helmet } from 'react-helmet-async'
 const UserDashboardLayout = ({ children }) => {
   const CompleteProfile = React.lazy(() => import('./dashboard/CompleteProfile'))
 
@@ -37,6 +38,9 @@ const UserDashboardLayout = ({ children }) => {
 
   return (
     <>
+      <Helmet>
+        <title>{user.name} - Dashboard</title>
+      </Helmet>
       {!user?.isVerified && <Suspense fallback={<>Loader...</>}> <CompleteProfile /></Suspense>}
       <Header
         toggleMode={toggleMode}
@@ -54,8 +58,8 @@ const UserDashboardLayout = ({ children }) => {
       />
       <main
         className={` ${
-          menuOpen ? 'pl-[230px] ' : 'pl-5 lg:pl-[90px]'
-        }  pr-5 py-5  bg-secondary min-h-[calc(100vh-70px)] text-gray-800 transition-all`}
+          menuOpen ? 'pl-[230px] ' : 'pl-5 lg:pl-[120px]'
+        }  pr-5 py-5  bg-secondary min-h-[calc(100vh-59px)] text-gray-800 transition-all`}
       >
         {children || <Outlet />}
       </main>

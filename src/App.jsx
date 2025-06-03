@@ -11,6 +11,7 @@ import { getQuiz } from './redux/api/getQuiz'
 import { getTestAdmin } from './redux/api/getTest'
 import { getTestUser } from './redux/api/getTestUser'
 import { HelmetProvider } from 'react-helmet-async'
+// import { HelmetProvider } from 'react-helmet-async'
 // Lazy-loaded pages
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))

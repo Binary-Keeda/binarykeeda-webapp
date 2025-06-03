@@ -5,23 +5,25 @@ import About from '../components/Home/About'
 import Showcase from '../components/Home/ShowCase'
 import Features from '../components/Home/Features'
 import Content from '../components/Home/Content'
-import Footer from '../components/Home/Footer'
 
 const Home = () => {
-  const [userInfoModal, setUserInfoModal] = useState(true)
+  const [userInfoModal, setUserInfoModal] = useState(false)
 
   useEffect(() => {
     const userinfo = localStorage.getItem('account')
-    setUserInfoModal(userinfo)
+    if (!userinfo) {
+      setUserInfoModal(false);
+      localStorage.setItem('current' , false);
+    }
   }, [])
+
   return (
-    <section className=''>
-      {!userInfoModal && <InfoModal setUserInfoModal={setUserInfoModal} />}
+    <section>
+      {userInfoModal && <InfoModal setUserInfoModal={setUserInfoModal} />}
       <Hero />
       <About />
       <Showcase />
       <Content />
-      <Footer />
     </section>
   )
 }

@@ -14,7 +14,7 @@ export default function ProgressArea({ solutions }) {
   const isEmpty = aptitude === 0 && core === 0 && misc === 0;
 
   return (
-    <div className='flex relative flex-col items-center justify-center flex-[0.5] gap-6 p-6 rounded-xl shadow-lg bg-primary dark:bg-support bg-opacity-60 backdrop-blur-lg'>
+    <div className='flex relative flex-col items-center justify-center flex-[0.5]  p-6 rounded-md shadow-lg bg-primary dark:bg-support bg-opacity-60 backdrop-blur-lg'>
       {isEmpty ? (
         <p className='text-center text-gray-600 dark:text-gray-300 font-semibold'>
           Not enough data to display progress
@@ -22,7 +22,7 @@ export default function ProgressArea({ solutions }) {
       ) : (
         <>
           <div className='flex flex-col items-center w-full  rounded-xl '>
-            <div className='flex flex-col gap-2 w-full mt-4'>
+            <div className='flex gap-2 justify-evenly w-full mb-3'>
               {[
                 {
                   label: 'Aptitude',
@@ -75,7 +75,7 @@ export default function ProgressArea({ solutions }) {
                       label: 'Miscellaneous',
                     },
                   ],
-                  innerRadius: 40,
+                  innerRadius: 24,
                   outerRadius: 100,
                   paddingAngle: 0,
                   cornerRadius: 5,
@@ -93,6 +93,7 @@ export default function ProgressArea({ solutions }) {
           </div>
 
           <div className='flex flex-col w-full'>
+            <h1>Average Marks</h1>
             <div className='flex flex-col w-full'>
               <label className='text-xs font-medium text-gray-800 dark:text-gray-300'>
                 Apti

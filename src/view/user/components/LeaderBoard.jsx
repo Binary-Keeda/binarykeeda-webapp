@@ -41,7 +41,7 @@ function Leaderboard ({}) {
   const userRank = userRankEntry?.rank || 'N/A'
 
   return (
-    <div className='flex-[.7] bg-primary dark:bg-support rounded-lg shadow-lg p-4 flex flex-col min-h-[400px]'>
+    <div className='flex-[.7] bg-primary dark:bg-support rounded-md shadow-lg p-4 flex flex-col min-h-[400px]'>
       <div className='rounded-lg flex flex-col gap-3'>
         <div className='flex items-center justify-between px-4 py-2 rounded-md bg-support dark:bg-primary   shadow-sm'>
           <div className='text-sm font-medium opacity-80'>Institution</div>

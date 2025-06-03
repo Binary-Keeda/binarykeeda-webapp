@@ -694,39 +694,39 @@ export default function Profile () {
   }, [darkMode])
   useEffect(() => {
     setCurrUser(user)
-  }, []);
+  }, [])
 
   const breakdown = [
     {
-      title: "Basic GK",
-      category: "Miscellaneous",
-      difficulty: "Easy",
+      title: 'Basic GK',
+      category: 'Miscellaneous',
+      difficulty: 'Easy',
       count: 1,
-      quizId: "683d7844f0f3a7f12ed65220"
+      quizId: '683d7844f0f3a7f12ed65220'
     },
     {
-      title: "TCS Aptitude Quiz",
-      category: "Aptitude",
-      difficulty: "Medium",
+      title: 'TCS Aptitude Quiz',
+      category: 'Aptitude',
+      difficulty: 'Medium',
       count: 1,
-      quizId: "6839afa2608fb1f4169870eb"
+      quizId: '6839afa2608fb1f4169870eb'
     },
     {
-      title: "Adobe Core cs",
-      category: "Core",
-      difficulty: "Hard",
+      title: 'Adobe Core cs',
+      category: 'Core',
+      difficulty: 'Hard',
       count: 1,
-      quizId: "683d7733f0f3a7f12ed65078"
+      quizId: '683d7733f0f3a7f12ed65078'
     }
-  ];
+  ]
 
   const groupedByDifficulty = breakdown.reduce((acc, quiz) => {
     if (!acc[quiz.difficulty]) {
-      acc[quiz.difficulty] = [];
+      acc[quiz.difficulty] = []
     }
-    acc[quiz.difficulty].push(quiz);
-    return acc;
-  }, {});
+    acc[quiz.difficulty].push(quiz)
+    return acc
+  }, {})
 
   return (
     <>
@@ -912,22 +912,37 @@ export default function Profile () {
               </ul>
             </div>
           </div>
+          <div className='dark:bg-support  bg-primary  shadow-md rounded-sm p-6 flex-[2]'>
+            {/* Category Stats */}
+            <div className=''>
+              <h4 className='font-semibold text-lg mb-4 '>
+                Quiz Difficulty Breakdown
+              </h4>
+              <ul className='flex flex-wrap gap-4'>
+                {['Aptitude', 'Miscellaneous', 'Core'].map(cat => (
+                  <li
+                    key={cat}
+                    className='flex items-center justify-between gap-4 p-5 bg-white dark:bg-support dark:text-wg dark:border-gray-600  rounded-2xl shadow-md border w-full sm:w-64 hover:shadow-lg transition-shadow duration-300'
+                  >
+                    <div className='flex flex-col'>
+                      <span className='text-base font-bold '>{cat}</span>
+                      <span className='text-sm mt-1'>
+                        {currUser?.solutions?.[cat]?.attempted || 0} attempted{' '}
+                        <br />
+                        Average {currUser?.solutions?.[cat]?.average || 0}
+                      </span>
+                    </div>
+                    <img
+                      src={`/profile/chart-${cat}.png`}
+                      alt={`${cat} Chart`}
+                      className='h-14 w-14 object-contain'
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </section>
-
-        <section>
-      {Object.entries(groupedByDifficulty).map(([difficulty, quizzes]) => (
-        <div key={difficulty}>
-          <h2>{difficulty}</h2>
-          <ul>
-            {quizzes.map(({ quizId, title, category, count }) => (
-              <li key={quizId}>
-                <strong>{title}</strong> - {category} (Count: {count})
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </section>
       </main>
     </>
   )

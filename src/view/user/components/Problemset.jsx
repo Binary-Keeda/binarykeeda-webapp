@@ -1,208 +1,255 @@
-import React, { useEffect, useState } from "react";
-import problemset from "../data/coding.json";
-import { ArrowRight, KeyboardArrowRight, MenuOpen } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-
-export default function ProblemSet() {
-  const [progress, setProgress] = useState({
-    noOfProblems: 0,
-    problemsSolved: 0,
-  });
-  const [problemByTopic, setProblemByTopic] = useState({});
-  const [showProgress, setShowProgress] = useState(false);
-
-  const selectTask = (name, topic) => {
-    const key = `${name}+${topic}`;
-    if (localStorage.getItem(key)) {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, "selected");
-    }
-    updateProgress();
-  };
-
-  const selectQuestion = (name, topic) => {
-    const key = `${name}+${topic}`;
-    if (localStorage.getItem(key)) {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, "selected");
-    }
-    updateProgress();
-  };
-
-  const updateProgress = () => {
-    let total = 0;
-    let completed = 0;
-    let problemsByTopic = {};
-
-    problemset.forEach((topic) => {
-      problemsByTopic[topic.topicName] = 0;
-
-      topic.tasks?.forEach((task) => {
-        total++;
-        if (localStorage.getItem(`${task.title}+${topic.topicName}`)) {
-          completed++;
-        }
-      });
-
-      topic.problems?.forEach((problem) => {
-        total++;
-        const key = `${problem.title}+${topic.topicName}`;
-        if (localStorage.getItem(key)) {
-          completed++;
-          problemsByTopic[topic.topicName]++;
-        }
-      });
-    });
-
-    setProblemByTopic(problemsByTopic);
-    setProgress({ noOfProblems: total, problemsSolved: completed });
-  };
+import { useEffect, useState } from 'react'
+import problemset from '../data/coding_with_difficulty.json'
+import { Article, ExpandMore, Shuffle } from '@mui/icons-material'
+import { IconButton, LinearProgress } from '@mui/material'
+import {} from '@mui/material'
+import { Link } from 'react-router-dom'
+export default ({ setStats }) => {
+  const [problems, setProblems] = useState([])
+  const [completed, setCompleted] = useState({})
 
   useEffect(() => {
-    updateProgress();
-  }, []);
+    setProblems(problemset)
+    const stored = JSON.parse(localStorage.getItem('completed')) || {}
+    setCompleted(stored)
+  }, [])
 
-  const progressPercentage =
-    progress.noOfProblems > 0
-      ? Math.round((progress.problemsSolved / progress.noOfProblems) * 100)
-      : 0;
+  const handleCheckboxChange = (topicIdx, problemIdx) => {
+    const newCompleted = { ...completed }
+
+    if (!newCompleted[`topic-${topicIdx}`])
+      newCompleted[`topic-${topicIdx}`] = []
+
+    const idx = newCompleted[`topic-${topicIdx}`].indexOf(problemIdx)
+    if (idx === -1) {
+      newCompleted[`topic-${topicIdx}`].push(problemIdx)
+    } else {
+      newCompleted[`topic-${topicIdx}`].splice(idx, 1)
+    }
+
+    setCompleted(newCompleted)
+    localStorage.setItem('completed', JSON.stringify(newCompleted))
+  }
+
+  const getGlobalStats = () => {
+    let total = 0
+    let done = 0
+
+    let easy = 0,
+      medium = 0,
+      hard = 0
+    let easyDone = 0,
+      mediumDone = 0,
+      hardDone = 0
+
+    problems.forEach((topic, topicIdx) => {
+      topic.problems.forEach((p, problemIdx) => {
+        total++
+
+        const isCompleted = completed[`topic-${topicIdx}`]?.includes(problemIdx)
+
+        // Count difficulty
+        switch (p.difficulty) {
+          case 'Easy':
+            easy++
+            if (isCompleted) easyDone++
+            break
+          case 'Medium':
+            medium++
+            if (isCompleted) mediumDone++
+            break
+          case 'Hard':
+            hard++
+            if (isCompleted) hardDone++
+            break
+          default:
+            break
+        }
+
+        // Count total done
+        if (isCompleted) done++
+      })
+    })
+
+    return {
+      total,
+      done,
+      easy,
+      easyDone,
+      medium,
+      mediumDone,
+      hard,
+      hardDone
+    }
+  }
+
+  useEffect(() => {
+    if (problems.length > 0) {
+      setStats(getGlobalStats())
+    }
+  }, [problems])
+
+  useEffect(() => {
+    setStats(getGlobalStats())
+  }, [completed])
+  const { total, done, easy, medium, hard } = getGlobalStats()
 
   return (
-    <div className="flex flex-col w-full ">
-      {/* Progress Header Section - Sticky */}
-      <div className="sticky px-6 py-4 dark:bg-support  top-[73px] z-50 bg-primary pb-4 pt-3 border-b border-gray-200 dark:border-gray-700">
-        <div className="text-left">
-          {progress.problemsSolved > 0 ? (
-            <p className="text-xl font-medium text-gray-800 dark:text-gray-300 italic">
-              You're making progress!{" "}
-              <span className="font-bold text-[#db5602]">
-                {progress.problemsSolved}
-              </span>{" "}
-              of{" "}
-              <span className="font-bold text-[#db5602]">
-                {progress.noOfProblems}
-              </span>{" "}
-              problems completed (
-              <span className="font-bold">{progressPercentage}%</span>)
-            </p>
-          ) : (
-            <p className="text-xl font-medium text-gray-800 dark:text-gray-300">
-              <span className="font-bold text-[#db5602]">
-                {progress.noOfProblems}
-              </span>{" "}
-              problems waiting to be solved!
-            </p>
-          )}
+    <main className='mt-10 flex flex-col'>
+      <div className='relative flex w-full mb-5 justify-between px-7 py-5 rounded-lg text-gray-700 bg-primary dark:bg-support bg-clip-border'>
+        <div>
+          <h5 className='text-xl font-semibold'>DSA Sheet</h5>
+          <p className='text-base'>Track progress across all topics</p>
         </div>
-        <div className="w-full mt-3 px-2">
-          <div className="w-full h-2.5 bg-primary  rounded-full overflow-hidden">
-            <div
-              className="h-2.5 bg-gradient-to-r from-[#db5602] to-orange-500 rounded-full transition-all duration-700 ease-in-out shadow-inner"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
+        <div className='h-10'>
+          <IconButton color='inherit'>
+            <Shuffle color='inherit' />
+          </IconButton>
         </div>
       </div>
 
-      {/* Problems List Section */}
-      <div className="flex-1 flex flex-col gap-3 w-full mt-3">
-        {problemset.map((topic, index) => (
-          <div
-            key={index}
-            className="rounded-lg bg-clip-border shadow-md bg-primary text-gray-900 dark:text-gray-50 bg-white transition-shadow duration-300"
-          >
-            <h3 className="text-2xl px-6 py-5 font-bold leading-none border-slate-100 text-gray-800 dark:text-gray-50 bg-orange-50 dark:bg-support">
-              {`Topic ${index + 1}: ${topic.topicName}`}
-            </h3>
+      {problems?.map((p, idx) => (
+        <Accordion
+          key={idx}
+          idx={idx}
+          data={p.problems}
+          title={p.topicName}
+          completed={completed[`topic-${idx}`] || []}
+          handleCheck={problemIdx => handleCheckboxChange(idx, problemIdx)}
+        />
+      ))}
+    </main>
+  )
+}
+const Accordion = ({ title, idx, data, completed, handleCheck }) => {
+  const [showData, setShowData] = useState(false)
 
-            <hr className="dark:border-gray-600" />
+  return (
+    <div className={`w-full flex-col bg-primary dark:bg-support border-b`}>
+      <button
+        onClick={() => setShowData(prev => !prev)}
+        className='flex items-center justify-between px-7 py-5 w-full'
+      >
+        <div className='flex items-center justify-between'>
+          <div>
+            <ExpandMore
+              className={`transition-transform duration-300 ${
+                showData ? 'rotate-360' : '-rotate-90'
+              }`}
+            />
+            <span className='ml-4 font-semibold text-lg'>{`Topic ${
+              idx + 1
+            }`}</span>
+            <span className='ml-4 text-lg font-semibold'>{title}</span>
+          </div>
+        </div>
+        <div className='flex items-center gap-4'>
+          <LinearProgress
+            variant='determinate'
+            value={(completed.length / data.length) * 100}
+            sx={{
+              height: 8,
+              width: 300,
+              borderRadius: 5,
+              backgroundColor: '#inherit',
+              '& .MuiLinearProgress-bar': {
+                borderRadius: 5,
+                backgroundColor: '#f7931e' // Striver-like orange
+              }
+            }}
+          />
+          {completed.length + ' / '}
+          {data.length}
+        </div>
+      </button>
 
-            <div>
-              {topic.tasks?.map((task, idx) => (
-                <div
-                  className="flex hover:bg-gray-50 hover:dark:bg-gray-600 justify-between dark:text-gray-50 items-center border-b dark:border-gray-700 py-5 px-6 last:border-b-0"
-                  key={idx}
-                >
-                  <p className="text-lg px-4 font-normal leading-none dark:text-gray-50 text-gray-800">
-                    {task.title ? idx + ". " : ""} {task?.title || task?.task}
-                  </p>
-                  {task.title && (
-                    <div className="flex px-4 gap-8 items-center">
-                      <a
-                        href="#"
-                        className="hover:underline text-base font-medium"
-                      >
-                        Description
-                      </a>
-                      <a
-                        className="text-sky-700 hover:underline text-base font-medium"
-                        href={task?.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Link
-                      </a>
-                      <input
-                        checked={
-                          !!localStorage.getItem(
-                            `${task.title}+${topic.topicName}`
-                          )
-                        }
-                        type="checkbox"
-                        className="cursor-pointer w-5 h-5"
-                        onChange={() =>
-                          selectTask(task?.title, topic.topicName)
-                        }
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
+      {showData && (
+        <div className='px-7 pb-4'>
+          <ProblemTable
+            data={data}
+            completed={completed}
+            handleCheck={handleCheck}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
 
-              {topic.problems?.map((problem, idx) => (
-                <div
-                  className="flex hover:bg-support  justify-between dark:text-gray-50 items-center border-b dark:border-gray-700 py-5 px-6 last:border-b-0"
-                  key={idx}
-                >
-                  <p className="text-lg px-4 font-normal leading-none dark:text-gray-50 text-gray-700">
-                    {problem?.title}
-                  </p>
-                  <div className="flex px-4 gap-8 items-center">
-                    <a
-                      href="#"
-                      className="hover:underline text-base font-medium"
+const ProblemTable = ({ data, completed, handleCheck }) => {
+  return (
+    <div className='relative mt-4 flex flex-col w-full h-full dark:text-white dark:bg-bg-secondary text-gray-700 bg-white shadow-md rounded-xl bg-clip-border'>
+      <table className='w-full text-left table-auto'>
+        <thead>
+          <tr>
+            {['Problem', 'Difficulty', 'Article', 'Link', 'Status'].map(h => (
+              <th
+                key={h}
+                className='p-4 border-b bg-blue-gray-50/50 text-sm opacity-70'
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((problem, idx) =>
+            problem.title ? (
+              <>
+                <tr key={idx}>
+                  <td className='p-4 border-b'>{problem.title}</td>
+                  <td className='p-4 border-b'>
+                    <span
+                      className={`px-2 py-1 text-xs font-bold rounded-md ${
+                        problem.difficulty === 'Easy'
+                          ? 'bg-blue-500/20 text-blue-900'
+                          : problem.difficulty === 'Medium'
+                          ? 'bg-green-500/20 text-green-900'
+                          : 'bg-red-500/20 text-red-900'
+                      }`}
                     >
-                      Description
-                    </a>
+                      {problem.difficulty}
+                    </span>
+                  </td>
+                  <td className='p-4 border-b'>
+                    <Link>
+                      <Article />
+                    </Link>
+                  </td>
+                  <td className='p-4 border-b'>
                     <a
-                      className="text-sky-700 hover:underline text-base font-medium"
-                      href={problem?.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={problem.link}
+                      target='_blank'
+                      rel='noopener noreferrer'
                     >
                       Link
                     </a>
+                  </td>
+                  <td className='p-4 border-b'>
                     <input
-                      checked={
-                        !!localStorage.getItem(
-                          `${problem.title}+${topic.topicName}`
-                        )
-                      }
-                      type="checkbox"
-                      className="cursor-pointer w-5 h-5"
-                      onChange={() =>
-                        selectQuestion(problem?.title, topic.topicName)
-                      }
+                      type='checkbox'
+                      checked={completed.includes(idx)}
+                      onChange={() => handleCheck(idx)}
                     />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+                  </td>
+                </tr>
+              </>
+            ) : (
+              <>
+                <tr>
+                  <td className='p-4 border-b'>
+                    {problem.task}
+                  </td>
+                  <td className='p-4 border-b'></td>
+                  <td className='p-4 border-b'></td>
+                  <td className='p-4 border-b'></td>
+                  <td className='p-4 border-b'></td>
+                </tr>
+              </>
+            )
+          )}
+        </tbody>
+      </table>
     </div>
-  );
+  )
 }

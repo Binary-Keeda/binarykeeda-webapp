@@ -148,7 +148,7 @@ const Sheet210Days = () => {
 
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>Binary Keeda - 210 Days Roadmap || BK Sheet</title>
         <meta
           name='description'
@@ -164,7 +164,7 @@ const Sheet210Days = () => {
         <meta name='twitter:title' content='Binary Keeda - DSA, Coding, and System Design Mastery' />
         <meta name='twitter:description' content="Access Binary Keeda's all-in-one sheet for mastering DSA, CP, and System Design. Tailored for job seekers and students." />
         <meta name='twitter:image' content='https://binarykeeda.com/og-image.png' />
-      </Helmet>
+      </Helmet> */}
 
       <div ref={containerRef}>
         <div className='sticky px-6 py-10 top-[73px] z-50 bg-gray-50 pb-4 pt-3 border-b border-gray-200'>

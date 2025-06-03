@@ -33,9 +33,9 @@ const Header = React.memo(
     }
     return (
       <>
-        <header className='relative h-[70px]'>
+        <header className='relative h-[59px]'>
           <nav
-            className={`fixed shadow-sm bg-primary dark:bg-support dark:text-gray-50 bg-blend-difference text-gray-600  h-[70px] items-center pr-5 pl-2  flex justify-between z-40 w-full top-0 dark:bg-[${DARK_STRONG}] `}
+            className={`fixed shadow-sm bg-primary  dark:bg-support dark:text-gray-50 bg-blend-difference text-gray-600  h-[59px] items-center pr-5 pl-2  flex justify-between z-40 w-full top-0 dark:bg-[${DARK_STRONG}] `}
           >
             <div className='lg:hidden'>
               <ShortText onClick={() => setMenuOpen(!menuOpen)} />
