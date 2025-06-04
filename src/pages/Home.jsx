@@ -53,7 +53,7 @@ function DynamicHeightModal () {
   useEffect(() => {
       calculateHeight()
       window.addEventListener('resize', calculateHeight)
-        document.body.style.overflow = 'hidden'
+        // document.body.style.overflow = 'hidden'
     return () => window.removeEventListener('resize', calculateHeight)
   }, [])
 

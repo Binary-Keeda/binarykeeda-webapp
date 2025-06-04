@@ -1,0 +1,1 @@
+import{G as s}from"./DefaultPropsProvider-DZgXFkFn.js";import{a as p}from"./useSlot-DNFgS7sg.js";function m(n){const{theme:e,name:o,props:r}=n;return!e||!e.components||!e.components[o]||!e.components[o].defaultProps?r:s(e.components[o].defaultProps,r)}function a({props:n,name:e,defaultTheme:o,themeId:r}){let t=p(o);return r&&(t=t[r]||t),m({theme:t,name:e,props:n})}export{a as u};
