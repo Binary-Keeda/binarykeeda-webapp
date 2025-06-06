@@ -169,6 +169,7 @@ const Accordion = ({ title, idx, data, completed, handleCheck }) => {
             data={data}
             completed={completed}
             handleCheck={handleCheck}
+            topicName={title}
           />
         </div>
       )}
@@ -176,7 +177,7 @@ const Accordion = ({ title, idx, data, completed, handleCheck }) => {
   )
 }
 
-const ProblemTable = ({ data, completed, handleCheck }) => {
+const ProblemTable = ({ data, completed, handleCheck , topicName }) => {
   return (
     <div className='relative mt-4 flex flex-col w-full h-full dark:text-white dark:bg-bg-secondary text-gray-700 bg-white shadow-md rounded-xl bg-clip-border'>
       <table className='w-full text-left table-auto'>
@@ -212,7 +213,7 @@ const ProblemTable = ({ data, completed, handleCheck }) => {
                     </span>
                   </td>
                   <td className='p-4 border-b'>
-                    <Link>
+                    <Link to={`/user/binarykeeda-dsa-sheet/description/${encodeURIComponent(topicName)}/${encodeURIComponent(problem.title)}`}>
                       <Article />
                     </Link>
                   </td>
