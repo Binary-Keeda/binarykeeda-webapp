@@ -34,7 +34,6 @@ export default function ProblemDescription() {
   const [description, setDescription] = useState(null);
   const [activeCodeTab, setActiveCodeTab] = useState("java");
 
-  // Slide toggles
   const [showAlgorithm, setShowAlgorithm] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
@@ -56,40 +55,34 @@ export default function ProblemDescription() {
     }
   }, [topicName, problemTitle]);
 
-  if (!description) return <div className="p-6">Loading...</div>;
+  if (!description) return <div className="p-6 dark:text-white">Loading...</div>;
 
   return (
     <div
-      className="w-full px-6 py-8 bg-white rounded-lg shadow-lg"
-      style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif", letterSpacing: "0.02em" }}
+      className="w-full px-6 py-8 bg-white text-black dark:bg-support dark:text-white rounded-lg shadow-lg"
+      style={{ fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em" }}
     >
-      {/* Title */}
-      <h1 className="text-4xl font-extrabold mb-6 text-gray-900 tracking-wide leading-tight">
+      <h1 className="text-4xl font-extrabold mb-6 tracking-wide leading-tight">
         {description.title}
       </h1>
 
-      {/* Description */}
-      <p className="mb-8 text-lg text-gray-700 leading-relaxed font-medium tracking-normal">
+      <p className="mb-8 text-lg leading-relaxed font-medium tracking-normal">
         {description.description}
       </p>
 
-      {/* Accordion: Algorithm Steps */}
+      {/* Algorithm */}
       {description.algorithm?.length > 0 && (
-        <div className="mb-6 border rounded-md bg-gray-900 text-white overflow-hidden transition-all duration-500 ease-in-out">
+        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
           <button
             onClick={() => setShowAlgorithm(!showAlgorithm)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer select-none hover:bg-gray-700 transition-colors duration-300"
+            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             aria-expanded={showAlgorithm}
           >
             Algorithm Steps
             <span className="text-xl">{showAlgorithm ? "▲" : "▼"}</span>
           </button>
-          <div
-            className={`px-6 bg-gray-800 transition-max-height duration-500 ease-in-out overflow-hidden ${
-              showAlgorithm ? "max-h-screen py-4" : "max-h-0"
-            }`}
-          >
-            <ol className="list-decimal list-inside space-y-2 font-sans text-base tracking-wide">
+          <div className={`${showAlgorithm ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500`}>
+            <ol className="list-decimal list-inside space-y-2 text-base">
               {description.algorithm.map((step, idx) => (
                 <li key={idx} className="whitespace-pre-line">
                   {step}
@@ -100,28 +93,21 @@ export default function ProblemDescription() {
         </div>
       )}
 
-      {/* Accordion: Analysis */}
+      {/* Analysis */}
       {description.analysis && (
-        <div className="mb-6 border rounded-md bg-gray-900 text-white overflow-hidden transition-all duration-500 ease-in-out">
+        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
           <button
             onClick={() => setShowAnalysis(!showAnalysis)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer select-none hover:bg-gray-700 transition-colors duration-300"
+            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             aria-expanded={showAnalysis}
           >
             Analysis
             <span className="text-xl">{showAnalysis ? "▲" : "▼"}</span>
           </button>
-          <div
-            className={`px-6 bg-gray-800 transition-max-height duration-500 ease-in-out overflow-hidden ${
-              showAnalysis ? "max-h-screen py-4" : "max-h-0"
-            } space-y-6`}
-          >
-            {/* Best Case */}
+          <div className={`${showAnalysis ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500 space-y-6`}>
             {description.analysis.best_case && (
-              <div className="bg-green-100 text-green-800 p-4 rounded-lg font-medium">
-                <h3 className="text-xl font-bold mb-2 tracking-wide">
-                  Best Case
-                </h3>
+              <div className="bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100 p-4 rounded-lg">
+                <h3 className="text-xl font-bold mb-2">Best Case</h3>
                 <ul className="list-disc list-inside mb-2">
                   {description.analysis.best_case.scenarios.map((sc, i) => (
                     <li key={i}>{sc}</li>
@@ -138,19 +124,14 @@ export default function ProblemDescription() {
                   {
                     description.analysis.best_case.time_complexity
                       .find_min_max
-                  }
-                  , GCD -{" "}
-                  {description.analysis.best_case.time_complexity.find_gcd}
+                  }, GCD - {description.analysis.best_case.time_complexity.find_gcd}
                 </p>
               </div>
             )}
 
-            {/* Worst Case */}
             {description.analysis.worst_case && (
-              <div className="bg-red-100 text-red-800 p-4 rounded-lg font-medium">
-                <h3 className="text-xl font-bold mb-2 tracking-wide">
-                  Worst Case
-                </h3>
+              <div className="bg-red-100 text-red-900 dark:bg-red-900 dark:text-red-100 p-4 rounded-lg">
+                <h3 className="text-xl font-bold mb-2">Worst Case</h3>
                 <ul className="list-disc list-inside mb-2">
                   {description.analysis.worst_case.scenarios.map((sc, i) => (
                     <li key={i}>{sc}</li>
@@ -167,21 +148,16 @@ export default function ProblemDescription() {
                   {
                     description.analysis.worst_case.time_complexity
                       .find_min_max
-                  }
-                  , GCD -{" "}
-                  {description.analysis.worst_case.time_complexity.gcd}
+                  }, GCD - {description.analysis.worst_case.time_complexity.gcd}
                 </p>
               </div>
             )}
 
-            {/* Time Complexity Comparison */}
             {description.time_complexity_comparison && (
               <div className="overflow-x-auto">
-                <h3 className="text-lg font-semibold mb-2 text-white tracking-wide">
-                  Time Complexity Comparison
-                </h3>
-                <table className="w-full text-sm text-left border-collapse text-white">
-                  <thead className="bg-gray-700">
+                <h3 className="text-lg font-semibold mb-2">Time Complexity Comparison</h3>
+                <table className="w-full text-sm border-collapse">
+                  <thead className="bg-gray-200 dark:bg-gray-700">
                     <tr>
                       <th className="px-4 py-2 border">Step</th>
                       <th className="px-4 py-2 border">Description</th>
@@ -191,7 +167,7 @@ export default function ProblemDescription() {
                   </thead>
                   <tbody>
                     {description.time_complexity_comparison.map((item, i) => (
-                      <tr key={i} className="bg-gray-800">
+                      <tr key={i} className="bg-white dark:bg-gray-900">
                         <td className="px-4 py-2 border">{item.step}</td>
                         <td className="px-4 py-2 border">{item.Description}</td>
                         <td className="px-4 py-2 border">{item.best_case}</td>
@@ -206,23 +182,19 @@ export default function ProblemDescription() {
         </div>
       )}
 
-      {/* Accordion: Notes */}
+      {/* Notes */}
       {description.notes?.length > 0 && (
-        <div className="mb-6 border rounded-md bg-gray-900 text-white overflow-hidden transition-all duration-500 ease-in-out">
+        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
           <button
             onClick={() => setShowNotes(!showNotes)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer select-none hover:bg-gray-700 transition-colors duration-300"
+            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             aria-expanded={showNotes}
           >
             Notes
             <span className="text-xl">{showNotes ? "▲" : "▼"}</span>
           </button>
-          <div
-            className={`px-6 bg-gray-800 transition-max-height duration-500 ease-in-out overflow-hidden ${
-              showNotes ? "max-h-screen py-4" : "max-h-0"
-            }`}
-          >
-            <ul className="list-disc list-inside space-y-2 font-sans text-base tracking-wide">
+          <div className={`${showNotes ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500`}>
+            <ul className="list-disc list-inside space-y-2 text-base">
               {description.notes.map((note, i) => (
                 <li key={i}>{note}</li>
               ))}
@@ -231,30 +203,25 @@ export default function ProblemDescription() {
         </div>
       )}
 
-      {/* Accordion: Code Solutions */}
+      {/* Code Solutions */}
       {(description.java_code || description.cpp_code) && (
-        <div className="mb-6 border rounded-md bg-gray-900 text-white overflow-hidden transition-all duration-500 ease-in-out">
+        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
           <button
             onClick={() => setShowCode(!showCode)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer select-none hover:bg-gray-700 transition-colors duration-300"
+            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             aria-expanded={showCode}
           >
             Code Solutions
             <span className="text-xl">{showCode ? "▲" : "▼"}</span>
           </button>
-          <div
-            className={`px-6 bg-gray-800 transition-max-height duration-500 ease-in-out overflow-hidden ${
-              showCode ? "max-h-screen py-4" : "max-h-0"
-            }`}
-          >
-            {/* Tabs + Copy Button in one row */}
+          <div className={`${showCode ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500`}>
             <div className="flex items-center mb-4">
               {description.java_code && (
                 <button
-                  className={`px-4 py-2 mr-2 rounded font-semibold tracking-wide transition-colors duration-300 ${
+                  className={`px-4 py-2 mr-2 rounded font-semibold ${
                     activeCodeTab === "java"
-                      ? "bg-blue-600 text-white  decoration-2"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
                   }`}
                   onClick={() => setActiveCodeTab("java")}
                 >
@@ -263,20 +230,17 @@ export default function ProblemDescription() {
               )}
               {description.cpp_code && (
                 <button
-                  className={`px-4 py-2 rounded font-semibold tracking-wide transition-colors duration-300 ${
+                  className={`px-4 py-2 rounded font-semibold ${
                     activeCodeTab === "cpp"
-                      ? "bg-blue-600 text-white decoration-2"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
                   }`}
                   onClick={() => setActiveCodeTab("cpp")}
                 >
                   C++
                 </button>
               )}
-
-              {/* Spacer pushes copy button to the right */}
               <div className="flex-grow" />
-
               <CopyButton
                 code={
                   activeCodeTab === "java"
@@ -286,7 +250,6 @@ export default function ProblemDescription() {
               />
             </div>
 
-            {/* Code Viewer */}
             <div className="bg-black rounded-lg shadow-lg">
               <div className="overflow-x-auto rounded-b-lg">
                 <SyntaxHighlighter
@@ -302,8 +265,8 @@ export default function ProblemDescription() {
                     fontFamily:
                       "'Source Code Pro', monospace, 'Courier New', Courier, monospace",
                   }}
-                  wrapLines={true}
-                  showLineNumbers={true}
+                  wrapLines
+                  showLineNumbers
                 >
                   {activeCodeTab === "java"
                     ? description.java_code
