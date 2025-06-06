@@ -675,7 +675,7 @@ export default function Profile () {
   const [studyOpen, setStudyOpen] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
   const [currUser, setCurrUser] = useState(null)
-  const { user } = useSelector(s => s.auth)
+  const { user , rankData } = useSelector(s => s.auth)
   const toggleMenu = () => setMenuOpen(!menuOpen)
   const toggleMode = () => {
     localStorage.setItem('mode', darkMode ? 'light' : 'dark')
@@ -844,7 +844,7 @@ export default function Profile () {
                 </div>
 
                 <div className='mb-4'>
-                  <p className='text-sm text-gray-500'>Ranking</p>
+                  <p className='text-sm text-gray-500'>Ranking (Global) </p>
                   <div className='flex items-center gap-2'>
                     <img
                       src='/icons/medal-first.png'
@@ -852,7 +852,22 @@ export default function Profile () {
                       alt='Rank'
                     />
                     <p className='text-base font-medium'>
-                      Rank {currUser?.solutions?.Rank || 0}
+                      Rank {rankData?.globalRank || 0}
+                   
+                    </p>
+                  </div>
+                </div>
+                <div className='mb-4'>
+                  <p className='text-sm text-gray-500'>Ranking (University) </p>
+                  <div className='flex items-center gap-2'>
+                    <img
+                      src='/icons/medal-first.png'
+                      className='h-6'
+                      alt='Rank'
+                    />
+                    <p className='text-base font-medium'>
+                      Rank {rankData?.universityRank || 0}
+    
                     </p>
                   </div>
                 </div>

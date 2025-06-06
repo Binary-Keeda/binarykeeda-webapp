@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import ProfileCard from './components/ProfileCard'
 
 function Home () {
-  const { user } = useSelector(s => s.auth)
+  const { user, rankData } = useSelector(s => s.auth)
 
 
   return (
@@ -59,6 +59,7 @@ function Home () {
             </Button>
           </Link>
         </div> */}
+       
         <ProfileCard user={user} />
         <ProgressArea solutions={user.solutions} />
         <Leaderboard user={user} userUniversity={user.university} />

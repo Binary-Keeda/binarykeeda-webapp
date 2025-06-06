@@ -6,11 +6,15 @@ const userSlice = createSlice({
         user: null,
         loading: true,
         error: null,
+        rankData: null
     },
     name: 'user',
     reducers: {
         setError(state, action) {
             state.error = action.payload || null
+        },
+        setRankData(state, action){
+            state.rankData = action.payload || null;
         },
         setLoading(state, action) {
             state.loading = action.payload || false
@@ -49,5 +53,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { loginSuccess, logoutUser, loginFailed, setLoading, setError, loginRequest } = userSlice.actions
+export const { loginSuccess , setRankData, logoutUser, loginFailed, setLoading, setError, loginRequest } = userSlice.actions
 export default userSlice.reducer

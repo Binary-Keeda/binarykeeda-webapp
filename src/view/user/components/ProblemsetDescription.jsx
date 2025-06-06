@@ -45,17 +45,16 @@ export default function ProblemDescription() {
 
     const topicData = fullData.find((t) => t.topicName === decodedTopic);
     if (!topicData) return;
-
     const problem =
       topicData.problems?.find((p) => p.title === decodedTitle) ||
       topicData.tasks?.find((t) => t.title === decodedTitle);
-
+    // alert(JSON.stringify(problem))
     if (problem) {
       setDescription(problem);
     }
   }, [topicName, problemTitle]);
 
-  if (!description) return <div className="p-6 dark:text-white">Loading...</div>;
+  if (!description) return <div className="p-6 dark:text-white">Not Found</div>;
 
   return (
     <div
