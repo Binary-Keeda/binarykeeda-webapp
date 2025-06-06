@@ -71,10 +71,11 @@ const App = () => {
       } else {
         getTestUser()
       }
-    }
-    if (!user?.rankData) {
+      if (!user?.rankData) {
       dispatch(getRank(user._id, user?.university))
     }
+    }
+    
   }, [user])
   const { loading } = useSelector(s => s.auth)
   return loading ? (
