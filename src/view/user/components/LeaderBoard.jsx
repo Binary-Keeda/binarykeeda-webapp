@@ -1,32 +1,37 @@
 import React, { useState } from 'react'
-import { Button } from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
+import { useSelector } from 'react-redux'
 
-const leaderboardData = {
-  university: [
-    { rank: 1, name: 'Aryan Bhandari', score: 980, university: 'UPES' },
-    { rank: 2, name: 'Pranjal Rawat', score: 950, university: 'UPES' },
-    { rank: 3, name: 'Tanvi Sharma', score: 920, university: 'UPES' }
-  ],
-  global: [
-    { rank: 1, name: 'Ritika Panwar', score: 1000, university: 'DU' },
-    { rank: 2, name: 'Aditya Mehra', score: 985, university: 'IIT Delhi' },
-    { rank: 3, name: 'Aryan Bhandari', score: 980, university: 'UPES' }
-  ]
+const getMedal = rank => {
+  if (rank === 1) return '/icons/medal-first.png'
+  if (rank === 2) return '/icons/medal-second.png'
+  if (rank === 3) return '/icons/medal-third.png'
+  return null
 }
 
-function Leaderboard ({ userUniversity }) {
+function Leaderboard () {
+  const { user, rankData, loading } = useSelector(s => s.auth) // using dynamic Redux data
   const [tab, setTab] = useState('university')
 
+  const activeLeaderboard =
+    tab === 'university' ? rankData?.topUniversity : rankData?.topGlobal || []
+
+
   return (
-    <div className='flex-[.7] dark:bg-gray-800 bg-white rounded-lg shadow-lg p-3 flex flex-col'>
-      <div className='flex-[0.8] dark:bg-gray-800 bg-white rounded-lg  flex flex-col'>
-        <div className='flex h-[50px] rounded-lg text-white gap-3 bg-gray-600 items-center px-4'>
+    <div className='flex-[.7] bg-primary dark:bg-support rounded-md shadow-lg p-4 flex flex-col min-h-[400px]'>
+      <div className='rounded-lg flex flex-col gap-3'>
+        <div className='flex items-center justify-between px-4 py-2 rounded-md bg-support dark:bg-primary shadow-sm'>
+          <div className='text-sm font-medium opacity-80'>Institution</div>
+          <div className='text-sm font-normal text-xs'>{user?.university || 'N/A'}</div>
+        </div>
+
+        <div className='flex h-[50px] rounded-lg text-white gap-3 bg-support dark:bg-primary items-center px-4'>
           <Button
             variant={tab === 'university' ? 'contained' : 'text'}
             onClick={() => setTab('university')}
             sx={{
-              fontSize: 10,
-              borderRadius: 100,
+              fontSize: 12,
+              borderRadius: 20,
               textTransform: 'none',
               color: tab === 'university' ? '#fff' : '#ccc'
             }}
@@ -37,8 +42,8 @@ function Leaderboard ({ userUniversity }) {
             variant={tab === 'global' ? 'contained' : 'text'}
             onClick={() => setTab('global')}
             sx={{
-              fontSize: 10,
-              borderRadius: 100,
+              fontSize: 12,
+              borderRadius: 20,
               textTransform: 'none',
               color: tab === 'global' ? '#fff' : '#ccc'
             }}
@@ -47,37 +52,69 @@ function Leaderboard ({ userUniversity }) {
           </Button>
         </div>
 
-        {/* <div className="my-2">
-        <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-          #{leaderboardData[tab].findIndex((u) => u.name === 'Aryan Bhandari') + 1} in {tab === 'university' ? userUniversity : 'Global'}
-        </p>
-      </div> */}
-
-        <div className='mt-4 flex flex-col gap-3'>
-          {leaderboardData[tab].map((user, i) => (
-            <div
-              key={i}
-              className='flex justify-between items-center px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-md'
-            >
-              <div className='flex gap-3 items-center'>
-                <span className='text-sm font-semibold text-gray-700 dark:text-gray-100'>
-                  #{user.rank}
+        {loading ? (
+          <div className='flex justify-center items-center h-32'>
+            <CircularProgress size={30} />
+          </div>
+        ) : (
+          <div className='mt-4 flex flex-col gap-3'>
+            {activeLeaderboard?.map((entry, i) => (
+              <div
+                key={entry.userId || i}
+                className='flex justify-between items-center px-4 py-2 bg-support dark:bg-primary rounded-md'
+              >
+                <div className='flex gap-3 items-center'>
+                  {getMedal(entry.rank) && (
+                    <img
+                      className='h-7'
+                      src={getMedal(entry.rank)}
+                      alt={`rank-${entry.rank}`}
+                    />
+                  )}
+                  <div>
+                    <p className='text-sm font-semibold text-gray-800 dark:text-white'>
+                      {entry.name}
+                    </p>
+                    <p className='text-xs text-gray-500 dark:text-gray-300'>
+                      {entry.university}
+                    </p>
+                  </div>
+                </div>
+                <span className='text-sm font-bold text-[#1976d2] dark:text-blue-300'>
+                  {entry.points} pts
                 </span>
-                <div>
-                  <p className='text-sm font-semibold text-gray-800 dark:text-white'>
-                    {user.name}
-                  </p>
-                  <p className='text-xs text-gray-500 dark:text-gray-300'>
-                    {user.university}
-                  </p>
+              </div>
+            ))}
+
+              <div className='p-4 bg-support dark:bg-primary rounded-md mt-4 shadow'>
+                <h1 className='text-md font-bold text-gray-800 dark:text-white mb-2'>
+                  Your Rank
+                </h1>
+                <div className='flex justify-between items-center'>
+                  <div className='flex gap-3 items-center'>
+                    {getMedal(user.solutions.Rank) && (
+                      <img
+                        className='h-7'
+                        src={getMedal(user.solutions.Rank)}
+                        alt=''
+                      />
+                    )}
+                    <div>
+                      <p className='text-sm font-semibold text-gray-800 dark:text-white'>
+                        #{user.solutions.Rank} {user?.name}
+                      </p>
+                      <p className='text-xs text-gray-500 dark:text-gray-300'>
+                        {user?.university}
+                      </p>
+                    </div>
+                  </div>
+                  <small className='text-[#1976d2] text-md font-bold dark:text-blue-300'>
+                    {user?.solutions?.Points} pts
+                  </small>
                 </div>
               </div>
-              <span className='text-sm font-bold text-blue-600 dark:text-blue-300'>
-                {user.score} pts
-              </span>
-            </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

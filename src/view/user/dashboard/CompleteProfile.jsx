@@ -50,6 +50,17 @@ const Specialisations = [
   "Other",
 ];
 const years = [
+  "2014",
+  "2015",
+  "2016",
+  "2017",
+  "2018",
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  "2024",
   "2025",
   "2026",
   "2027",
@@ -205,8 +216,6 @@ export default function CompleteProfile() {
         avatar: avatar.src,
         specialisation: specialisation,
       });
-      // alert(JSON.stringify(validatedData))
-      // return;
       const token = await getUserToken();
       validatedData._id = user._id;
       const response = await axios.post(

@@ -20,7 +20,6 @@ export default function Test () {
         `${BASE_URL}/api/v2/test/submission?userId=${user._id}&testId=${id}`,{withCredentials:true}
       )
       .then(response => {
-        console.log('Fetched Test Data:', response.data)
         // setTestSubmission(response.data.testSubmission)
         setTest(response.data.test)
         setTestSubmission(response.data.testSubmission);
@@ -40,7 +39,7 @@ export default function Test () {
         <TestSolve testSubmission={testSubmission} userId={user._id} currSection={currSection} test={test} setCurrentSection={setCurrentSection} testId={id} />
       ) : (
         <>
-          <TestIntro submissionId={testSubmission._id} setTest={setTest} setHashAgreed={setHashAgreed} />
+          <TestIntro setTestSubmission={setTestSubmission} submissionId={testSubmission._id} setTest={setTest} setHashAgreed={setHashAgreed} />
         </>
       )}
     </Suspense>

@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-// import GoogleSignInPopup from './utilities/GooglePopup';
 import { GOOGLE_CLIENT_ID } from './lib/config'
 import Loaader from './layout/Loader'
 import { getUser } from './redux/reducers/UserThunks'
@@ -12,12 +11,17 @@ import { getQuiz } from './redux/api/getQuiz'
 import NotFound from './utilities/NotFound'
 import { getTestAdmin } from './redux/api/getTest'
 import { getTestUser } from './redux/api/getTestUser'
+import { HelmetProvider } from 'react-helmet-async'
+import { getRank } from './redux/api/getRank'
+// import { HelmetProvider } from 'react-helmet-async'
 // Lazy-loaded pages
 const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const Redirect = lazy(() => import('./utilities/redirect'))
 const MagicSignup = lazy(() => import('./pages/Signup'))
+
 const Home = lazy(() => import('./pages/Home'))
+const NotFound = lazy(() => import('./utilities/NotFound'))
 const CLIENT_ID = GOOGLE_CLIENT_ID
 const App = () => {
   const dispatch = useDispatch()
@@ -25,13 +29,16 @@ const App = () => {
   const { user } = useSelector(state => state.auth)
 
   // Pages
-  const Sheet210Days = React.lazy(() => import('./pages/Sheet210Days'))
 
   /// User routes
+  const UserRoadMapSheet = React.lazy(() => import('./view/user/RoadMapSheet'))
   const UserLayout = React.lazy(() => import('./view/user/Userdashboard'))
   const UserDashboard = React.lazy(() => import('./view/user/Home'))
   const UserPractice = React.lazy(() => import('./view/user/Practice'))
   const UserCoding = React.lazy(() => import('./view/user/Coding'))
+  const UserCodingDescription = React.lazy(() =>
+    import('./view/user/components/ProblemsetDescription')
+  )
   const UserRoadmaps = React.lazy(() => import('./view/user/Roadmap'))
   const UserSolution = React.lazy(() => import('./view/user/Solutions'))
   const UserProfile = React.lazy(() => import('./view/user/Profile'))
@@ -50,33 +57,45 @@ const App = () => {
   const AdminHome = React.lazy(() => import('./view/admin/Home'))
   const AdminTestSeries = React.lazy(() => import('./view/admin/Test'))
   const AdminTestEdit = React.lazy(() => import('./view/admin/TestEdit'))
+  const AdminAddProblem = lazy(() =>
+    import('./view/admin/components/AddProblem')
+  )
+
+  useEffect(() => {}, [])
   useEffect(() => {
     dispatch(getUser(token))
   }, [])
   useEffect(() => {
     if (user) {
-      getQuiz()
       if (user.role == 'admin') {
         getTestAdmin()
       } else {
-        console.log("Fetching")
         getTestUser()
       }
+      if (!user?.rankData) {
+      dispatch(getRank(user._id, user?.university))
     }
+    }
+    
   }, [user])
   const { loading } = useSelector(s => s.auth)
   return loading ? (
-    <Loaader />
+    <div className='flex h-screen w-screen justify-center items-center'>
+      <div className='loader1'></div>
+    </div>
   ) : (
-    <GoogleOAuthProvider clientId={CLIENT_ID}>
-      {/* <GoogleSignInPopup /> */}
-      <Suspense fallback={<Loaader />}>
+    <HelmetProvider>
+      <Suspense
+        fallback={
+          <div className='flex h-screen w-screen justify-center items-center'>
+            <div className='loader1'></div>
+          </div>
+        }
+      >
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />
-            {/* <Route path='/' element={<>Home</>}></Route> */}
-            <Route path='/roadmaps' element={<UserRoadmaps />} />
-            <Route path='/binary-keeda-sheet' element={<Sheet210Days />} />
+            <Route path='user/profile/:id' element={<UserProfile />} />
             <Route element={<UserRoute />}>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
@@ -84,6 +103,26 @@ const App = () => {
               <Route path='/verify/:id' element={<MagicSignup />} />
             </Route>
 
+            {/*  User But Public  */}
+            <Route path='/' element={<UserLayout />}>
+              <Route
+                path='user/binarykeeda-dsa-sheet'
+                element={<UserCoding />}
+              />
+              <Route
+                path='user/binarykeeda-dsa-sheet/description/:topicName/:problemTitle'
+                element={<UserCodingDescription />}
+              />
+              <Route
+                path='/user/binarykeeda-210-sheet'
+                element={<UserRoadMapSheet />}
+              />
+
+              <Route
+                path='user/binarykeeda-roadmap-sheet'
+                element={<UserRoadmaps />}
+              />
+            </Route>
             <Route
               path='/user'
               element={
@@ -94,7 +133,6 @@ const App = () => {
             >
               <Route index element={<UserDashboard />} />
               <Route path='practice' element={<UserPractice></UserPractice>} />
-              <Route path='coding' element={<UserCoding />} />
               <Route path='playground' element={<UserPlayground />} />
               <Route path='roadmaps' element={<UserRoadmaps />} />
               <Route path='practice/:name' element={<UserQuizList />} />
@@ -102,6 +140,9 @@ const App = () => {
               <Route element={<UserTestList />} path='test/' />
               <Route element={<UserPreview />} path='preview/:id' />
 
+              <Route path='practice/:name' element={<UserQuizList />} />
+              <Route element={<UserTestList />} path='test-series/' />
+              <Route element={<UserPreview />} path='preview/:id' />
             </Route>
             <Route element={<RoleBasedRoutes requiredRole={'user'} />}>
               <Route element={<UserSolution />} path='user/solution/:id' />
@@ -121,12 +162,13 @@ const App = () => {
               <Route path='users' element={<Users />} />
               <Route path='view/:id' element={<ViewQuiz />} />
               <Route path='test-series' element={<AdminTestSeries />} />
+              <Route path='problem' element={<AdminAddProblem />} />
             </Route>
             <Route path='*' element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </Suspense>
-    </GoogleOAuthProvider>
+    </HelmetProvider>
   )
 }
 

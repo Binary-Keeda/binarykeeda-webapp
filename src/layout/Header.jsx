@@ -392,29 +392,108 @@ import { Menu } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link, Link as NavLink } from 'react-router-dom'
-import { Link as ScrollLink } from 'react-scroll'
+import { Link } from 'react-router-dom'
+import { ExpandMore, DarkMode, LightMode, Menu } from '@mui/icons-material'
+import Joyride from 'react-joyride'
+import { LOGO } from '../lib/config'
+import { Divider } from '@mui/material'
 
 export default function Header () {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scroll, setScroll] = useState(false)
   const { user } = useSelector(s => s.auth)
-  const [showDropDown, setShowDropDown] = useState(false);
+  const [practiceOpen, setPracticeOpen] = useState(false)
+  const [studyOpen, setStudyOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+  const [runTour, setRunTour] = useState(false)
+
+  // Toggle Dark/Light mode and save in localStorage
+  const toggleMode = () => {
+    localStorage.setItem('mode', darkMode ? 'light' : 'dark')
+    setDarkMode(!darkMode)
+  }
+
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 1) {
-        setScroll(true)
-      } else {
-        setScroll(false)
-      }
-    })
+    const mode = localStorage.getItem('mode')
+    if (mode === 'dark') {
+      document.getElementById('root').classList.add('dark')
+      setDarkMode(true)
+    } else {
+      document.getElementById('root').classList.remove('dark')
+      setDarkMode(false)
+    }
+  }, [darkMode])
+
+  // Scroll effect if needed (you can add scroll state if you want)
+  useEffect(() => {
+    // example scroll listener here if
+    const run = localStorage.getItem('run')
+    if (run) return
+    setRunTour(true)
+    localStorage.setItem('run', true)
   }, [])
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen)
   }
+
+  // Joyride steps for the walkthrough
+  const steps = [
+    {
+      target: '[data-tour="home-link"]',
+      content: 'Click here to go to the Home page.'
+    },
+    {
+      target: '[data-tour="dashboard-link"]',
+      content: 'This is your Dashboard where you can track your progress.'
+    },
+    {
+      target: '[data-tour="study-menu"]',
+      content: 'Hover here to explore study resources and sheets.'
+    },
+    {
+      target: '[data-tour="practice-menu"]',
+      content: 'Hover here to practice quizzes and test series.'
+    },
+    {
+      target: '[data-tour="dark-mode-toggle"]',
+      content: 'Toggle between Light and Dark mode here.'
+    },
+    {
+      target: '[data-tour="login-link"]',
+      content: 'Login using this'
+    },
+    {
+      target: '[data-tour="sign-link"]',
+      content: 'Sign in using this'
+    },
+    
+    // {
+    //   target:'[data-tour="modal-link"]',
+    //   content:"Website Under Maintainance"
+    // }
+  ]
+
   return (
     <>
-      <header id='home' className='relative h-[73px] w-full'>
+      {/* Joyride component */}
+      <Joyride
+        steps={steps}
+        run={runTour}
+        continuous={true}
+        showSkipButton={true}
+        styles={{
+          options: {
+            zIndex: 10000
+          }
+        }}
+        callback={data => {
+          if (data.status === 'finished' || data.status === 'skipped') {
+            setRunTour(false)
+          }
+        }}
+      />
+
+      <header className='relative bg-primary h-[60px] w-full'>
         <nav
           className={`fixed w-full flex justify-between 
            px-3 md:px-5 pl-1
@@ -500,14 +579,7 @@ export default function Header () {
                   </NavLink>
                 </>
               )}
-            </div>
-          </div>
-          <div className='lg:hidden flex'>
-            <IconButton onClick={toggleMenu}>
-              <Menu />
-            </IconButton>
-          </div>
-        </nav>
+            </li>
 
         <span
           onClick={toggleMenu}
@@ -527,10 +599,6 @@ export default function Header () {
                 onClick={() => {
                   setMenuOpen(false)
                 }}
-                smooth
-                duration={500}
-                to='about'
-                className='text-gray-800 mt-6 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
               >
                 About
               </ScrollLink>
@@ -594,8 +662,9 @@ export default function Header () {
                 </>
               )}x
       </header>
+
+      {/* Button to start the walkthrough */}
     </>
   )
 }
 
-=== END OF PREVIOUS CODE === */

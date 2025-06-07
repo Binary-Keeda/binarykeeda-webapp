@@ -1,208 +1,273 @@
-import React, { useEffect, useState } from "react";
-import problemset from "../data/coding.json";
-import { ArrowRight, KeyboardArrowRight, MenuOpen } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import problemset from "../data/coding_with_difficulty.json";
+import { Article, ExpandMore, Shuffle } from "@mui/icons-material";
+import { IconButton, LinearProgress } from "@mui/material";
+import {} from "@mui/material";
 import { Link } from "react-router-dom";
+export default ({ setStats }) => {
+  const [problems, setProblems] = useState([]);
+  const [completed, setCompleted] = useState({});
 
-export default function ProblemSet() {
-  const [progress, setProgress] = useState({
-    noOfProblems: 0,
-    problemsSolved: 0,
-  });
-  const [problemByTopic, setProblemByTopic] = useState({});
-  const [showProgress, setShowProgress] = useState(false);
+  useEffect(() => {
+    setProblems(problemset);
+    const stored = JSON.parse(localStorage.getItem("completed")) || {};
+    setCompleted(stored);
+  }, []);
 
-  const selectTask = (name, topic) => {
-    const key = `${name}+${topic}`;
-    if (localStorage.getItem(key)) {
-      localStorage.removeItem(key);
+  const handleCheckboxChange = (topicIdx, problemIdx) => {
+    const newCompleted = { ...completed };
+
+    if (!newCompleted[`topic-${topicIdx}`])
+      newCompleted[`topic-${topicIdx}`] = [];
+
+    const idx = newCompleted[`topic-${topicIdx}`].indexOf(problemIdx);
+    if (idx === -1) {
+      newCompleted[`topic-${topicIdx}`].push(problemIdx);
     } else {
-      localStorage.setItem(key, "selected");
+      newCompleted[`topic-${topicIdx}`].splice(idx, 1);
     }
-    updateProgress();
+
+    setCompleted(newCompleted);
+    localStorage.setItem("completed", JSON.stringify(newCompleted));
   };
 
-  const selectQuestion = (name, topic) => {
-    const key = `${name}+${topic}`;
-    if (localStorage.getItem(key)) {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, "selected");
-    }
-    updateProgress();
-  };
-
-  const updateProgress = () => {
+  const getGlobalStats = () => {
     let total = 0;
-    let completed = 0;
-    let problemsByTopic = {};
+    let done = 0;
 
-    problemset.forEach((topic) => {
-      problemsByTopic[topic.topicName] = 0;
+    let easy = 0,
+      medium = 0,
+      hard = 0;
+    let easyDone = 0,
+      mediumDone = 0,
+      hardDone = 0;
 
-      topic.tasks?.forEach((task) => {
+    problems.forEach((topic, topicIdx) => {
+      topic.problems.forEach((p, problemIdx) => {
         total++;
-        if (localStorage.getItem(`${task.title}+${topic.topicName}`)) {
-          completed++;
-        }
-      });
 
-      topic.problems?.forEach((problem) => {
-        total++;
-        const key = `${problem.title}+${topic.topicName}`;
-        if (localStorage.getItem(key)) {
-          completed++;
-          problemsByTopic[topic.topicName]++;
+        const isCompleted =
+          completed[`topic-${topicIdx}`]?.includes(problemIdx);
+
+        // Count difficulty
+        switch (p.difficulty) {
+          case "Easy":
+            easy++;
+            if (isCompleted) easyDone++;
+            break;
+          case "Medium":
+            medium++;
+            if (isCompleted) mediumDone++;
+            break;
+          case "Hard":
+            hard++;
+            if (isCompleted) hardDone++;
+            break;
+          default:
+            break;
         }
+
+        // Count total done
+        if (isCompleted) done++;
       });
     });
 
-    setProblemByTopic(problemsByTopic);
-    setProgress({ noOfProblems: total, problemsSolved: completed });
+    return {
+      total,
+      done,
+      easy,
+      easyDone,
+      medium,
+      mediumDone,
+      hard,
+      hardDone,
+    };
   };
 
   useEffect(() => {
-    updateProgress();
-  }, []);
+    if (problems.length > 0) {
+      setStats(getGlobalStats());
+    }
+  }, [problems]);
 
-  const progressPercentage =
-    progress.noOfProblems > 0
-      ? Math.round((progress.problemsSolved / progress.noOfProblems) * 100)
-      : 0;
+  useEffect(() => {
+    setStats(getGlobalStats());
+  }, [completed]);
+  const { total, done, easy, medium, hard } = getGlobalStats();
 
   return (
-    <div className="flex flex-col w-full">
-      {/* Progress Header Section - Sticky */}
-      <div className="sticky px-6 py-4 top-[73px] z-50 bg-gray-50 dark:bg-gray-800 pb-4 pt-3 border-b border-gray-200 dark:border-gray-700">
-        <div className="text-left">
-          {progress.problemsSolved > 0 ? (
-            <p className="text-xl font-medium text-gray-800 dark:text-gray-300 italic">
-              You're making progress!{" "}
-              <span className="font-bold text-[#db5602]">
-                {progress.problemsSolved}
-              </span>{" "}
-              of{" "}
-              <span className="font-bold text-[#db5602]">
-                {progress.noOfProblems}
-              </span>{" "}
-              problems completed (
-              <span className="font-bold">{progressPercentage}%</span>)
-            </p>
-          ) : (
-            <p className="text-xl font-medium text-gray-800 dark:text-gray-300">
-              <span className="font-bold text-[#db5602]">
-                {progress.noOfProblems}
-              </span>{" "}
-              problems waiting to be solved!
-            </p>
-          )}
+    <main className="mt-10 flex flex-col">
+      <div className="relative flex w-full mb-5 justify-between px-7 py-5 rounded-lg text-gray-700 bg-primary dark:bg-support bg-clip-border">
+        <div>
+          <h5 className="text-xl font-semibold">DSA Sheet</h5>
+          <p className="text-base">Track progress across all topics</p>
         </div>
-        <div className="w-full mt-3 px-2">
-          <div className="w-full h-2.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-            <div
-              className="h-2.5 bg-gradient-to-r from-[#db5602] to-orange-500 rounded-full transition-all duration-700 ease-in-out shadow-inner"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
+        <div className="h-10">
+          <IconButton color="inherit">
+            <Shuffle color="inherit" />
+          </IconButton>
         </div>
       </div>
 
-      {/* Problems List Section */}
-      <div className="flex-1 flex flex-col gap-3 w-full p-6">
-        {problemset.map((topic, index) => (
-          <div
-            key={index}
-            className="rounded-lg bg-clip-border shadow-md dark:bg-gray-800 text-gray-900 dark:text-gray-50 bg-white transition-shadow duration-300"
-          >
-            <h3 className="text-2xl px-6 py-5 font-bold leading-none border-slate-100 text-gray-800 dark:text-gray-50 bg-orange-50 dark:bg-gray-700">
-              {`Topic ${index + 1}: ${topic.topicName}`}
-            </h3>
+      {problems?.map((p, idx) => (
+        <Accordion
+          key={idx}
+          idx={idx}
+          data={p.problems}
+          title={p.topicName}
+          completed={completed[`topic-${idx}`] || []}
+          handleCheck={(problemIdx) => handleCheckboxChange(idx, problemIdx)}
+        />
+      ))}
+    </main>
+  );
+};
+const Accordion = ({ title, idx, data, completed, handleCheck }) => {
+  const [showData, setShowData] = useState(false);
 
-            <hr className="dark:border-gray-600" />
+  return (
+    <div className={`w-full flex-col bg-primary dark:bg-support border-b`}>
+      <button
+        onClick={() => setShowData((prev) => !prev)}
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-7 py-3 sm:py-5 w-full gap-2 sm:gap-4"
+      >
+        {/* Left Side: Expand Icon + Topic + Title */}
+        <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto min-w-0 gap-1 sm:gap-4">
+          {/* Line 1: Expand Icon + Topic */}
+          <div className="flex items-center flex-shrink-0 w-[100px] sm:w-[120px] min-w-[100px]">
+            <ExpandMore
+              className={`flex-shrink-0 transition-transform duration-300 ${
+                showData ? "rotate-360" : "-rotate-90"
+              }`}
+            />
+            <span className="ml-2 font-semibold text-lg">{`Topic ${
+              idx + 1
+            }`}</span>
+          </div>
 
-            <div>
-              {topic.tasks?.map((task, idx) => (
-                <div
-                  className="flex hover:bg-gray-50 hover:dark:bg-gray-600 justify-between dark:text-gray-50 items-center border-b dark:border-gray-700 py-5 px-6 last:border-b-0"
-                  key={idx}
-                >
-                  <p className="text-lg px-4 font-normal leading-none dark:text-gray-50 text-gray-800">
-                    {task.title ? idx + ". " : ""} {task?.title || task?.task}
-                  </p>
-                  {task.title && (
-                    <div className="flex px-4 gap-8 items-center">
-                      <a
-                        href="#"
-                        className="hover:underline text-base font-medium"
-                      >
-                        Description
-                      </a>
-                      <a
-                        className="text-sky-700 hover:underline text-base font-medium"
-                        href={task?.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Link
-                      </a>
-                      <input
-                        checked={
-                          !!localStorage.getItem(
-                            `${task.title}+${topic.topicName}`
-                          )
-                        }
-                        type="checkbox"
-                        className="cursor-pointer w-5 h-5"
-                        onChange={() =>
-                          selectTask(task?.title, topic.topicName)
-                        }
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
+          {/* Line 2: Title (stacked under Topic on mobile, inline on desktop) */}
+          <div className="ml-8 sm:ml-0 sm:mt-0">
+            <span
+              className="font-semibold text-base sm:text-lg text-left block text-ellipsis overflow-hidden"
+              title={title}
+            >
+              {title}
+            </span>
+          </div>
+        </div>
 
-              {topic.problems?.map((problem, idx) => (
-                <div
-                  className="flex hover:bg-gray-50 hover:dark:bg-gray-700 justify-between dark:text-gray-50 items-center border-b dark:border-gray-700 py-5 px-6 last:border-b-0"
-                  key={idx}
-                >
-                  <p className="text-lg px-4 font-normal leading-none dark:text-gray-50 text-gray-700">
-                    {problem?.title}
-                  </p>
-                  <div className="flex px-4 gap-8 items-center">
-                    <a
-                      href="#"
-                      className="hover:underline text-base font-medium"
+        {/* Right Side: Progress Bar + Count */}
+        <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto sm:min-w-[200px]">
+          <LinearProgress
+            variant="determinate"
+            value={(completed.length / data.length) * 100}
+            sx={{
+              height: 8,
+              width: "100%",
+              minWidth: 150,
+              maxWidth: 370,
+              borderRadius: 5,
+              backgroundColor: "#inherit",
+              "& .MuiLinearProgress-bar": {
+                borderRadius: 5,
+                backgroundColor: "#f7931e",
+              },
+            }}
+          />
+          <span className="text-sm sm:text-base w-full text-right sm:text-left">
+            {completed.length} / {data.length}
+          </span>
+        </div>
+      </button>
+
+      {showData && (
+        <div className="px-4 sm:px-7 pb-4">
+          <ProblemTable
+            data={data}
+            completed={completed}
+            handleCheck={handleCheck}
+            topicName={title}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ProblemTable = ({ data, completed, handleCheck , topicName }) => {
+  return (
+    <div className="relative mt-4 overflow-x-auto flex flex-col w-full h-full dark:text-white dark:bg-bg-secondary text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
+      <table className="w-full text-left table-auto">
+        <thead>
+          <tr>
+            {["Problem", "Difficulty", "Article", "Link", "Status"].map((h) => (
+              <th
+                key={h}
+                className="p-4 border-b bg-blue-gray-50/50 text-sm opacity-70"
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((problem, idx) =>
+            problem.title ? (
+              <>
+                <tr key={idx}>
+                  <td className="p-4 border-b max-w-[180px] sm:max-w-[300px] overflow-hidden line-clamp-2">
+                    {problem.title}
+                  </td>
+                  <td className="p-4 border-b">
+                    <span
+                      className={`px-2 py-1 text-xs font-bold rounded-md ${
+                        problem.difficulty === "Easy"
+                          ? "bg-blue-500/20 text-blue-900"
+                          : problem.difficulty === "Medium"
+                          ? "bg-green-500/20 text-green-900"
+                          : "bg-red-500/20 text-red-900"
+                      }`}
                     >
-                      Description
-                    </a>
+                      {problem.difficulty}
+                    </span>
+                  </td>
+                  <td className='p-4 border-b'>
+                    <Link to={`/user/binarykeeda-dsa-sheet/description/${encodeURIComponent(topicName)}/${encodeURIComponent(problem.title)}`}>
+                      <Article />
+                    </Link>
+                  </td>
+                  <td className="p-4 border-b">
                     <a
-                      className="text-sky-700 hover:underline text-base font-medium"
-                      href={problem?.link}
+                      href={problem.link}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       Link
                     </a>
+                  </td>
+                  <td className="p-4 border-b">
                     <input
-                      checked={
-                        !!localStorage.getItem(
-                          `${problem.title}+${topic.topicName}`
-                        )
-                      }
                       type="checkbox"
-                      className="cursor-pointer w-5 h-5"
-                      onChange={() =>
-                        selectQuestion(problem?.title, topic.topicName)
-                      }
+                      checked={completed.includes(idx)}
+                      onChange={() => handleCheck(idx)}
                     />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+                  </td>
+                </tr>
+              </>
+            ) : (
+              <>
+                <tr>
+                  <td className="p-4 border-b">{problem.task}</td>
+                  <td className="p-4 border-b"></td>
+                  <td className="p-4 border-b"></td>
+                  <td className="p-4 border-b"></td>
+                  <td className="p-4 border-b"></td>
+                </tr>
+              </>
+            )
+          )}
+        </tbody>
+      </table>
     </div>
   );
-}
+};

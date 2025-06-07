@@ -11,29 +11,26 @@ const Submissions = () => {
         getSubmissions()
     }, [])
     return (
-        <section className=' bg-white mt-9 shadow-lg rounded-lg gap-6 dark:text-gray-50 text-gray-700 flex flex-col  dark:bg-gray-800 '>
+        <section className=' bg-white mt-9 shadow-lg rounded-lg gap-6   flex flex-col '>
 
-            <div className='relative flex flex-col  w-full h-full custom-scrollbar overflow-scroll dark:text-gray-50 dark:bg-gray-800 text-gray-700 bg-white shadow-md rounded-lg bg-clip-border'>
+            <div className='relative flex flex-col  w-full h-full custom-scrollbar overflow-scroll    bg-white shadow-md  bg-clip-border'>
                 <table className='w-full text-left table-auto min-w-max'>
-                    <thead>
+                    <thead className="bg-support rounded-t-lg">
                         <tr>
-                            <td className='p-4 border-b border-slate-200 dark:bg-gray-800 bg-slate-50'>
-                                <p className='text-sm font-normal leading-none text-slate-500'>
+                            <td className='p-4 border-b border-slate-200 '>
+                                <p className='text-sm font-normal leading-none '>
                                     Quiz Name
                                 </p>
                             </td>
-                            <td className='p-4 border-b border-slate-200 dark:bg-gray-800 bg-slate-50'>
-                                <p className='text-sm font-normal leading-none text-slate-500'>
-                                    Initiated At
-                                </p>
-                            </td>
-                            <td className='p-4 border-b border-slate-200 dark:bg-gray-800 bg-slate-50'>
-                                <p className='text-sm font-normal leading-none text-slate-500'>
+                       
+                            <td className='p-4 border-b border-slate-200 '>
+                                <p className='text-sm font-normal leading-none '>
                                     Submitted At
                                 </p>
                             </td>
-                            <td className='p-4 border-b border-slate-200 dark:bg-gray-800 bg-slate-50'>
-                                <p className='text-sm font-normal leading-none text-slate-500'>
+                      
+                            <td className='p-4 border-b border-slate-200 '>
+                                <p className='text-sm font-normal leading-none '>
                                     Preview
                                 </p>
                             </td>
@@ -44,27 +41,23 @@ const Submissions = () => {
                             return (
                                 <tr
                                     key={item._id}
-                                    className='hover dark:bg-gray-800:bg-slate-50 border-b border-slate-200'
+                                    className='hover bg-primary border-b border-slate-200'
                                 >
                                     <td className='p-4 py-5'>
-                                        <p className='block font-semibold text-sm dark:text-gray-50 text-slate-800'>
+                                        <p className='block font-semibold text-sm  dark:text-white text-slate-800'>
                                             {item.quizId.title}
                                         </p>
                                     </td>
+                           
                                     <td className='p-4 py-5'>
-                                        <p className='block font-semibold text-sm dark:text-gray-50 text-slate-800'>
-                                            {formatDateTime(item.createdAt)}
-                                        </p>
-                                    </td>
-                                    <td className='p-4 py-5'>
-                                        <p className='block font-semibold text-sm dark:text-gray-50 text-slate-800'>
+                                        <p className='block font-semibold text-sm  dark:text-white text-slate-800'>
                                             {formatDateTime(item.updatedAt)}
                                         </p>
                                     </td>
                                     <td className='p-4 py-5'>
                                         <Link
                                             to={`/user/preview/${item._id}`}
-                                            className='block font-semibold text-sm dark:text-gray-50 text-slate-800'
+                                            className='block font-semibold text-sm  dark:text-white text-slate-800'
                                         >
                                             <Assessment />
                                         </Link>

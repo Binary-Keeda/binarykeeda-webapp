@@ -5,7 +5,7 @@ import {
 } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { useState } from 'react'
-import { BASE_URL } from '../lib/config'
+import { BASE_URL, LOGO } from '../lib/config'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
@@ -73,7 +73,7 @@ const VerifyPage = () => {
 
       <div className='mb-10 overflow-hidden relative'>
         <img
-          src='/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg'
+          src={LOGO}
           className='h-14 rounded-md'
           alt='Logo'
         />
