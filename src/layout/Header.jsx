@@ -13,7 +13,6 @@ import {
 } from '@mui/icons-material'
 import { IconButton, Fade, Backdrop } from '@mui/material'
 
-// Resources dropdown configuration
 const resourcesConfig = [
   {
     id: 'sheets',
@@ -475,196 +474,196 @@ export default function Header () {
 
   return (
     <>
-      {/* Joyride component */}
-      <Joyride
-        steps={steps}
-        run={runTour}
-        continuous={true}
-        showSkipButton={true}
-        styles={{
-          options: {
-            zIndex: 10000
-          }
-        }}
-        callback={data => {
-          if (data.status === 'finished' || data.status === 'skipped') {
-            setRunTour(false)
-          }
-        }}
-      />
+      // {/* Joyride component */
+//       <Joyride
+//         steps={steps}
+//         run={runTour}
+//         continuous={true}
+//         showSkipButton={true}
+//         styles={{
+//           options: {
+//             zIndex: 10000
+//           }
+//         }}
+//         callback={data => {
+//           if (data.status === 'finished' || data.status === 'skipped') {
+//             setRunTour(false)
+//           }
+//         }}
+//       />
 
-      <header className='relative bg-primary h-[60px] w-full'>
-        <nav
-          className={`fixed w-full flex justify-between 
-           px-3 md:px-5 pl-1
-           transition-all duration-200  items-center h-[73px] top-0 bg-gradient-to-br from-[#faf7f4] via-[#f8f4f0] to-[#f5f1ed] z-40`}
-        >
-          <div className='flex items-center gap-6'>
-            <ScrollLink to='home' smooth className='cursor-pointer'>
-              <Link to={'/'}>
-                <img
-                  src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
-                  className='h-10'
-                  alt=''
-                />
-              </Link>
-            </ScrollLink>
-          </div>
-          <div className='lg:flex hidden'>
-            <div className='flex gap-2'>
-              <div className='flex items-center gap-6 mr-5'>
-                <ScrollLink
-                  to={'about'}
-                  smooth
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  About
-                </ScrollLink>
-                <ScrollLink
-                  to={'features'}
-                  smooth
-                  offset={-60}
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  Features
-                </ScrollLink>
-                <Link to={'/binary-keeda-sheet'} className='relative'>
-                  BK Sheet
-                </Link>
-                <ScrollLink
-                  to={'contact'}
-                  smooth
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  Contact Us
-                </ScrollLink>
-              </div>
-              {!user ? (
-                <>
-                  <NavLink
-                    to='/login'
-                    className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-black hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  >
-                    Login
-                  </NavLink>
-                  <NavLink
-                    to='/register'
-                    className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  >
-                    Sign Up
-                  </NavLink>
-                </>
-              ) : (
-                <>
-                  <NavLink
-                    to={`/${user.role}`}
-                    className='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
-                  >
-                    Continue to Dashboard
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                      className='w-4 h-4 ml-1.5'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
-                  </NavLink>
-                </>
-              )}
-            </li>
+//       <header className='relative bg-primary h-[60px] w-full'>
+//         <nav
+//           className={`fixed w-full flex justify-between 
+//            px-3 md:px-5 pl-1
+//            transition-all duration-200  items-center h-[73px] top-0 bg-gradient-to-br from-[#faf7f4] via-[#f8f4f0] to-[#f5f1ed] z-40`}
+//         >
+//           <div className='flex items-center gap-6'>
+//             <ScrollLink to='home' smooth className='cursor-pointer'>
+//               <Link to={'/'}>
+//                 <img
+//                   src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
+//                   className='h-10'
+//                   alt=''
+//                 />
+//               </Link>
+//             </ScrollLink>
+//           </div>
+//           <div className='lg:flex hidden'>
+//             <div className='flex gap-2'>
+//               <div className='flex items-center gap-6 mr-5'>
+//                 <ScrollLink
+//                   to={'about'}
+//                   smooth
+//                   duration={1000}
+//                   className='cursor-pointer nav-link'
+//                 >
+//                   About
+//                 </ScrollLink>
+//                 <ScrollLink
+//                   to={'features'}
+//                   smooth
+//                   offset={-60}
+//                   duration={1000}
+//                   className='cursor-pointer nav-link'
+//                 >
+//                   Features
+//                 </ScrollLink>
+//                 <Link to={'/binary-keeda-sheet'} className='relative'>
+//                   BK Sheet
+//                 </Link>
+//                 <ScrollLink
+//                   to={'contact'}
+//                   smooth
+//                   duration={1000}
+//                   className='cursor-pointer nav-link'
+//                 >
+//                   Contact Us
+//                 </ScrollLink>
+//               </div>
+//               {!user ? (
+//                 <>
+//                   <NavLink
+//                     to='/login'
+//                     className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-black hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+//                   >
+//                     Login
+//                   </NavLink>
+//                   <NavLink
+//                     to='/register'
+//                     className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+//                   >
+//                     Sign Up
+//                   </NavLink>
+//                 </>
+//               ) : (
+//                 <>
+//                   <NavLink
+//                     to={`/${user.role}`}
+//                     className='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+//                   >
+//                     Continue to Dashboard
+//                     <svg
+//                       xmlns='http://www.w3.org/2000/svg'
+//                       viewBox='0 0 24 24'
+//                       fill='currentColor'
+//                       className='w-4 h-4 ml-1.5'
+//                     >
+//                       <path
+//                         fillRule='evenodd'
+//                         d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
+//                         clipRule='evenodd'
+//                       />
+//                     </svg>
+//                   </NavLink>
+//                 </>
+//               )}
+//             </li>
 
-        <span
-          onClick={toggleMenu}
-          className={`${
-            menuOpen ? '' : 'hidden '
-          } fixed top-0 left-0 z-40 h-[100vh] w-[100vw] bg-black bg-opacity-60`}
-        ></span>
-        <header
-          className={` ${
-            menuOpen ? 'translate-x-0' : '-translate-x-full'
-          }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
-        >
-          <ul className='px-5 py-7 flex justify-between h-full flex-col'>
-            <div className='flex flex-col gap-2 '>
-              <img className='w-[140px]' src='/assets/logo.jpg' alt='' />
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-              >
-                About
-              </ScrollLink>
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='features'
-                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                Features
-              </ScrollLink>
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='content'
-                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                Quiz Portal
-              </ScrollLink>
-              <ScrollLink
-                onClick={() => {
-                  setMenuOpen(false)
-                }}
-                smooth
-                duration={500}
-                to='contact'
-                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
-              >
-                Contact
-              </ScrollLink>
-              <hr className='my-5' />
-              {user ? (
-                <>
-                  <NavLink
-                    to={'/user'}
-                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
-                  >
-                    Dashboard
-                  </NavLink>
-                </>
-              ) : (
-                <>
-                  <NavLink
-                    to={'/login'}
-                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
-                  >
-                    Login
-                  </NavLink>
-                  <NavLink
-                    to={'/register'}
-                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
-                  >
-                    Signup
-                  </NavLink>
-                </>
-              )}x
-      </header>
+//         <span
+//           onClick={toggleMenu}
+//           className={`${
+//             menuOpen ? '' : 'hidden '
+//           } fixed top-0 left-0 z-40 h-[100vh] w-[100vw] bg-black bg-opacity-60`}
+//         ></span>
+//         <header
+//           className={` ${
+//             menuOpen ? 'translate-x-0' : '-translate-x-full'
+//           }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
+//         >
+//           <ul className='px-5 py-7 flex justify-between h-full flex-col'>
+//             <div className='flex flex-col gap-2 '>
+//               <img className='w-[140px]' src='/assets/logo.jpg' alt='' />
+//               <ScrollLink
+//                 onClick={() => {
+//                   setMenuOpen(false)
+//                 }}
+//               >
+//                 About
+//               </ScrollLink>
+//               <ScrollLink
+//                 onClick={() => {
+//                   setMenuOpen(false)
+//                 }}
+//                 smooth
+//                 duration={500}
+//                 to='features'
+//                 className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
+//               >
+//                 Features
+//               </ScrollLink>
+//               <ScrollLink
+//                 onClick={() => {
+//                   setMenuOpen(false)
+//                 }}
+//                 smooth
+//                 duration={500}
+//                 to='content'
+//                 className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
+//               >
+//                 Quiz Portal
+//               </ScrollLink>
+//               <ScrollLink
+//                 onClick={() => {
+//                   setMenuOpen(false)
+//                 }}
+//                 smooth
+//                 duration={500}
+//                 to='contact'
+//                 className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
+//               >
+//                 Contact
+//               </ScrollLink>
+//               <hr className='my-5' />
+//               {user ? (
+//                 <>
+//                   <NavLink
+//                     to={'/user'}
+//                     className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+//                   >
+//                     Dashboard
+//                   </NavLink>
+//                 </>
+//               ) : (
+//                 <>
+//                   <NavLink
+//                     to={'/login'}
+//                     className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+//                   >
+//                     Login
+//                   </NavLink>
+//                   <NavLink
+//                     to={'/register'}
+//                     className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+//                   >
+//                     Signup
+//                   </NavLink>
+//                 </>
+//               )}x
+//       </header>
 
-      {/* Button to start the walkthrough */}
-    </>
-  )
-}
+//       {/* Button to start the walkthrough */}
+//     </>
+//   )
+// }
 
