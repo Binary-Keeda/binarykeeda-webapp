@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+
 import Layout from '../layout/Layout'
-import Hero from '../components/Home/Hero'
-import About from '../components/Home/About'
-import Showcase from '../components/Home/ShowCase'
-import Features from '../components/Home/Features'
-import Content from '../components/Home/Content'
+import Hero from '../components/Home/Hero';
+import About from '../components/Home/About';
+import Showcase from '../components/Home/ShowCase';
+import Footer from '../components/Home/Footer';
 
 const Home = () => {
   const [userInfoModal, setUserInfoModal] = useState(false)
@@ -18,14 +17,15 @@ const Home = () => {
   }, [])
 
   return (
-    <section>
-      {userInfoModal && <InfoModal setUserInfoModal={setUserInfoModal} />}
+    <>
+    <section className='bg-landingPage'>
       <Hero />
       <DynamicHeightModal />
       <About />
-      <Showcase />
-      <Content />
+      <Showcase/>
+      <Footer/>
     </section>
+    </>
   )
 }
 

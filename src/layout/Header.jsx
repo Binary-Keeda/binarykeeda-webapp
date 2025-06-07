@@ -1,197 +1,395 @@
-// import React from 'react';
-// import { Avatar, IconButton } from '@mui/material'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { CustomButton } from '../utilities/CustomButton';
-// import { Logout } from '@mui/icons-material';
-// import { Link } from 'react-router-dom';
-// import { logOutUser } from '../redux/reducers/UserThunks';
-// import Cookies from 'js-cookie';
-// const Header = () => {
-//     const { user } = useSelector(s => s.auth)
-//     const dispacth = useDispatch();
-//     const handleLogout = () => {
-//         try {
-//             console.log("Btn clicked")
-//             dispacth(logOutUser(Cookies.get('token')));
-//         } catch (error) {
-//             console.log(error, "logout");
-//         }
-//     };
-//     return (
-//         <>
-//             <header className='h-[65px] z-40  w-full relative'>
-//                 <nav className='border-b-[1px] z-40 bg-white h-[65px] items-center pl-3 pr-5 top-0 w-full relative flex justify-between'>
-//                     <div className='flex items-center gap-7'>
-//                         <img className='h-12' src="/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg" alt="" />
-//                         <a id='w' onClick={(e) => { e.preventDefault(); alert(e.target.id) }} className='text-sm hover:underline' href="">About</a>
-//                         <a className='text-sm hover:underline ml-2' href="">Learning</a>
-//                         <a className='text-sm hover:underline' href="">Mentorship</a>
-//                         <a className='text-sm hover:underline' href="">Test Series</a>
-//                         <a className='text-sm hover:underline' href="">Connect</a>
-//                     </div>
-//                     <div>
-//                         {user ?
-//                             <div className='flex gap-1 items-center'>
-//                                 <Link className='mr-2 text-xs' to={`/${user.role}`}>Dashbord</Link>
-//                                 <Avatar src={user.avata || user.image} />
-//                                 <IconButton onClick={handleLogout}>
-//                                     <Logout className='cursor-pointer' />
-//                                 </IconButton>
-//                             </div> :
-//                             <div className='flex  h-auto items-center gap-3'>
-//                                 {/* <a className="flex items-center w-[100px] text-gray-300 justify-center rounded-md hover:bg-[rgba(29,30,32,.9)] transition-all duration-300 p-2 bg-[rgba(29,30,32,1)]"  href="">Login</a>
-//                                 <a className="flex items-center w-[100px] text-gray-300 justify-center rounded-md hover:bg-[rgba(29,30,32,.9)] transition-all duration-300 p-2 bg-[rgba(29,30,32,1)]" href="">Sign Up</a> */}
-//                                 <a href="/login">Login</a>
-//                                 <hr className='w-[1px] h-[17px] bg-[rgba(29,30,32,1)]' />
-//                                 <a href="/register">Sign Up</a>
-//                             </div>
-//                         }
-//                     </div>
-//                 </nav>
+import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link as ScrollLink } from 'react-scroll'
+import {
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  ExpandMore as ExpandMoreIcon,
+  MenuBook,
+  Person,
+  Dashboard
+} from '@mui/icons-material'
+import { IconButton, Fade, Backdrop } from '@mui/material'
 
-//             </header>
-//         </>
-//     );
-// }
+// Resources dropdown configuration
+const resourcesConfig = [
+  {
+    id: 'sheets',
+    title: 'BK Sheets',
+    description: 'Comprehensive study materials and cheat sheets',
+    icon: MenuBook,
+    path: '/binary-keeda-sheet',
+    color: 'bg-blue-50 group-hover:bg-blue-100'
+  },
+ 
+]
 
-// export default Header;
+// Navigation links configuration
+const navigationLinks = [
+  { id: 'about', label: 'About Us', scrollTo: 'about' },
+  { id: 'features', label: 'Why Us', scrollTo: 'features' },
+  { id: 'contact', label: 'Contact Us', scrollTo: 'contact' }
+]
 
-// import { Menu } from '@mui/icons-material'
-// import { IconButton } from '@mui/material'
-// import React, { useEffect, useState } from 'react'
-// import { useSelector } from 'react-redux'
-// import { Link, Link as NavLink } from 'react-router-dom'
-// import { Link as ScrollLink } from 'react-scroll'
-// import { ExpandMore, DarkMode , LightMode } from '@mui/icons-material'
-// import { LOGO } from '../lib/config'
-// export default function Header () {
-//   const [menuOpen, setMenuOpen] = useState(false)
-//   const { user } = useSelector(s => s.auth)
-//   const [practiceOpen, setPracticeOpen] = useState(false)
-//   const [studyOpen, setStudyOpen] = useState(false)
-//   const [darkMode, setDarkMode] = useState(false)
-//   const toggleMode = () => {
-//     localStorage.setItem('mode', darkMode ? 'light' : 'dark')
-//     setDarkMode(!darkMode)
-//   }
+// Resources Dropdown Component
+const ResourcesDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const timeoutRef = useRef(null)
+  const dropdownRef = useRef(null)
 
-//   useEffect(() => {
-//     const mode = localStorage.getItem('mode')
-//     if (mode === 'dark') {
-//       document.getElementById('root').classList.add('dark')
-//       setDarkMode(true)
-//     } else {
-//       document.getElementById('root').classList.remove('dark')
-//       setDarkMode(false)
-//     }
-//   }, [darkMode])
-//   useEffect(() => {
-//     window.addEventListener('scroll', () => {
-//       if (window.scrollY > 1) {
-//         setScroll(true)
-//       } else {
-//         setScroll(false)
-//       }
-//     })
-//   }, [])
-//   const toggleMenu = () => {
-//     setMenuOpen(!menuOpen)
-//   }
-//   return (
-//     <>
-//       <header className='relative  bg-primary h-[60px] w-full'>
-//         <nav
-//           onMouseLeave={() => {
-//             setPracticeOpen(false)
-//             setStudyOpen(false)
-//           }}
-//           className='fixed shadow-sm bg-bg-primary dark:bg-support flex items-center px-3 pr-16 justify-between h-[60px] w-full  z-10'
-//         >
-//           <img src={LOGO} className='h-10' alt='Logo' />
-//           <ul className='list-none gap-4 text-sm flex items-center'>
-//             <li className='nav-link mr-2 cursor-pointer'>
-//               <Link to={'/'}>Home</Link>
-//             </li>
-//             <li className='nav-link mr-2 cursor-pointer'>
-//               <Link to={'/user'}>Dashboard</Link>
-//             </li>
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setIsHovered(true)
+    setIsOpen(true)
+  }
 
-//             <li
-//               className='nav-link cursor-pointer  flex items-center'
-//               onMouseEnter={() => {
-//                 setStudyOpen(true), setPracticeOpen(false)
-//               }}
-//             >
-//               Study
-//               <ExpandMore
-//                 sx={{
-//                   fontSize: 20,
-//                   transition: 'transform 0.5s ease',
-//                   transform: studyOpen ? 'rotate(360deg)' : 'rotate(0deg)'
-//                 }}
-//               />
-//               {studyOpen && (
-//                 <ul className='dropdown-header'>
-//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-//                     <Link to={'/user/binarykeeda-dsa-sheet'}>DSA Sheet</Link>
-//                   </li>
-//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-//                     <Link to={'/user/binarykeeda-210-sheet'}>
-//                       210 Roadmaps Sheet
-//                     </Link>
-//                   </li>
-//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-//                     <Link to={'/user/binarykeeda-roadmap-sheet'}>Roadmaps</Link>
-//                   </li>
-//                 </ul>
-//               )}
-//             </li>
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    timeoutRef.current = setTimeout(() => {
+      if (isHovered) {
+        setIsOpen(false)
+      }
+    }, 150)
+  }
 
-//             <li
-//               className='nav-link mr-2 cursor-pointer  flex items-center'
-//               onMouseEnter={() => {
-//                 setPracticeOpen(true)
-//                 setStudyOpen(false)
-//               }}
-//             >
-//               Practice
-//               <ExpandMore
-//                 sx={{
-//                   fontSize: 20,
-//                   transition: 'transform 0.2s ease',
-//                   transform: practiceOpen ? 'rotate(180deg)' : 'rotate(0deg)'
-//                 }}
-//               />
-//               {practiceOpen && (
-//                 <ul className='dropdown-header'>
-//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-//                     <Link to={'/user/test-series'}>Test Series</Link>
-//                   </li>
-//                   <li className='px-4 py-1 text-pretty   text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-//                     <Link to={'/user/practice'}>Go to quiz section</Link>
-//                   </li>
-//                 </ul>
-//               )}
-//             </li>
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
-//             <li>
-//               {' '}
-//               <span onClick={toggleMode} className='cursor-pointer'>
-//                 {' '}
-//                 {darkMode ? (
-//                   <LightMode sx={{ fontSize: 21 }} />
-//                 ) : (
-//                   <DarkMode sx={{ fontSize: 21 }} />
-//                 )}
-//               </span>
-//             </li>
-//           </ul>
-//         </nav>
-//       </header>
-//     </>
-//   )
-// }
+  return (
+    <div className="" ref={dropdownRef}>
+      <button
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="flex items-center gap-1 px-4 py-2 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-200 hover:bg-gray-50/80"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+      >
+        Resources
+        <ExpandMoreIcon 
+          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          sx={{ fontSize: 18 }}
+        />
+      </button>
 
+      <Fade in={isOpen} timeout={200}>
+        <div
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="absolute top-full left-1/4 mt-2 w-96 bg-neutral-100 rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden"
+          style={{ display: isOpen ? 'block' : 'none' }}
+        >
+          <div className="p-2" >
+            <div className="grid grid-cols-2 gap-2">
+              {resourcesConfig.map((item) => {
+                const IconComponent = item.icon
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    className="group flex items-start gap-3 p-4 rounded-lg hover:shadow-md transition-all duration-200 border border-transparent hover:border-gray-100"
+                  >
+                    <div className={`flex-shrink-0 p-2 rounded-lg ${item.color} transition-colors duration-200`}>
+                      <IconComponent 
+                        className="text-gray-700" 
+                        sx={{ fontSize: 20 }} 
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-sm text-gray-900 mb-1 group-hover:text-gray-700">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                        {item.description}
+                      </p>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </Fade>
+    </div>
+  )
+}
+
+// Mobile Menu Component
+const MobileMenu = ({ isOpen, onClose, user }) => {
+  const navigate = useNavigate()
+
+  const handleNavigation = (path) => {
+    navigate(path)
+    onClose()
+  }
+
+  return (
+    <>
+      <Backdrop
+        open={isOpen}
+        onClick={onClose}
+        sx={{ zIndex: 40 }}
+        className="lg:hidden"
+      />
+      
+      <Fade in={isOpen} timeout={300}>
+        <div className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 lg:hidden ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <img
+                  src='./assets/hero/keeda.png'
+                  className='h-10 w-10 rounded-full object-cover'
+                  alt='Binary Keeda'
+                />
+                <span className="text-lg font-bold text-gray-800">Binary Keeda</span>
+              </div>
+              <IconButton onClick={onClose} size="small">
+                <CloseIcon />
+              </IconButton>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <nav className="space-y-4">
+                {navigationLinks.map((link) => (
+                  <ScrollLink
+                    key={link.id}
+                    to={link.scrollTo}
+                    smooth
+                    duration={500}
+                    offset={-80}
+                    onClick={onClose}
+                    className="block px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer font-medium"
+                  >
+                    {link.label}
+                  </ScrollLink>
+                ))}
+
+                {/* Resources Section */}
+                <div className="pt-4">
+                  <h3 className="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                    Resources
+                  </h3>
+                  <div className="space-y-1">
+                    {resourcesConfig.map((item) => {
+                      const IconComponent = item.icon
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => handleNavigation(item.path)}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                        >
+                          <IconComponent sx={{ fontSize: 20 }} className="text-gray-600" />
+                          <div>
+                            <div className="font-medium text-gray-700">{item.title}</div>
+                            <div className="text-sm text-gray-500 line-clamp-1">{item.description}</div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </nav>
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-100 space-y-3">
+              {user ? (
+                <button
+                  onClick={() => handleNavigation(`/${user.role}`)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                >
+                  <Dashboard sx={{ fontSize: 20 }} />
+                  Dashboard
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => handleNavigation('/login')}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                  >
+                    <Person sx={{ fontSize: 20 }} />
+                    Login
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/register')}
+                    className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </Fade>
+    </>
+  )
+}
+
+// PropTypes for MobileMenu
+MobileMenu.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    role: PropTypes.string
+  })
+}
+
+MobileMenu.defaultProps = {
+  user: null
+}
+
+// Main Header Component
+export default function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { user } = useSelector(state => state.auth)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleNavigationClick = (scrollTo) => {
+    if (location.pathname !== '/') {
+      navigate('/')
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(scrollTo)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    }
+  }
+
+  // Close mobile menu on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return (
+    <>
+      <header className="h-20 relative">
+        <nav className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-landingPage shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20">
+              
+              {/* Logo */}
+              <ScrollLink to="home" smooth duration={500} className="cursor-pointer">
+                <Link to="/" className="flex items-center gap-3 group">
+                  <div className="relative">
+                    <img
+                      src="./assets/hero/keeda.png"
+                      className="h-12 w-12 rounded-full object-cover transition-transform group-hover:scale-105"
+                      alt="Binary Keeda Logo"
+                    />
+                  </div>
+                  <span className="text-xl font-bold text-gray-800 hidden sm:block transition-colors group-hover:text-gray-600">
+                    Binary Keeda
+                  </span>
+                </Link>
+              </ScrollLink>
+
+              {/* Desktop Navigation */}
+              <div className="relative hidden lg:flex items-center space-x-1">
+                {navigationLinks.map((link) => {
+                  if(location.pathname === '/') {
+                    return (
+                      <ScrollLink
+                        key={link.id}
+                        to={link.scrollTo}
+                        smooth
+                        duration={500}
+                        offset={-80}
+                        className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-200 hover:bg-gray-50/80 cursor-pointer"
+                      >
+                        {link.label}
+                      </ScrollLink>
+                    )
+                  } else {
+                    return (
+                      <button
+                        key={link.id}
+                        onClick={() => handleNavigationClick(link.scrollTo)}
+                        className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-200 hover:bg-gray-50/80 cursor-pointer"
+                      >
+                        {link.label}
+                      </button>
+                    )
+                  }
+                })}
+                
+                <ResourcesDropdown />
+                {/* Auth Buttons - Desktop */}
+                <div className="hidden lg:flex items-center gap-3">
+                  {user ? (
+                    <Link
+                      to={`/${user.role}`}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+                    >
+                      <Dashboard sx={{ fontSize: 18 }} />
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="px-6 py-2.5 text-gray-700 hover:text-gray-900 font-medium rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 hover:bg-gray-50"
+                    >
+                      Login
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <div className="lg:hidden">
+                <IconButton
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="text-gray-700 hover:text-gray-900"
+                  size="small"
+                >
+                  <MenuIcon />
+                </IconButton>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)}
+        user={user}
+      />
+    </>
+  )
+}
+
+
+/* 
+=== PREVIOUS HEADER CODE (COMMENTED OUT) ===
+Elements with Enhanced Contrast
+import { Menu } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -297,124 +495,176 @@ export default function Header () {
 
       <header className='relative bg-primary h-[60px] w-full'>
         <nav
-          onMouseLeave={() => {
-            setPracticeOpen(false)
-            setStudyOpen(false)
-          }}
-          className='fixed shadow-sm bg-bg-primary dark:bg-support flex items-center px-3 pr-16 justify-between h-[60px] w-full z-10'
+          className={`fixed w-full flex justify-between 
+           px-3 md:px-5 pl-1
+           transition-all duration-200  items-center h-[73px] top-0 bg-gradient-to-br from-[#faf7f4] via-[#f8f4f0] to-[#f5f1ed] z-40`}
         >
-          <img src={LOGO} className='h-10' alt='Logo' />
-
-          <ul className='list-none gap-4 text-sm flex items-center'>
-            <li className='nav-link mr-2 cursor-pointer' data-tour='home-link'>
-              <Link to={'/'}>Home</Link>
-            </li>
-            {user && (
-              <li
-                className='nav-link mr-2 cursor-pointer'
-                data-tour='dashboard-link'
-              >
-                <Link to={'/user'}>Dashboard</Link>
-              </li>
-            )}
-
-            <li
-              className='nav-link cursor-pointer flex items-center'
-              data-tour='study-menu'
-              onMouseEnter={() => {
-                setStudyOpen(true)
-                setPracticeOpen(false)
-              }}
-            >
-              Study
-              <ExpandMore
-                sx={{
-                  fontSize: 20,
-                  transition: 'transform 0.5s ease',
-                  transform: studyOpen ? 'rotate(360deg)' : 'rotate(0deg)'
-                }}
-              />
-              {studyOpen && (
-                <ul className='dropdown-header'>
-                  <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'/user/binarykeeda-dsa-sheet'}>DSA Sheet</Link>
-                  </li>
-                  <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'/user/binarykeeda-210-sheet'}>
-                      210 Roadmaps Sheet
-                    </Link>
-                  </li>
-                  <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                    <Link to={'/user/binarykeeda-roadmap-sheet'}>Roadmaps</Link>
-                  </li>
-                </ul>
+          <div className='flex items-center gap-6'>
+            <ScrollLink to='home' smooth className='cursor-pointer'>
+              <Link to={'/'}>
+                <img
+                  src='https://res.cloudinary.com/drzyrq7d5/image/upload/v1744699895/binarykeeda/zipjouvv161c11xywrwk.jpg'
+                  className='h-10'
+                  alt=''
+                />
+              </Link>
+            </ScrollLink>
+          </div>
+          <div className='lg:flex hidden'>
+            <div className='flex gap-2'>
+              <div className='flex items-center gap-6 mr-5'>
+                <ScrollLink
+                  to={'about'}
+                  smooth
+                  duration={1000}
+                  className='cursor-pointer nav-link'
+                >
+                  About
+                </ScrollLink>
+                <ScrollLink
+                  to={'features'}
+                  smooth
+                  offset={-60}
+                  duration={1000}
+                  className='cursor-pointer nav-link'
+                >
+                  Features
+                </ScrollLink>
+                <Link to={'/binary-keeda-sheet'} className='relative'>
+                  BK Sheet
+                </Link>
+                <ScrollLink
+                  to={'contact'}
+                  smooth
+                  duration={1000}
+                  className='cursor-pointer nav-link'
+                >
+                  Contact Us
+                </ScrollLink>
+              </div>
+              {!user ? (
+                <>
+                  <NavLink
+                    to='/login'
+                    className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-black hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to='/register'
+                    className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                  >
+                    Sign Up
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to={`/${user.role}`}
+                    className='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                  >
+                    Continue to Dashboard
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      viewBox='0 0 24 24'
+                      fill='currentColor'
+                      className='w-4 h-4 ml-1.5'
+                    >
+                      <path
+                        fillRule='evenodd'
+                        d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
+                        clipRule='evenodd'
+                      />
+                    </svg>
+                  </NavLink>
+                </>
               )}
             </li>
 
-            {user && (
-              <li
-                className='nav-link mr-2 cursor-pointer flex items-center'
-                data-tour='practice-menu'
-                onMouseEnter={() => {
-                  setPracticeOpen(true)
-                  setStudyOpen(false)
+        <span
+          onClick={toggleMenu}
+          className={`${
+            menuOpen ? '' : 'hidden '
+          } fixed top-0 left-0 z-40 h-[100vh] w-[100vw] bg-black bg-opacity-60`}
+        ></span>
+        <header
+          className={` ${
+            menuOpen ? 'translate-x-0' : '-translate-x-full'
+          }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
+        >
+          <ul className='px-5 py-7 flex justify-between h-full flex-col'>
+            <div className='flex flex-col gap-2 '>
+              <img className='w-[140px]' src='/assets/logo.jpg' alt='' />
+              <ScrollLink
+                onClick={() => {
+                  setMenuOpen(false)
                 }}
               >
-                Practice
-                <ExpandMore
-                  sx={{
-                    fontSize: 20,
-                    transition: 'transform 0.2s ease',
-                    transform: practiceOpen ? 'rotate(180deg)' : 'rotate(0deg)'
-                  }}
-                />
-                {practiceOpen && (
-                  <ul className='dropdown-header'>
-                    <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                      <Link to={'/user/test-series'}>Test Series</Link>
-                    </li>
-                    <li className='px-4 py-1 text-pretty text-sm hover:dark:bg-gray-800 hover:bg-gray-100 cursor-pointer'>
-                      <Link to={'/user/practice'}>Go to quiz section</Link>
-                    </li>
-                  </ul>
-                )}
-              </li>
-            )}
-
-            {!user && (
-              <>
-                <li
-                  className='nav-link cursor-pointer'
-                  data-tour='login-link'
-                >
-                  <Link to={'/login'}>Login</Link>
-                </li>
-                <Divider flexItem orientation='vertical' sx={{
-                  color:'gray'
-                }} />
-                <li
-                  className='nav-link mr-2 cursor-pointer'
-                  data-tour='sign-link'
-                >
-                  <Link to={'/register'}>Register</Link>
-                </li>
-              </>
-            )}
-
-            <li data-tour='dark-mode-toggle'>
-              <span onClick={toggleMode} className='cursor-pointer'>
-                {darkMode ? (
-                  <LightMode sx={{ fontSize: 21 }} />
-                ) : (
-                  <DarkMode sx={{ fontSize: 21 }} />
-                )}
-              </span>
-            </li>
-          </ul>
-        </nav>
+                About
+              </ScrollLink>
+              <ScrollLink
+                onClick={() => {
+                  setMenuOpen(false)
+                }}
+                smooth
+                duration={500}
+                to='features'
+                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
+              >
+                Features
+              </ScrollLink>
+              <ScrollLink
+                onClick={() => {
+                  setMenuOpen(false)
+                }}
+                smooth
+                duration={500}
+                to='content'
+                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
+              >
+                Quiz Portal
+              </ScrollLink>
+              <ScrollLink
+                onClick={() => {
+                  setMenuOpen(false)
+                }}
+                smooth
+                duration={500}
+                to='contact'
+                className='text-gray-800 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer '
+              >
+                Contact
+              </ScrollLink>
+              <hr className='my-5' />
+              {user ? (
+                <>
+                  <NavLink
+                    to={'/user'}
+                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+                  >
+                    Dashboard
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to={'/login'}
+                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to={'/register'}
+                    className='hover:bg-gray-50 hover:text-gray-800 hover:border-2 border-2 border-sky-700 transition-all duration-150 text-lg bg-gray-50 p-3 rounded-lg cursor-pointer bg-sky-700 text-gray-50'
+                  >
+                    Signup
+                  </NavLink>
+                </>
+              )}x
       </header>
 
       {/* Button to start the walkthrough */}
     </>
   )
 }
+

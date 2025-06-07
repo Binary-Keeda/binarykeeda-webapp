@@ -5,7 +5,7 @@ export default function Footer () {
   return (
     <>
       <hr />
-      <footer id='contact' className='w-full bg-gray-50'>
+      <footer id='contact' className='w-full bg-[landingPage]'>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-5'>
           <div className='py-7 border-t border-gray-200'>
             <div className='flex items-center justify-center flex-col lg:justify-between lg:flex-row'>

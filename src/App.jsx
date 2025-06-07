@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import { RoleBasedRoutes, UserRoute } from './auth/ProtectedRoutes'
 import { getQuiz } from './redux/api/getQuiz'
+import NotFound from './utilities/NotFound'
 import { getTestAdmin } from './redux/api/getTest'
 import { getTestUser } from './redux/api/getTestUser'
 import { HelmetProvider } from 'react-helmet-async'
@@ -133,6 +134,11 @@ const App = () => {
               <Route index element={<UserDashboard />} />
               <Route path='practice' element={<UserPractice></UserPractice>} />
               <Route path='playground' element={<UserPlayground />} />
+              <Route path='roadmaps' element={<UserRoadmaps />} />
+              <Route path='practice/:name' element={<UserQuizList />} />
+              <Route path='profile' element={<UserProfile/>}/>
+              <Route element={<UserTestList />} path='test/' />
+              <Route element={<UserPreview />} path='preview/:id' />
 
               <Route path='practice/:name' element={<UserQuizList />} />
               <Route element={<UserTestList />} path='test-series/' />

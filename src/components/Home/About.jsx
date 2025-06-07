@@ -10,7 +10,7 @@ export default function About () {
         viewport={{ once: true, amount: 0.2 }}
         variants={fadeIn}
         id='about'
-        className='pt-16 pb-10 relative'
+        className='pt-16 pb-10 relative '
       >
         <div className='w-full max-w-7xl px-5 md:px-5 lg:px-5 mx-auto'>
           <div className='w-full justify-start items-center gap-12 flex sm:flex-row-reverse flex-col'>
