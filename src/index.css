@@ -13,6 +13,14 @@ body{
   overflow-x: hidden;
 }
 
+@layer utilities{
+  .bg-landingPage{
+    background: linear-gradient(to bottom right, #faf7f4, #f8f4f0, #f5f1ed);
+  }
+  .bg-landingPage2{
+    background: linear-gradient(to top left, #faf7f4, #f8f4f0, #f5f1ed);
+}
+}
 
 .loader1 {
   width: 48px;
@@ -53,7 +61,17 @@ body{
   }
 }
 
+@keyframes gentle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 
 .custominput {
   @apply w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300  focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow;
 }
+

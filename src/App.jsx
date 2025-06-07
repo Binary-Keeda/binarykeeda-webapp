@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 // import GoogleSignInPopup from './utilities/GooglePopup';
 import { GOOGLE_CLIENT_ID } from './lib/config'
@@ -10,7 +10,6 @@ import Cookies from 'js-cookie'
 import { RoleBasedRoutes, UserRoute } from './auth/ProtectedRoutes'
 import { getQuiz } from './redux/api/getQuiz'
 import NotFound from './utilities/NotFound'
-import QuizList from './view/user/QuizList'
 import { getTestAdmin } from './redux/api/getTest'
 import { getTestUser } from './redux/api/getTestUser'
 // Lazy-loaded pages
@@ -98,7 +97,7 @@ const App = () => {
               <Route path='coding' element={<UserCoding />} />
               <Route path='playground' element={<UserPlayground />} />
               <Route path='roadmaps' element={<UserRoadmaps />} />
-              <Route path='practice/:name' element={<QuizList />} />
+              <Route path='practice/:name' element={<UserQuizList />} />
               <Route path='profile' element={<UserProfile/>}/>
               <Route element={<UserTestList />} path='test/' />
               <Route element={<UserPreview />} path='preview/:id' />

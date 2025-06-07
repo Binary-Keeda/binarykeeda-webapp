@@ -1,61 +1,393 @@
-// import React from 'react';
-// import { Avatar, IconButton } from '@mui/material'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { CustomButton } from '../utilities/CustomButton';
-// import { Logout } from '@mui/icons-material';
-// import { Link } from 'react-router-dom';
-// import { logOutUser } from '../redux/reducers/UserThunks';
-// import Cookies from 'js-cookie';
-// const Header = () => {
-//     const { user } = useSelector(s => s.auth)
-//     const dispacth = useDispatch();
-//     const handleLogout = () => {
-//         try {
-//             console.log("Btn clicked")
-//             dispacth(logOutUser(Cookies.get('token')));
-//         } catch (error) {
-//             console.log(error, "logout");
-//         }
-//     };
-//     return (
-//         <>
-//             <header className='h-[65px] z-40  w-full relative'>
-//                 <nav className='border-b-[1px] z-40 bg-white h-[65px] items-center pl-3 pr-5 top-0 w-full relative flex justify-between'>
-//                     <div className='flex items-center gap-7'>
-//                         <img className='h-12' src="/assets/logo/A37A874D-8E55-4BCC-BDF4-EBFA65B2F790_1_201_a.jpeg" alt="" />
-//                         <a id='w' onClick={(e) => { e.preventDefault(); alert(e.target.id) }} className='text-sm hover:underline' href="">About</a>
-//                         <a className='text-sm hover:underline ml-2' href="">Learning</a>
-//                         <a className='text-sm hover:underline' href="">Mentorship</a>
-//                         <a className='text-sm hover:underline' href="">Test Series</a>
-//                         <a className='text-sm hover:underline' href="">Connect</a>
-//                     </div>
-//                     <div>
-//                         {user ?
-//                             <div className='flex gap-1 items-center'>
-//                                 <Link className='mr-2 text-xs' to={`/${user.role}`}>Dashbord</Link>
-//                                 <Avatar src={user.avata || user.image} />
-//                                 <IconButton onClick={handleLogout}>
-//                                     <Logout className='cursor-pointer' />
-//                                 </IconButton>
-//                             </div> :
-//                             <div className='flex  h-auto items-center gap-3'>
-//                                 {/* <a className="flex items-center w-[100px] text-gray-300 justify-center rounded-md hover:bg-[rgba(29,30,32,.9)] transition-all duration-300 p-2 bg-[rgba(29,30,32,1)]"  href="">Login</a>
-//                                 <a className="flex items-center w-[100px] text-gray-300 justify-center rounded-md hover:bg-[rgba(29,30,32,.9)] transition-all duration-300 p-2 bg-[rgba(29,30,32,1)]" href="">Sign Up</a> */}
-//                                 <a href="/login">Login</a>
-//                                 <hr className='w-[1px] h-[17px] bg-[rgba(29,30,32,1)]' />
-//                                 <a href="/register">Sign Up</a>
-//                             </div>
-//                         }
-//                     </div>
-//                 </nav>
+import React, { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link as ScrollLink } from 'react-scroll'
+import {
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  ExpandMore as ExpandMoreIcon,
+  MenuBook,
+  Person,
+  Dashboard
+} from '@mui/icons-material'
+import { IconButton, Fade, Backdrop } from '@mui/material'
 
-//             </header>
-//         </>
-//     );
-// }
+// Resources dropdown configuration
+const resourcesConfig = [
+  {
+    id: 'sheets',
+    title: 'BK Sheets',
+    description: 'Comprehensive study materials and cheat sheets',
+    icon: MenuBook,
+    path: '/binary-keeda-sheet',
+    color: 'bg-blue-50 group-hover:bg-blue-100'
+  },
+ 
+]
 
-// export default Header;
+// Navigation links configuration
+const navigationLinks = [
+  { id: 'about', label: 'About Us', scrollTo: 'about' },
+  { id: 'features', label: 'Why Us', scrollTo: 'features' },
+  { id: 'contact', label: 'Contact Us', scrollTo: 'contact' }
+]
 
+// Resources Dropdown Component
+const ResourcesDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const timeoutRef = useRef(null)
+  const dropdownRef = useRef(null)
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    setIsHovered(true)
+    setIsOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    timeoutRef.current = setTimeout(() => {
+      if (isHovered) {
+        setIsOpen(false)
+      }
+    }, 150)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
+  return (
+    <div className="" ref={dropdownRef}>
+      <button
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="flex items-center gap-1 px-4 py-2 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-200 hover:bg-gray-50/80"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+      >
+        Resources
+        <ExpandMoreIcon 
+          className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          sx={{ fontSize: 18 }}
+        />
+      </button>
+
+      <Fade in={isOpen} timeout={200}>
+        <div
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="absolute top-full left-1/4 mt-2 w-96 bg-neutral-100 rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden"
+          style={{ display: isOpen ? 'block' : 'none' }}
+        >
+          <div className="p-2" >
+            <div className="grid grid-cols-2 gap-2">
+              {resourcesConfig.map((item) => {
+                const IconComponent = item.icon
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    className="group flex items-start gap-3 p-4 rounded-lg hover:shadow-md transition-all duration-200 border border-transparent hover:border-gray-100"
+                  >
+                    <div className={`flex-shrink-0 p-2 rounded-lg ${item.color} transition-colors duration-200`}>
+                      <IconComponent 
+                        className="text-gray-700" 
+                        sx={{ fontSize: 20 }} 
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-sm text-gray-900 mb-1 group-hover:text-gray-700">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                        {item.description}
+                      </p>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </Fade>
+    </div>
+  )
+}
+
+// Mobile Menu Component
+const MobileMenu = ({ isOpen, onClose, user }) => {
+  const navigate = useNavigate()
+
+  const handleNavigation = (path) => {
+    navigate(path)
+    onClose()
+  }
+
+  return (
+    <>
+      <Backdrop
+        open={isOpen}
+        onClick={onClose}
+        sx={{ zIndex: 40 }}
+        className="lg:hidden"
+      />
+      
+      <Fade in={isOpen} timeout={300}>
+        <div className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 lg:hidden ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <img
+                  src='./assets/hero/keeda.png'
+                  className='h-10 w-10 rounded-full object-cover'
+                  alt='Binary Keeda'
+                />
+                <span className="text-lg font-bold text-gray-800">Binary Keeda</span>
+              </div>
+              <IconButton onClick={onClose} size="small">
+                <CloseIcon />
+              </IconButton>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <nav className="space-y-4">
+                {navigationLinks.map((link) => (
+                  <ScrollLink
+                    key={link.id}
+                    to={link.scrollTo}
+                    smooth
+                    duration={500}
+                    offset={-80}
+                    onClick={onClose}
+                    className="block px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer font-medium"
+                  >
+                    {link.label}
+                  </ScrollLink>
+                ))}
+
+                {/* Resources Section */}
+                <div className="pt-4">
+                  <h3 className="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                    Resources
+                  </h3>
+                  <div className="space-y-1">
+                    {resourcesConfig.map((item) => {
+                      const IconComponent = item.icon
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => handleNavigation(item.path)}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                        >
+                          <IconComponent sx={{ fontSize: 20 }} className="text-gray-600" />
+                          <div>
+                            <div className="font-medium text-gray-700">{item.title}</div>
+                            <div className="text-sm text-gray-500 line-clamp-1">{item.description}</div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </nav>
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 border-t border-gray-100 space-y-3">
+              {user ? (
+                <button
+                  onClick={() => handleNavigation(`/${user.role}`)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                >
+                  <Dashboard sx={{ fontSize: 20 }} />
+                  Dashboard
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => handleNavigation('/login')}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+                  >
+                    <Person sx={{ fontSize: 20 }} />
+                    Login
+                  </button>
+                  <button
+                    onClick={() => handleNavigation('/register')}
+                    className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </Fade>
+    </>
+  )
+}
+
+// PropTypes for MobileMenu
+MobileMenu.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    role: PropTypes.string
+  })
+}
+
+MobileMenu.defaultProps = {
+  user: null
+}
+
+// Main Header Component
+export default function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { user } = useSelector(state => state.auth)
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const handleNavigationClick = (scrollTo) => {
+    if (location.pathname !== '/') {
+      navigate('/')
+      // Wait for navigation to complete, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(scrollTo)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    }
+  }
+
+  // Close mobile menu on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return (
+    <>
+      <header className="h-20 relative">
+        <nav className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-landingPage shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20">
+              
+              {/* Logo */}
+              <ScrollLink to="home" smooth duration={500} className="cursor-pointer">
+                <Link to="/" className="flex items-center gap-3 group">
+                  <div className="relative">
+                    <img
+                      src="./assets/hero/keeda.png"
+                      className="h-12 w-12 rounded-full object-cover transition-transform group-hover:scale-105"
+                      alt="Binary Keeda Logo"
+                    />
+                  </div>
+                  <span className="text-xl font-bold text-gray-800 hidden sm:block transition-colors group-hover:text-gray-600">
+                    Binary Keeda
+                  </span>
+                </Link>
+              </ScrollLink>
+
+              {/* Desktop Navigation */}
+              <div className="relative hidden lg:flex items-center space-x-1">
+                {navigationLinks.map((link) => {
+                  if(location.pathname === '/') {
+                    return (
+                      <ScrollLink
+                        key={link.id}
+                        to={link.scrollTo}
+                        smooth
+                        duration={500}
+                        offset={-80}
+                        className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-200 hover:bg-gray-50/80 cursor-pointer"
+                      >
+                        {link.label}
+                      </ScrollLink>
+                    )
+                  } else {
+                    return (
+                      <button
+                        key={link.id}
+                        onClick={() => handleNavigationClick(link.scrollTo)}
+                        className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-200 hover:bg-gray-50/80 cursor-pointer"
+                      >
+                        {link.label}
+                      </button>
+                    )
+                  }
+                })}
+                
+                <ResourcesDropdown />
+                {/* Auth Buttons - Desktop */}
+                <div className="hidden lg:flex items-center gap-3">
+                  {user ? (
+                    <Link
+                      to={`/${user.role}`}
+                      className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200 font-medium shadow-sm hover:shadow-md"
+                    >
+                      <Dashboard sx={{ fontSize: 18 }} />
+                      Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/login"
+                      className="px-6 py-2.5 text-gray-700 hover:text-gray-900 font-medium rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 hover:bg-gray-50"
+                    >
+                      Login
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <div className="lg:hidden">
+                <IconButton
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="text-gray-700 hover:text-gray-900"
+                  size="small"
+                >
+                  <MenuIcon />
+                </IconButton>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)}
+        user={user}
+      />
+    </>
+  )
+}
+
+
+/* 
+=== PREVIOUS HEADER CODE (COMMENTED OUT) ===
+Elements with Enhanced Contrast
 import { Menu } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
@@ -85,8 +417,8 @@ export default function Header () {
       <header id='home' className='relative h-[73px] w-full'>
         <nav
           className={`fixed w-full flex justify-between 
-           shadow-lg px-3 md:px-5 pl-1
-           transition-all duration-200  items-center h-[73px] top-0  bg-white z-40`}
+           px-3 md:px-5 pl-1
+           transition-all duration-200  items-center h-[73px] top-0 bg-gradient-to-br from-[#faf7f4] via-[#f8f4f0] to-[#f5f1ed] z-40`}
         >
           <div className='flex items-center gap-6'>
             <ScrollLink to='home' smooth className='cursor-pointer'>
@@ -119,19 +451,9 @@ export default function Header () {
                 >
                   Features
                 </ScrollLink>
-                {/* <ScrollLink
-                  to={'content'}
-                  smooth
-                  offset={-60}
-                  duration={1000}
-                  className='cursor-pointer nav-link'
-                >
-                  Quiz Portal
-                </ScrollLink> */}
                 <Link to={'/binary-keeda-sheet'} className='relative'>
                   BK Sheet
                 </Link>
-
                 <ScrollLink
                   to={'contact'}
                   smooth
@@ -140,32 +462,18 @@ export default function Header () {
                 >
                   Contact Us
                 </ScrollLink>
-                {/* <Link>Practice</Link> */}
               </div>
-
               {!user ? (
                 <>
                   <NavLink
                     to='/login'
-                    class='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-black hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                    className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-black hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                   >
                     Login
-                    {/* <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      fill='currentColor'
-                      class='w-4 h-4 ml-1.5'
-                    >
-                      <path
-                        fill-rule='evenodd'
-                        d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
-                        clip-rule='evenodd'
-                      />
-                    </svg> */}
                   </NavLink>
                   <NavLink
                     to='/register'
-                    class='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                    className='flex items-center rounded-md border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-[#ca5a27] hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                   >
                     Sign Up
                   </NavLink>
@@ -174,19 +482,19 @@ export default function Header () {
                 <>
                   <NavLink
                     to={`/${user.role}`}
-                    class='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
+                    className='flex items-center rounded-[28px]  border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-white bg-slate-800 hover:border-slate-800 hover:text-slate-700 hover:bg-white focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none'
                   >
                     Continue to Dashboard
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       viewBox='0 0 24 24'
                       fill='currentColor'
-                      class='w-4 h-4 ml-1.5'
+                      className='w-4 h-4 ml-1.5'
                     >
                       <path
-                        fill-rule='evenodd'
+                        fillRule='evenodd'
                         d='M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z'
-                        clip-rule='evenodd'
+                        clipRule='evenodd'
                       />
                     </svg>
                   </NavLink>
@@ -201,7 +509,6 @@ export default function Header () {
           </div>
         </nav>
 
-        {/* Small Screen Nab */}
         <span
           onClick={toggleMenu}
           className={`${
@@ -213,11 +520,6 @@ export default function Header () {
             menuOpen ? 'translate-x-0' : '-translate-x-full'
           }   fixed bg-white duration-300 transition-all z-50 h-screen left-0 top-0 w-[250px]`}
         >
-          <div className='w-full absolute flex justify-end p-2'>
-            {/* <IconButton onClick={toggleMenu}>
-              <Close />
-            </IconButton> */}
-          </div>
           <ul className='px-5 py-7 flex justify-between h-full flex-col'>
             <div className='flex flex-col gap-2 '>
               <img className='w-[140px]' src='/assets/logo.jpg' alt='' />
@@ -290,11 +592,10 @@ export default function Header () {
                     Signup
                   </NavLink>
                 </>
-              )}
-            </div>
-          </ul>
-        </header>
+              )}x
       </header>
     </>
   )
 }
+
+=== END OF PREVIOUS CODE === */
