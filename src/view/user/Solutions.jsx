@@ -640,15 +640,15 @@ const Solution = () => {
     let base = 'p-2 border text-sm'
 
     if (isCurrent) {
-      return `${base} bg-sky-600 text-white border-blue-700`
+      return `${base} bg-blue-600 text-white border-blue-700`
     }
     if (isAnswered) {
-      return `${base} bg-[#7ccb40] border-green-400 text-green-800`
+      return `${base} bg-green-600/20 border-green-400 text-green-800`
     }
     if (isVisited) {
       return `${base} bg-orange-100 border-orange-400 text-orange-800`
     }
-    return `${base} bg-[#c54325] border-red-400 text-red-800`
+    return `${base} bg-blue-100 border-blue-400 text-blue-600`
   }
 
   useEffect(() => {
@@ -707,11 +707,10 @@ const Solution = () => {
   const submitHandler = async () => {
     setLoading(true)
     try {
-
-        const res = await axios.post(`${BASE_URL}/api/v1/solution/user/submit`, {
+      const res = await axios.post(`${BASE_URL}/api/v1/solution/user/submit`, {
         quizId: id,
         userId: user._id,
-        response:answers
+        response: answers
       })
       localStorage.removeItem(`solution-${id}`)
       navigate('/user/results') // or wherever appropriate
@@ -775,6 +774,20 @@ const Solution = () => {
                   </label>
                 )
               })}
+              <div className='flex justify-end'>
+                <button
+                className='text-gray-900 text-sm'
+                  onClick={() => {
+                    setAnswers(prev => {
+                      const updated = { ...prev }
+                      delete updated[currentQuestion._id]
+                      return updated
+                    })
+                  }}
+                >
+                  Clear choice
+                </button>
+              </div>
             </div>
           </div>
           <div className='mt-8 justify-end flex items-center gap-4'>
@@ -831,7 +844,7 @@ const Solution = () => {
                     <span>Seen but Unattempted</span>
                   </div>
                   <div className='flex items-center gap-2'>
-                    <span className='w-4 h-4 rounded-sm bg-red-100 border border-red-400 inline-block'></span>
+                    <span className='w-4 h-4 rounded-sm bg-blue-100 border border-blue-400 inline-block'></span>
                     <span>Unseen</span>
                   </div>
                 </div>
