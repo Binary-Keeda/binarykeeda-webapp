@@ -1,15 +1,8 @@
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { Provider } from 'react-redux'
-import store from './redux/store.js'
-import React from 'react'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-console.log("Starting app")
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
-)
+console.log("Mounting App"); // Confirm this shows in console
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <h1 style={{ color: "red" }}>Hello Test</h1>
+);
