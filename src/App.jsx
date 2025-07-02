@@ -1,18 +1,17 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { GOOGLE_CLIENT_ID } from "./lib/config";
-import Loaader from "./layout/Loader";
-import { getUser } from "./redux/reducers/UserThunks";
-import { useDispatch, useSelector } from "react-redux";
-import Cookies from "js-cookie";
-import { RoleBasedRoutes, UserRoute } from "./auth/ProtectedRoutes";
-import { getQuiz } from "./redux/api/getQuiz";
-import { getTestAdmin } from "./redux/api/getTest";
-import { getTestUser } from "./redux/api/getTestUser";
-import { HelmetProvider } from "react-helmet-async";
-import { getRank } from "./redux/api/getRank";
-// import { HelmetProvider } from 'react-helmet-async'
+import React, { Suspense, lazy, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { GOOGLE_CLIENT_ID } from './lib/config'
+import Loaader from './layout/Loader'
+import { getUser } from './redux/reducers/UserThunks'
+import { useDispatch, useSelector } from 'react-redux'
+import Cookies from 'js-cookie'
+import { RoleBasedRoutes, UserRoute } from './auth/ProtectedRoutes'
+import { getQuiz } from './redux/api/getQuiz'
+import { getTestAdmin } from './redux/api/getTest'
+import { getTestUser } from './redux/api/getTestUser'
+import { getRank } from './redux/api/getRank'
+import { HelmetProvider } from 'react-helmet-async'
 // Lazy-loaded pages
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
