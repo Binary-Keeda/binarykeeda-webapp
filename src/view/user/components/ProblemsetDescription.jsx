@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import fullData from "../data/codingsolution.json";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import ReactMarkdown from "react-markdown";
 
 export default function ProblemDescription() {
   function CopyButton({ code }) {
     const [copied, setCopied] = useState(false);
-
     const handleCopy = async () => {
       try {
         await navigator.clipboard.writeText(code);
@@ -17,7 +17,6 @@ export default function ProblemDescription() {
         console.error("Copy failed", err);
       }
     };
-
     return (
       <button
         onClick={handleCopy}
@@ -36,246 +35,303 @@ export default function ProblemDescription() {
 
   const [showAlgorithm, setShowAlgorithm] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
-  const [showNotes, setShowNotes] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
   const [showCode, setShowCode] = useState(false);
 
   useEffect(() => {
     const decodedTopic = decodeURIComponent(topicName);
     const decodedTitle = decodeURIComponent(problemTitle);
-
     const topicData = fullData.find((t) => t.topicName === decodedTopic);
     if (!topicData) return;
-    const problem =
-      topicData.problems?.find((p) => p.title === decodedTitle) ||
-      topicData.tasks?.find((t) => t.title === decodedTitle);
-    // alert(JSON.stringify(problem))
+    const problem = topicData.problems?.find((p) => p.title === decodedTitle);
     if (problem) {
-      setDescription(problem);
+      const javaMatch = problem.code?.match(
+        /JAVA CODE:\s*([\s\S]*?)\nC\+\+ CODE:/
+      );
+      const cppMatch = problem.code?.match(/C\+\+ CODE:\s*([\s\S]*)/);
+
+      setDescription({
+        title: problem.title,
+        description: problem.description,
+        algorithm: problem.algorithm,
+        analysis: problem.analysis,
+        comparison: problem.comparison,
+        code: {
+          java: javaMatch ? javaMatch[1].trim() : "",
+          cpp: cppMatch ? cppMatch[1].trim() : "",
+        },
+      });
     }
   }, [topicName, problemTitle]);
 
   if (!description) return <div className="p-6 dark:text-white">Not Found</div>;
 
-  return (
-    <div
-      className="w-full px-6 py-8 bg-white text-black dark:bg-support dark:text-white rounded-lg shadow-lg"
-      style={{ fontFamily: "'Inter', sans-serif", letterSpacing: "0.02em" }}
-    >
-      <h1 className="text-4xl font-extrabold mb-6 tracking-wide leading-tight">
-        {description.title}
-      </h1>
+  const markdownComponents = {
+    h1: ({ node, ...props }) => (
+      <h1
+        className="text-[1.8rem] font-extrabold text-black dark:text-white mt-4 mb-2"
+        {...props}
+      />
+    ),
+    h2: ({ node, ...props }) => (
+      <h2
+        className="text-[1.5rem] font-bold text-gray-800 dark:text-gray-100 mt-3 mb-2"
+        {...props}
+      />
+    ),
+    h3: ({ node, ...props }) => (
+      <h3
+        className="text-[1.3rem] font-semibold text-gray-700 dark:text-gray-200 mt-2 mb-1"
+        {...props}
+      />
+    ),
+    p: ({ node, ...props }) => (
+      <p
+        className="text-[1.1rem] text-gray-900 dark:text-gray-300 leading-[1.6] mb-3"
+        {...props}
+      />
+    ),
+    ul: ({ node, ...props }) => (
+      <ul
+        className="list-disc list-inside pl-5 text-[1.1rem] text-gray-900 dark:text-gray-300 mb-3"
+        {...props}
+      />
+    ),
+    li: ({ node, ...props }) => (
+      <li className="mb-1 leading-[1.6]" {...props} />
+    ),
+    code: ({ node, inline, className, children, ...props }) => {
+      return (
+        <code
+          className="bg-gray-200 dark:bg-gray-700 text-black dark:text-red-300 px-1 py-0.5 rounded text-[1rem] font-mono"
+          {...props}
+        >
+          {children}
+        </code>
+      );
+      // Uncomment if you later want block code handling too
+      // if (inline) {
+      //   return (
+      //     <code className="...">{children}</code>
+      //   );
+      // } else {
+      //   return (
+      //     <pre className="..."><code>{children}</code></pre>
+      //   );
+      // }
+    },
+    table: ({ node, ...props }) => (
+      <div className="overflow-x-auto my-4">
+        <table
+          className="w-full table-auto min-w-[600px] border-collapse border border-gray-400 dark:border-gray-600 text-[1rem] text-left"
+          {...props}
+        />
+      </div>
+    ),
+    thead: ({ node, ...props }) => (
+      <thead
+        className="bg-gray-200 dark:bg-gray-700 font-semibold"
+        {...props}
+      />
+    ),
+    tbody: ({ node, ...props }) => <tbody {...props} />,
+    tr: ({ node, ...props }) => (
+      <tr
+        className="border-b border-gray-300 dark:border-gray-600"
+        {...props}
+      />
+    ),
+    th: ({ node, ...props }) => (
+      <th
+        className="px-3 py-2 border border-gray-400 dark:border-gray-600 text-left font-semibold bg-gray-100 dark:bg-gray-700"
+        {...props}
+      />
+    ),
+    td: ({ node, ...props }) => (
+      <td
+        className="px-3 py-2 border border-gray-300 dark:border-gray-600 text-left"
+        {...props}
+      />
+    ),
+    strong: ({ node, ...props }) => (
+      <strong className="text-black dark:text-white font-semibold" {...props} />
+    ),
+  };
 
-      <p className="mb-8 text-lg leading-relaxed font-medium tracking-normal">
-        {description.description}
-      </p>
+  return (
+    <div className="w-full px-6 py-8 bg-white text-black dark:bg-support dark:text-white rounded-lg shadow-lg">
+      <h1 className="text-4xl font-extrabold mb-6">{description.title}</h1>
+
+      {/* Problem Description */}
+      <div className="mb-6 leading-relaxed space-y-5 text-lg">
+        <ReactMarkdown components={markdownComponents}>
+          {description.description}
+        </ReactMarkdown>
+      </div>
 
       {/* Algorithm */}
-      {description.algorithm?.length > 0 && (
-        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
-          <button
-            onClick={() => setShowAlgorithm(!showAlgorithm)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-            aria-expanded={showAlgorithm}
-          >
-            Algorithm Steps
-            <span className="text-xl">{showAlgorithm ? "▲" : "▼"}</span>
-          </button>
-          <div className={`${showAlgorithm ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500`}>
-            <ol className="list-decimal list-inside space-y-2 text-base">
-              {description.algorithm.map((step, idx) => (
-                <li key={idx} className="whitespace-pre-line">
-                  {step}
-                </li>
-              ))}
-            </ol>
-          </div>
+      <div className="mb-6 h-full border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
+        <button
+          onClick={() => setShowAlgorithm(!showAlgorithm)}
+          className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          Algorithm Steps <span>{showAlgorithm ? "▲" : "▼"}</span>
+        </button>
+        <div
+          className={`${
+            showAlgorithm ? "max-h py-4" : "max-h-0"
+          } px-6 overflow-hidden transition-all duration-500 leading-relaxed space-y-2`}
+        >
+          <ReactMarkdown components={markdownComponents}>
+            {description.algorithm}
+          </ReactMarkdown>
         </div>
-      )}
+      </div>
 
-      {/* Analysis */}
-      {description.analysis && (
-        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
-          <button
-            onClick={() => setShowAnalysis(!showAnalysis)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-            aria-expanded={showAnalysis}
-          >
-            Analysis
-            <span className="text-xl">{showAnalysis ? "▲" : "▼"}</span>
-          </button>
-          <div className={`${showAnalysis ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500 space-y-6`}>
-            {description.analysis.best_case && (
-              <div className="bg-green-100 text-green-900 dark:bg-green-900 dark:text-green-100 p-4 rounded-lg">
-                <h3 className="text-xl font-bold mb-2">Best Case</h3>
-                <ul className="list-disc list-inside mb-2">
-                  {description.analysis.best_case.scenarios.map((sc, i) => (
-                    <li key={i}>{sc}</li>
-                  ))}
-                </ul>
-                <p>
-                  <strong>Example:</strong> Array: [
-                  {description.analysis.best_case.example.array.join(", ")}],
-                  Min: {description.analysis.best_case.example.min}, Max:{" "}
-                  {description.analysis.best_case.example.max}
-                </p>
-                <p>
-                  <strong>Time Complexity:</strong> Find Min & Max -{" "}
-                  {
-                    description.analysis.best_case.time_complexity
-                      .find_min_max
-                  }, GCD - {description.analysis.best_case.time_complexity.find_gcd}
-                </p>
-              </div>
-            )}
+      {/* Time Complexity Analysis */}
+      <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
+        <button
+          onClick={() => setShowAnalysis(!showAnalysis)}
+          className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          Time Complexity Analysis <span>{showAnalysis ? "▲" : "▼"}</span>
+        </button>
+        <div
+          className={`${
+            showAnalysis ? "max-h py-4" : "max-h-0"
+          } px-6 overflow-hidden transition-all duration-500 leading-relaxed space-y-2`}
+        >
+          <ReactMarkdown components={markdownComponents}>
+            {description.analysis}
+          </ReactMarkdown>
+        </div>
+      </div>
 
-            {description.analysis.worst_case && (
-              <div className="bg-red-100 text-red-900 dark:bg-red-900 dark:text-red-100 p-4 rounded-lg">
-                <h3 className="text-xl font-bold mb-2">Worst Case</h3>
-                <ul className="list-disc list-inside mb-2">
-                  {description.analysis.worst_case.scenarios.map((sc, i) => (
-                    <li key={i}>{sc}</li>
-                  ))}
-                </ul>
-                <p>
-                  <strong>Example:</strong> Array: [
-                  {description.analysis.worst_case.example.array.join(", ")}],
-                  Min: {description.analysis.worst_case.example.min}, Max:{" "}
-                  {description.analysis.worst_case.example.max}
-                </p>
-                <p>
-                  <strong>Time Complexity:</strong> Find Min & Max -{" "}
-                  {
-                    description.analysis.worst_case.time_complexity
-                      .find_min_max
-                  }, GCD - {description.analysis.worst_case.time_complexity.gcd}
-                </p>
-              </div>
-            )}
+      {/* Time Complexity Comparison */}
+      <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
+        <button
+          onClick={() => setShowComparison(!showComparison)}
+          className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          Time Complexity Comparison <span>{showComparison ? "▲" : "▼"}</span>
+        </button>
 
-            {description.time_complexity_comparison && (
-              <div className="overflow-x-auto">
-                <h3 className="text-lg font-semibold mb-2">Time Complexity Comparison</h3>
-                <table className="w-full text-sm border-collapse">
-                  <thead className="bg-gray-200 dark:bg-gray-700">
-                    <tr>
-                      <th className="px-4 py-2 border">Step</th>
-                      <th className="px-4 py-2 border">Description</th>
-                      <th className="px-4 py-2 border">Best Case</th>
-                      <th className="px-4 py-2 border">Worst Case</th>
+        <div
+          className={`${
+            showComparison ? "max-h-screen py-4" : "max-h-0"
+          } px-6 overflow-hidden transition-all duration-500`}
+        >
+          {showComparison && (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[500px] border border-gray-300 dark:border-gray-600 text-sm md:text-base text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <th className="px-4 py-2 border border-gray-300 dark:border-gray-600">
+                      Algorithm
+                    </th>
+                    <th className="px-4 py-2 border border-gray-300 dark:border-gray-600">
+                      Time Complexity
+                    </th>
+                    <th className="px-4 py-2 border border-gray-300 dark:border-gray-600">
+                      Space Complexity
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {description.comparison.map((row, idx) => (
+                    <tr
+                      key={idx}
+                      className="even:bg-gray-50 dark:even:bg-gray-800 text-gray-800 dark:text-gray-200"
+                    >
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-600">
+                        {row.algorithm}
+                      </td>
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-600">
+                        {row.time}
+                      </td>
+                      <td className="px-4 py-2 border border-gray-300 dark:border-gray-600">
+                        {row.space}
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {description.time_complexity_comparison.map((item, i) => (
-                      <tr key={i} className="bg-white dark:bg-gray-900">
-                        <td className="px-4 py-2 border">{item.step}</td>
-                        <td className="px-4 py-2 border">{item.Description}</td>
-                        <td className="px-4 py-2 border">{item.best_case}</td>
-                        <td className="px-4 py-2 border">{item.worst_case}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Notes */}
-      {description.notes?.length > 0 && (
-        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
-          <button
-            onClick={() => setShowNotes(!showNotes)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-            aria-expanded={showNotes}
-          >
-            Notes
-            <span className="text-xl">{showNotes ? "▲" : "▼"}</span>
-          </button>
-          <div className={`${showNotes ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500`}>
-            <ul className="list-disc list-inside space-y-2 text-base">
-              {description.notes.map((note, i) => (
-                <li key={i}>{note}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-
-      {/* Code Solutions */}
-      {(description.java_code || description.cpp_code) && (
-        <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
-          <button
-            onClick={() => setShowCode(!showCode)}
-            className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-            aria-expanded={showCode}
-          >
-            Code Solutions
-            <span className="text-xl">{showCode ? "▲" : "▼"}</span>
-          </button>
-          <div className={`${showCode ? "max-h-screen py-4" : "max-h-0"} px-6 overflow-hidden transition-all duration-500`}>
-            <div className="flex items-center mb-4">
-              {description.java_code && (
-                <button
-                  className={`px-4 py-2 mr-2 rounded font-semibold ${
-                    activeCodeTab === "java"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
-                  }`}
-                  onClick={() => setActiveCodeTab("java")}
-                >
-                  Java
-                </button>
-              )}
-              {description.cpp_code && (
-                <button
-                  className={`px-4 py-2 rounded font-semibold ${
-                    activeCodeTab === "cpp"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
-                  }`}
-                  onClick={() => setActiveCodeTab("cpp")}
-                >
-                  C++
-                </button>
-              )}
-              <div className="flex-grow" />
-              <CopyButton
-                code={
+      {/* Code Samples */}
+      <div className="mb-6 border rounded-md bg-gray-100 dark:bg-support overflow-hidden">
+        <button
+          onClick={() => setShowCode(!showCode)}
+          className="w-full px-4 py-3 text-left text-lg font-semibold flex justify-between items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+        >
+          Code Samples <span>{showCode ? "▲" : "▼"}</span>
+        </button>
+        <div
+          className={`${
+            showCode ? "max-h-screen py-4" : "max-h-0"
+          } px-6 overflow-hidden transition-all duration-500`}
+        >
+          <div className="flex items-center mb-4">
+            {description.code?.java && (
+              <button
+                className={`px-4 py-2 mr-2 rounded font-semibold ${
                   activeCodeTab === "java"
-                    ? description.java_code
-                    : description.cpp_code
-                }
-              />
-            </div>
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
+                }`}
+                onClick={() => setActiveCodeTab("java")}
+              >
+                Java
+              </button>
+            )}
+            {description.code?.cpp && (
+              <button
+                className={`px-4 py-2 rounded font-semibold ${
+                  activeCodeTab === "cpp"
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-300 text-black dark:bg-gray-700 dark:text-white"
+                }`}
+                onClick={() => setActiveCodeTab("cpp")}
+              >
+                C++
+              </button>
+            )}
+            <div className="flex-grow" />
+            <CopyButton
+              code={
+                activeCodeTab === "java"
+                  ? description.code?.java
+                  : description.code?.cpp
+              }
+            />
+          </div>
 
-            <div className="bg-black rounded-lg shadow-lg">
-              <div className="overflow-x-auto rounded-b-lg">
-                <SyntaxHighlighter
-                  language={activeCodeTab === "java" ? "java" : "cpp"}
-                  style={oneDark}
-                  customStyle={{
-                    margin: 0,
-                    padding: "1rem",
-                    backgroundColor: "#1e1e1e",
-                    fontSize: "0.9rem",
-                    maxHeight: "500px",
-                    overflowX: "auto",
-                    fontFamily:
-                      "'Source Code Pro', monospace, 'Courier New', Courier, monospace",
-                  }}
-                  wrapLines
-                  showLineNumbers
-                >
-                  {activeCodeTab === "java"
-                    ? description.java_code
-                    : description.cpp_code}
-                </SyntaxHighlighter>
-              </div>
-            </div>
+          <div className="bg-black rounded-lg shadow-lg overflow-auto max-h-[600px]">
+            <SyntaxHighlighter
+              language={activeCodeTab}
+              style={oneDark}
+              customStyle={{
+                margin: 0,
+                padding: "1rem",
+                backgroundColor: "#1e1e1e",
+                fontSize: "0.9rem",
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
+              }}
+              wrapLines={true}
+              wrapLongLines={true}
+              showLineNumbers
+            >
+              {activeCodeTab === "java"
+                ? description.code?.java
+                : description.code?.cpp}
+            </SyntaxHighlighter>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

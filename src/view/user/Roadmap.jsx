@@ -14,7 +14,7 @@ import UserDashboard from './Userdashboard';
             <Link
               key={index}
               className="relative rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105"
-              to={i.material}
+              to={`/user/binarykeeda-roadmap-sheet/blog/${i.slug}`}
             >
               <img
                 className="w-full h-[200px] object-cover"

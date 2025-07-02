@@ -206,3 +206,13 @@ body {
     @apply pr-6;
   }
 }
+
+/* blog content */
+.custom-prose code {
+  @apply bg-gray-100 text-red-500 font-semibold rounded px-1 py-0.5 text-sm;
+}
+
+.custom-prose code::before,
+.custom-prose code::after {
+  content: none !important;
+}
